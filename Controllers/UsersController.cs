@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourseManagement.Data;
 using OnlineCourseManagement.DTOs;
+using OnlineCourseManagement.DTOs.Common;
 using OnlineCourseManagement.Models;
+using OnlineCourseManagement.Services;
 using System.Security.Claims;
 
 namespace OnlineCourseManagement.Controllers
@@ -16,6 +18,7 @@ namespace OnlineCourseManagement.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IPasswordHasher<User> _hasher;
+        private readonly IUserService _userService;
 
         private static readonly string[] ValidRoles =
         {
@@ -24,47 +27,20 @@ namespace OnlineCourseManagement.Controllers
 
         public UsersController(
             AppDbContext context,
-            IPasswordHasher<User> hasher)
+            IPasswordHasher<User> hasher,
+            IUserService userService)
         {
             _context = context;
             _hasher = hasher;
+            _userService = userService;
         }
 
         // GET: api/users
         [HttpGet]
-        public async Task<IActionResult> GetAll(
-            [FromQuery] string? role,
-            [FromQuery] string? search)
+        public async Task<ActionResult<PagedResult<UserResponseDto>>> GetAll([FromQuery] UserQueryParameters queryParams)
         {
-            var query = _context.Users
-                .AsNoTracking()
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(role))
-            {
-                query = query.Where(u => u.Role == role);
-            }
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(u =>
-                    u.FullName.Contains(search) ||
-                    u.Email.Contains(search));
-            }
-
-            var users = await query
-                .OrderBy(u => u.Id)
-                .Select(u => new
-                {
-                    u.Id,
-                    u.FullName,
-                    u.Email,
-                    u.Role,
-                    u.CreatedAt
-                })
-                .ToListAsync();
-
-            return Ok(users);
+            var result = await _userService.GetAllAsync(queryParams);
+            return Ok(result);
         }
 
         // GET: api/users/1

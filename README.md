@@ -114,3 +114,9 @@ NU1902 / NU1903	Kiểm tra và nâng cấp gói NuGet có lỗ hổng lên phiê
 - Mật khẩu người dùng phải được hash; không lưu mật khẩu thô vào database.
 - Dùng tài khoản và dữ liệu thử nghiệm khi test API xóa/sửa.
 - Các API quản trị yêu cầu JWT có vai trò Admin.
+
+
+account admin: {
+     "email": "admin@onlinecourse.local",
+     "password": "Admin@123"
+   }

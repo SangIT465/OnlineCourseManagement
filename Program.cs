@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using OnlineCourseManagement.Data;
 using OnlineCourseManagement.Models;
 using OnlineCourseManagement.Services;
+using OnlineCourseManagement.Repositories;
 using System.Text;
 using Microsoft.OpenApi;
 
@@ -48,6 +49,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Services
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<
     IPasswordHasher<User>,
