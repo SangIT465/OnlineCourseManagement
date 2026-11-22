@@ -1,5 +1,7 @@
 # Báo cáo kỹ thuật và kịch bản bảo vệ CourseFlow
 
+Hướng dẫn thuyết trình từng slide, lời mở đầu, demo bốn vai trò và câu hỏi thường gặp: [project-presentation.md](project-presentation.md). Cài đặt/chuyển máy: [SETUP_GUIDE.md](../SETUP_GUIDE.md).
+
 ## Đề tài và mục tiêu
 
 Thiết kế backend quản lý khóa học trực tuyến: tổ chức danh mục, khóa học, bài học, học liệu; quản lý tài khoản và phân công; ghi danh và lưu tiến độ. Dữ liệu lưu trong SQL Server, giao diện gọi API HTTP. Hệ thống hiện chưa có thanh toán hoặc kiểm tra nội dung video.
@@ -43,6 +45,8 @@ User.Email là duy nhất; Category.Name là duy nhất; Lesson có cặp Course
 - Admin quản trị tài khoản, vai trò và phân công. Staff vận hành catalog và hỗ trợ tài khoản User. Instructor chỉ quản lý khóa được giao. User học nội dung đã ghi danh và cập nhật tiến độ của mình.
 - Role xác định nhóm tài khoản; permission claims thể hiện quyền được server cấp; named policies kết hợp vai trò/quyền; resource policy kiểm tra khóa cụ thể.
 - JWT được kiểm tra chữ ký, issuer/audience, thời hạn và trạng thái hiện tại của tài khoản. Đổi role/password tạo stamp mới để thu hồi token ngay.
+- Admin có thể phân công hoặc bỏ từng phân công bằng FK nullable. Các thao tác phân công, tự tạo khóa, đổi role/password và xóa tài khoản phối hợp qua transaction/update lock; xung đột SQL trả 409. Kiểm thử đồng thời bảo đảm không để StaffId/InstructorId trỏ sang sai vai trò qua API.
+- FE tải lại khi chuyển trang, nhấn làm mới hoặc quay lại cửa sổ; xác thực lại qua auth/me. Không cần đăng xuất/đăng nhập chỉ để nhận phân công mới; role/password thay đổi làm token cũ mất hiệu lực.
 - Không xóa danh mục/khóa đang có quan hệ cần xử lý; không chuyển bài đã có tiến độ/tài liệu; xóa bài và tiến độ dùng một giao dịch SaveChanges.
 - Upload kiểm tra dung lượng và chữ ký file, đặt tên GUID, từ chối tên lưu trữ có thể thoát thư mục.
 
@@ -57,16 +61,28 @@ Kết quả kiểm tra trên máy Development ngày **22/11/2026**:
 | Hạng mục | Kết quả |
 | --- | --- |
 | Build solution + frontend | Thành công; build .NET có 0 lỗi, 0 cảnh báo |
-| xUnit backend | 44 test qua |
+| xUnit backend | 52 test qua |
 | Frontend/config/catalog | 25 test qua |
-| HTTP phân quyền, CRUD và backend contracts | Cả ba suite qua, đã dọn bản ghi QA |
-| Postman chạy bằng Newman | 27 request, 29 assertion qua |
-| Frontend kết nối backend | Luồng Admin/Staff/Instructor/User qua, không có lỗi JavaScript không xử lý |
-| Publish Production chạy thử cục bộ | Catalog, health/readiness hoạt động; Swagger tắt; JWT key yếu làm khởi động thất bại |
-| NuGet audit | Không phát hiện package có cảnh báo theo nguồn audit tại thời điểm kiểm tra |
+| HTTP/SQL authorization, auth lifecycle, CRUD, contracts, role sync | Cả 5 suite qua, đã dọn bản ghi QA |
+| Đồng bộ quyền FE–API–SQL | Đối chiếu các hàm quyền FE với API/SQL; gồm 12 vòng thao tác đồng thời |
+| Frontend kết nối backend | Đợt kiểm tra quyền ghi nhận 28 kiểm tra qua; cập nhật xác nhận đăng xuất có 10 kiểm tra auth/mất kết nối qua, gồm Hủy giữ phiên và xác nhận mới thoát |
+| Kiểm tra quan hệ SQL | 0 phân công sai vai trò; 0 tiến độ/tài liệu chéo khóa |
+| EF model và migration | Không có thay đổi model cần migration |
+| Postman/Newman, lần kiểm tra trước cùng ngày | 27 request, 29 assertion qua; chưa chạy lại trong đợt kiểm tra quyền này |
+| Publish Production cục bộ, lần kiểm tra trước cùng ngày | Catalog, health/readiness hoạt động; Swagger tắt; JWT key yếu làm khởi động thất bại |
+| NuGet audit, lần kiểm tra trước cùng ngày | Không phát hiện package có cảnh báo theo nguồn audit tại thời điểm kiểm tra đó |
 | Bảo toàn database | Số bản ghi và checksum của cả 7 bảng dữ liệu khớp trước/sau kiểm thử |
 
-Dữ liệu sau kiểm thử: 1.003 tài khoản, 7 danh mục, 25 khóa học, 193 bài học, 0 ghi danh/tiến độ và 2 metadata file. Migration mới bổ sung ràng buộc; không xóa các bản ghi này. Các con số là bằng chứng của lần chạy trên máy này, không thay cho việc chạy lại khi đổi mã nguồn/môi trường. Workflow GitHub Actions đã được chuẩn bị; kết quả chạy CI trên GitHub cần kiểm tra sau khi push.
+Dữ liệu gốc trong đợt kiểm tra quyền hiện tại: 1.004 tài khoản, 7 danh mục, 25 khóa học, 193 bài học, 2 ghi danh, 2 tiến độ và 2 metadata file; được giữ nguyên sau khi dọn QA. 1.000 tài khoản seed dùng hash giả nên cần tạo tài khoản thật hoặc Admin đặt lại mật khẩu cho tài khoản dùng demo. Các con số là bằng chứng lần chạy trên máy này, không thay cho chạy lại khi đổi mã nguồn/môi trường. Workflow GitHub Actions đã được chuẩn bị; chưa xác nhận kết quả CI trên GitHub cho thay đổi chưa push.
+
+## Lỗi phát hiện và sửa trong đợt kiểm tra quyền
+
+1. Giảng viên vẫn thấy khóa cũ khi Admin phân công lại ở phiên khác: đã tái hiện bằng browser, sửa cập nhật dữ liệu khi điều hướng/quay lại cửa sổ và kiểm tra phiên hiện tại.
+2. Không có cách đưa khóa về trạng thái chưa phân công: bổ sung null trong DTO/service và lựa chọn Bỏ phân công ở FE, giữ độc lập StaffId/InstructorId. Không đổi schema.
+3. Đổi vai trò và phân công đồng thời có thể trả 500 do deadlock được EF bọc trong exception khác: thống nhất update lock trên tài khoản và nhận diện xung đột trong chuỗi exception để trả 409. Tự tạo khóa cũng kiểm tra lại role/stamp trong giao dịch để bảo vệ quan hệ tự phân công.
+4. Hướng dẫn cũ mô tả nhầm npm cài NuGet, migration tạo Admin và cách đăng nhập Swagger; còn ví dụ vai trò Student/hash giả. SETUP_GUIDE.md đã được chỉnh đúng theo mã hiện tại.
+
+Trong SSMS, mở `database/queries/AuditPermissions.sql`. Các truy vấn phân công sai vai trò, tiến độ chéo khóa và tài liệu chéo khóa phải trả 0 dòng. Không dùng `SELECT * FROM Users` khi trình chiếu.
 
 ## Kịch bản demo khoảng 10 phút
 

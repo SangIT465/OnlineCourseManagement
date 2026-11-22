@@ -1,4 +1,4 @@
-USE [OnlineCourseDB];
+  USE [OnlineCourseDB];
 GO
 SET NOCOUNT ON;
 

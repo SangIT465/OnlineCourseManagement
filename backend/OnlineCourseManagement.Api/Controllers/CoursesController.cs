@@ -51,17 +51,19 @@ public sealed class CoursesController(ICourseService courses) : ControllerBase
         return Ok(new { message = "Cập nhật thành công" });
     }
 
+    /// <summary>Admin assigns a Staff account; staffId = null clears only the staff assignment.</summary>
     [Authorize(Policy = AppPolicies.AccountAdministration)]
     [HttpPut("{id:int}/staff")]
     public Task<IActionResult> AssignStaff(int id, [FromBody] AssignStaffDto input, CancellationToken token) =>
         Assign(id, input.StaffId, AppRoles.Staff, token);
 
+    /// <summary>Admin assigns an Instructor account; instructorId = null clears only the teaching assignment.</summary>
     [Authorize(Policy = AppPolicies.AccountAdministration)]
     [HttpPut("{id:int}/instructor")]
     public Task<IActionResult> AssignInstructor(int id, [FromBody] AssignInstructorDto input, CancellationToken token) =>
         Assign(id, input.InstructorId, AppRoles.Instructor, token);
 
-    private async Task<IActionResult> Assign(int id, int operatorId, string role, CancellationToken token)
+    private async Task<IActionResult> Assign(int id, int? operatorId, string role, CancellationToken token)
     {
         var course = await courses.AssignAsync(id, operatorId, role, User, token);
         return Ok(new { message = "Phân công thành công", course.Id, course.InstructorId, course.StaffId,

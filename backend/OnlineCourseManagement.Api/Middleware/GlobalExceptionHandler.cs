@@ -27,6 +27,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
             BusinessException { Error: BusinessError.NotFound } => 404,
             BusinessException { Error: BusinessError.Conflict } => 409,
             DbUpdateConcurrencyException => 409,
+            _ when HasSqlDeadlock(exception) => 409,
             DbUpdateException { InnerException: SqlException { Number: 2601 or 2627 or 547 } } => 409,
             BadHttpRequestException request => request.StatusCode,
             _ => 500
@@ -55,5 +56,12 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         context.Response.StatusCode = status;
         await context.Response.WriteAsJsonAsync(problem, JsonOptions, "application/problem+json", token);
         return true;
+    }
+
+    private static bool HasSqlDeadlock(Exception exception)
+    {
+        for (Exception? current = exception; current is not null; current = current.InnerException)
+            if (current is SqlException { Number: 1205 }) return true;
+        return false;
     }
 }
