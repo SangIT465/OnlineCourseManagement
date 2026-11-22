@@ -1,3 +1,4 @@
+using OnlineCourseManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // POST: api/progress/lessons/1/complete
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpPost("lessons/{lessonId:int}/complete")]
         public async Task<IActionResult> CompleteLesson(
             int lessonId)
@@ -105,7 +106,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // DELETE: api/progress/lessons/1/complete
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpDelete("lessons/{lessonId:int}/complete")]
         public async Task<IActionResult> UndoComplete(
             int lessonId)
@@ -142,7 +143,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/progress/courses/1
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpGet("courses/{courseId:int}")]
         public async Task<IActionResult> GetCourseProgress(
             int courseId)
@@ -218,7 +219,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/progress/my
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpGet("my")]
         public async Task<IActionResult> MyProgress()
         {
@@ -263,7 +264,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/progress/courses/1/students
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         [HttpGet("courses/{courseId:int}/students")]
         public async Task<IActionResult> GetStudentsProgress(
             int courseId)
@@ -275,8 +276,7 @@ namespace OnlineCourseManagement.Controllers
             if (course == null)
                 return NotFound();
 
-            if (!User.IsInRole("Admin") &&
-                course.InstructorId != CurrentUserId())
+            if (!AppRoles.CanManageCourse(User, course))
                 return Forbid();
 
             var totalLessons = await _context.Lessons

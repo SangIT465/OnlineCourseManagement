@@ -15,9 +15,9 @@ BEGIN
 	IF @i % 15 = 0
 		SET @Role = 'Admin';
 	ELSE IF @i % 5 = 0
-		SET @Role = 'Instructor';
+		SET @Role = 'Staff';
 	ELSE
-		SET @Role = 'Student';
+		SET @Role = 'User';
 
 	-- Fake password hash (trong thực tế nên hash đúng)
 	SET @PasswordHash = CONCAT('hash', @i);

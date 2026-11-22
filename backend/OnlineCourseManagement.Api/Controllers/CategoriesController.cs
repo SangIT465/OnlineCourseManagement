@@ -1,3 +1,4 @@
+using OnlineCourseManagement.Security;
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +45,7 @@ namespace OnlineCourseManagement.Controllers
 
         // Chỉ Admin được tạo danh mục
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppRoles.CatalogManagers)]
         public async Task<IActionResult> Create(
             [FromBody] Category category)
         {
@@ -61,7 +62,7 @@ namespace OnlineCourseManagement.Controllers
 
         // Chỉ Admin được cập nhật danh mục
         [HttpPut("{id:int}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppRoles.CatalogManagers)]
         public async Task<IActionResult> Update(
             int id,
             [FromBody] Category input)
@@ -82,7 +83,7 @@ namespace OnlineCourseManagement.Controllers
 
         // Chỉ Admin được xóa danh mục
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppRoles.CatalogManagers)]
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _context.Categories

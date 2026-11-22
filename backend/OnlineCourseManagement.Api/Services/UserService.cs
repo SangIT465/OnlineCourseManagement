@@ -3,6 +3,7 @@ using OnlineCourseManagement.DTOs;
 using OnlineCourseManagement.DTOs.Common;
 using OnlineCourseManagement.Models;
 using OnlineCourseManagement.Repositories;
+using OnlineCourseManagement.Security;
 
 namespace OnlineCourseManagement.Services
 {
@@ -54,7 +55,7 @@ namespace OnlineCourseManagement.Services
             {
                 FullName = dto.FullName,
                 Email = dto.Email.ToLower(),
-                Role = dto.Role,
+                Role = AppRoles.Normalize(dto.Role) ?? throw new ArgumentException("Vai trò không hợp lệ."),
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -73,7 +74,9 @@ namespace OnlineCourseManagement.Services
                 throw new KeyNotFoundException($"User với ID {id} không tồn tại");
 
             user.FullName = dto.FullName;
-            user.Role = dto.Role;
+            var role = AppRoles.Normalize(dto.Role) ?? throw new ArgumentException("Vai trò không hợp lệ.");
+            if (user.Role != role) user.SecurityStamp = Guid.NewGuid().ToString("N");
+            user.Role = role;
 
             await _userRepo.UpdateAsync(user);
             await _userRepo.SaveChangesAsync();
@@ -98,6 +101,7 @@ namespace OnlineCourseManagement.Services
                 throw new KeyNotFoundException($"User với ID {id} không tồn tại");
 
             user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
+            user.SecurityStamp = Guid.NewGuid().ToString("N");
 
             await _userRepo.UpdateAsync(user);
             await _userRepo.SaveChangesAsync();

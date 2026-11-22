@@ -15,8 +15,8 @@ namespace OnlineCourseManagement.DTOs
         [Range(1, int.MaxValue)]
         public int CategoryId { get; set; }
 
-        // Admin chỉ định; Instructor không được
-        // tự gán khóa học cho tài khoản khác.
+        // Legacy field; assignment is controlled by /courses/{id}/staff.
+        // Staff-created courses are assigned to the current Staff account.
         public int? InstructorId { get; set; }
     }
 

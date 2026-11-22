@@ -24,7 +24,7 @@ Swagger: http://localhost:5106/swagger. Endpoint `/` trả thông tin API, `/hea
 - `DTOs/`: định dạng và validation dữ liệu trao đổi.
 - `Services/`: nghiệp vụ người dùng, JWT và xử lý mật khẩu.
 - `Repositories/`: truy vấn người dùng, lọc, sắp xếp và phân trang.
-- `Data/`: EF Core DbContext và tạo Admin ban đầu trong môi trường Development.
+- `Data/`: EF Core DbContext, tạo Admin ban đầu và lệnh nạp catalog mẫu trong Development.
 - `Models/`: các thực thể Course, Lesson, User, Enrollment, LessonProgress và UploadedFile.
 - `Migrations/`: các migration hiện có; giữ nguyên namespace và lịch sử database.
 - `Uploads/`: dữ liệu ảnh/PDF, tên file được giữ nguyên sau khi di chuyển.
@@ -53,7 +53,21 @@ dotnet ef database update --project backend/OnlineCourseManagement.Api --startup
 
 Không tạo migration mới chỉ vì di chuyển thư mục. Các script seed được chuyển sang `database/seeds/` tại gốc repository.
 
+## Catalog khóa học mẫu
+
+Từ thư mục gốc chạy `npm.cmd run seed:catalog`, hoặc gọi trực tiếp:
+
+```powershell
+dotnet run --project backend/OnlineCourseManagement.Api --configuration Release --launch-profile http -- --seed-catalog
+```
+
+Lệnh chỉ chạy trong Development, thêm dữ liệu còn thiếu rồi kết thúc; không khởi động HTTP server hoặc tạo tài khoản. Không tự tạo database hay áp dụng migration. File catalog được liên kết từ `database/seeds/course-catalog.json` và sao chép vào `SeedData/` của đầu ra build/publish, nên không phụ thuộc thư mục terminal đang đứng.
+
+`CourseCatalogSeeder` kiểm tra dữ liệu trước khi ghi, thực hiện toàn bộ thay đổi trong một giao dịch và giữ nguyên bản ghi đã có. Lịch sử migration và schema không thay đổi. Xem [database/README.md](../database/README.md) để biết cách nhận diện bản ghi và nạp lại.
+
 ## CORS và triển khai
+
+Phân quyền gồm Admin, Staff, Instructor và User. Instructor chỉ quản lý khóa được gán qua `InstructorId`; `StaffId` lưu phân công nhân viên riêng. Xem [hướng dẫn phân quyền](../docs/permissions.md) về migration bảo toàn dữ liệu, phạm vi từng vai trò và cơ chế SecurityStamp thu hồi phiên đăng nhập.
 
 `Cors:AllowedOrigins` là danh sách nguồn frontend được phép gọi API trực tiếp. Development có localhost/127.0.0.1 tại cổng 5173 và 4173. Khi triển khai khác tên miền, thiết lập nguồn cụ thể, ví dụ biến môi trường `Cors__AllowedOrigins__0=https://courses.example.com`.
 

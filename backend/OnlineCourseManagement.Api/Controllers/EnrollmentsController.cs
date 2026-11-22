@@ -1,3 +1,4 @@
+using OnlineCourseManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace OnlineCourseManagement.Controllers
 
         // POST: api/enrollments
         // Student đăng ký khóa học
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpPost]
         public async Task<IActionResult> Enroll(
             [FromBody] EnrollCourseDto dto)
@@ -44,7 +45,7 @@ namespace OnlineCourseManagement.Controllers
             var studentExists = await _context.Users
                 .AnyAsync(u =>
                     u.Id == studentId.Value &&
-                    u.Role == "Student");
+                    u.Role == AppRoles.User);
 
             if (!studentExists)
                 return Forbid();
@@ -104,7 +105,7 @@ namespace OnlineCourseManagement.Controllers
 
         // GET: api/enrollments/my
         // Student xem các khóa học đã đăng ký
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpGet("my")]
         public async Task<IActionResult> MyCourses()
         {
@@ -133,7 +134,7 @@ namespace OnlineCourseManagement.Controllers
 
         // GET: api/enrollments
         // Admin xem tất cả lượt đăng ký
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppRoles.CatalogManagers)]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -157,7 +158,7 @@ namespace OnlineCourseManagement.Controllers
 
         // GET: api/enrollments/course/1
         // Admin hoặc giảng viên phụ trách xem học viên
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         [HttpGet("course/{courseId:int}")]
         public async Task<IActionResult> GetStudents(
             int courseId)
@@ -172,8 +173,7 @@ namespace OnlineCourseManagement.Controllers
                     message = "Khóa học không tồn tại"
                 });
 
-            if (!User.IsInRole("Admin") &&
-                course.InstructorId != CurrentUserId())
+            if (!AppRoles.CanManageCourse(User, course))
             {
                 return Forbid();
             }
@@ -203,7 +203,7 @@ namespace OnlineCourseManagement.Controllers
 
         // DELETE: api/enrollments/{courseId}
         // Student hủy đăng ký khóa học
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpDelete("{courseId:int}")]
         public async Task<IActionResult> Cancel(int courseId)
         {

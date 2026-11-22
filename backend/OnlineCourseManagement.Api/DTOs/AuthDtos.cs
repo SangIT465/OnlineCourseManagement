@@ -12,6 +12,8 @@ namespace OnlineCourseManagement.DTOs
 
         [Required, MinLength(8)]
         public string Password { get; set; } = "";
+
+        public string Role { get; set; } = "User";
     }
 
     public class LoginDto

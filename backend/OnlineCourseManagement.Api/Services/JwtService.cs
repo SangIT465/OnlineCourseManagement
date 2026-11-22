@@ -3,6 +3,7 @@ using OnlineCourseManagement.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using OnlineCourseManagement.Security;
 
 namespace OnlineCourseManagement.Services
 {
@@ -44,7 +45,9 @@ namespace OnlineCourseManagement.Services
 
                 new Claim(
                     ClaimTypes.Role,
-                    user.Role)
+                    user.Role),
+
+                new Claim(AppRoles.SecurityStampClaim, user.SecurityStamp)
             };
 
             var token = new JwtSecurityToken(

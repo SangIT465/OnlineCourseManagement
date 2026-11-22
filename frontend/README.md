@@ -22,6 +22,7 @@ Từ thư mục gốc có thể dùng `npm.cmd run dev:frontend`, hoặc `npm.cm
 - `src/app.js`: trạng thái ứng dụng, các trang, định tuyến hash, biểu mẫu và xử lý thao tác.
 - `src/api/client.js`: HTTP client, JWT session, xử lý lỗi, tải file và mã hóa nội dung.
 - `src/config.js`: cấu hình API công khai theo môi trường.
+- `src/auth/permissions.js`: nhãn, quyền và điều hướng cho bốn vai trò Admin/Staff/Instructor/User; API vẫn là nơi quyết định quyền cuối cùng.
 - `src/components/icons.js`: SVG icons dùng chung.
 - `src/styles/main.css`: giao diện desktop/tablet/điện thoại.
 - `public/`: file tĩnh được đưa vào kết quả build.
@@ -60,3 +61,5 @@ npm.cmd run preview
 - Định tuyến dùng hash (`#/courses/...`), giữ nguyên các URL màn hình hiện có.
 
 Phiên đăng nhập nằm trong sessionStorage của từng tab; backend xác minh JWT và quyền truy cập. Số liệu và tiến độ đều lấy từ API. Khi chuyển từ giao diện cũ tại cổng 5106 sang cổng 5173, cần đăng nhập lại vì đây là hai nguồn trình duyệt khác nhau.
+
+Admin dùng màn hình Tài khoản để tạo/đổi vai trò và phân công giảng viên, nhân viên từ trang khóa học. Instructor có Khóa tôi giảng dạy và Học viên của tôi, chỉ quản lý nội dung và tiến độ trong khóa được giao. Staff chỉ xem/hỗ trợ tài khoản User; User ghi danh và học. Màn hình Vai trò & quyền trình bày đầy đủ ma trận quyền. Đổi quyền, đặt lại mật khẩu hoặc xóa tài khoản làm token cũ mất hiệu lực; giao diện sẽ yêu cầu đăng nhập lại khi nhận HTTP 401.

@@ -16,9 +16,9 @@ BEGIN
 	IF @i % 15 = 0
 		SET @Role = 'Admin';
 	ELSE IF @i % 5 = 0
-		SET @Role = 'Instructor';
+		SET @Role = 'Staff';
 	ELSE
-		SET @Role = 'Student';
+		SET @Role = 'User';
 
 	-- Fake password hash for testing
 	SET @PasswordHash = CONCAT('AQAAAAIAAYagP/2JM7R5kLWV8JF', @i);
@@ -42,6 +42,6 @@ END
 SELECT 
 	COUNT(*) as TotalUsers,
 	SUM(CASE WHEN Role = 'Admin' THEN 1 ELSE 0 END) as AdminCount,
-	SUM(CASE WHEN Role = 'Instructor' THEN 1 ELSE 0 END) as InstructorCount,
-	SUM(CASE WHEN Role = 'Student' THEN 1 ELSE 0 END) as StudentCount
+	SUM(CASE WHEN Role = 'Staff' THEN 1 ELSE 0 END) as StaffCount,
+	SUM(CASE WHEN Role = 'User' THEN 1 ELSE 0 END) as UserCount
 FROM [Users];

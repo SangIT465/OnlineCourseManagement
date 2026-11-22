@@ -8,22 +8,19 @@ using OnlineCourseManagement.DTOs.Common;
 using OnlineCourseManagement.Models;
 using OnlineCourseManagement.Services;
 using System.Security.Claims;
+using System.Data;
+using OnlineCourseManagement.Security;
 
 namespace OnlineCourseManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = AppRoles.CatalogManagers)]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly IPasswordHasher<User> _hasher;
         private readonly IUserService _userService;
-
-        private static readonly string[] ValidRoles =
-        {
-            "Admin", "Instructor", "Student"
-        };
 
         public UsersController(
             AppDbContext context,
@@ -39,6 +36,16 @@ namespace OnlineCourseManagement.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResult<UserResponseDto>>> GetAll([FromQuery] UserQueryParameters queryParams)
         {
+            if (!string.IsNullOrWhiteSpace(queryParams.Role))
+            {
+                queryParams.Role = AppRoles.Normalize(queryParams.Role);
+                if (queryParams.Role == null)
+                    return BadRequest(new { message = "Vai trò không hợp lệ." });
+            }
+            if (!User.IsInRole(AppRoles.Admin) && queryParams.Role is not (null or AppRoles.User))
+                return Forbid();
+            // Never trust an incoming query parameter to determine directory scope.
+            queryParams.AllowedRoles = User.IsInRole(AppRoles.Admin) ? null : [AppRoles.User];
             var result = await _userService.GetAllAsync(queryParams);
             return Ok(result);
         }
@@ -66,18 +73,19 @@ namespace OnlineCourseManagement.Controllers
                     message = "Không tìm thấy tài khoản"
                 });
 
+            if (!User.IsInRole(AppRoles.Admin) && user.Role != AppRoles.User)
+                return Forbid();
+
             return Ok(user);
         }
 
         // POST: api/users
         [HttpPost]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Create(
             [FromBody] CreateUserDto dto)
         {
-            var role = ValidRoles.FirstOrDefault(
-                r => r.Equals(
-                    dto.Role?.Trim(),
-                    StringComparison.OrdinalIgnoreCase));
+            var role = AppRoles.Normalize(dto.Role);
 
             if (role == null)
                 return BadRequest(new
@@ -135,14 +143,12 @@ namespace OnlineCourseManagement.Controllers
 
         // PUT: api/users/1/role
         [HttpPut("{id:int}/role")]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> UpdateRole(
             int id,
             [FromBody] UpdateUserRoleDto dto)
         {
-            var role = ValidRoles.FirstOrDefault(
-                r => r.Equals(
-                    dto.Role?.Trim(),
-                    StringComparison.OrdinalIgnoreCase));
+            var role = AppRoles.Normalize(dto.Role);
 
             if (role == null)
                 return BadRequest(new
@@ -150,6 +156,7 @@ namespace OnlineCourseManagement.Controllers
                     message = "Vai trò không hợp lệ"
                 });
 
+            await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
@@ -182,8 +189,18 @@ namespace OnlineCourseManagement.Controllers
                     });
             }
 
+            if (user.Role == AppRoles.Staff && role != AppRoles.Staff &&
+                await _context.Courses.AnyAsync(course => course.StaffId == id))
+                return Conflict(new { message = "Hãy phân công lại các khóa học trước khi đổi vai trò nhân viên." });
+
+            if (user.Role == AppRoles.Instructor && role != AppRoles.Instructor &&
+                await _context.Courses.AnyAsync(course => course.InstructorId == id))
+                return Conflict(new { message = "Hãy phân công lại các khóa học trước khi đổi vai trò giảng viên." });
+
+            if (user.Role != role) user.SecurityStamp = Guid.NewGuid().ToString("N");
             user.Role = role;
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return Ok(new
             {
@@ -209,20 +226,17 @@ namespace OnlineCourseManagement.Controllers
                 });
             }
 
-            if (user.Role != "Student")
+            if (!User.IsInRole(AppRoles.Admin) && user.Role != AppRoles.User)
             {
-                return BadRequest(new
-                {
-                    message = "Chỉ được đặt lại mật khẩu Student"
-                });
+                return Forbid();
             }
 
             if (string.IsNullOrWhiteSpace(dto.NewPassword) ||
-                dto.NewPassword.Length < 6)
+                dto.NewPassword.Length < 8)
             {
                 return BadRequest(new
                 {
-                    message = "Mật khẩu phải có ít nhất 6 ký tự"
+                    message = "Mật khẩu phải có ít nhất 8 ký tự"
                 });
             }
 
@@ -230,18 +244,21 @@ namespace OnlineCourseManagement.Controllers
                 user,
                 dto.NewPassword
             );
+            user.SecurityStamp = Guid.NewGuid().ToString("N");
 
             await _context.SaveChangesAsync();
 
             return Ok(new
             {
-                message = "Đặt lại mật khẩu Student thành công"
+                message = "Đặt lại mật khẩu thành công. Các phiên đăng nhập cũ đã hết hiệu lực."
             });
         }
         // DELETE: api/users/1
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
@@ -276,6 +293,7 @@ namespace OnlineCourseManagement.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
             }
             catch (DbUpdateException)
             {

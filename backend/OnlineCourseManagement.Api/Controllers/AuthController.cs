@@ -7,6 +7,7 @@ using OnlineCourseManagement.DTOs;
 using OnlineCourseManagement.Models;
 using OnlineCourseManagement.Services;
 using System.Security.Claims;
+using OnlineCourseManagement.Security;
 
 namespace OnlineCourseManagement.Controllers
 {
@@ -34,6 +35,9 @@ namespace OnlineCourseManagement.Controllers
         public async Task<IActionResult> Register(
             [FromBody] RegisterDto dto)
         {
+            if (AppRoles.Normalize(dto.Role) != AppRoles.User)
+                return BadRequest(new { message = "Đăng ký công khai chỉ tạo User (sinh viên)." });
+
             var email = dto.Email.Trim().ToLowerInvariant();
 
             var exists = await _context.Users
@@ -49,7 +53,7 @@ namespace OnlineCourseManagement.Controllers
             {
                 FullName = dto.FullName.Trim(),
                 Email = email,
-                Role = "Student"
+                Role = AppRoles.User
             };
 
             user.PasswordHash = _passwordHasher
@@ -96,11 +100,16 @@ namespace OnlineCourseManagement.Controllers
                     message = "Email hoặc mật khẩu không đúng"
                 });
 
-            var result = _passwordHasher
-                .VerifyHashedPassword(
-                    user,
-                    user.PasswordHash,
-                    dto.Password);
+            PasswordVerificationResult result;
+            try
+            {
+                result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+            }
+            catch (FormatException)
+            {
+                // Legacy SQL demo accounts may not contain an Identity password hash.
+                return Unauthorized(new { message = "Email hoặc mật khẩu không đúng" });
+            }
 
             if (result == PasswordVerificationResult.Failed)
                 return Unauthorized(new
@@ -163,13 +172,14 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/auth/student-only
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = AppRoles.User)]
         [HttpGet("student-only")]
+        [HttpGet("user-only")]
         public IActionResult StudentOnly()
         {
             return Ok(new
             {
-                message = "Bạn có quyền Student"
+                    message = "Bạn có quyền User (sinh viên)"
             });
         }
 

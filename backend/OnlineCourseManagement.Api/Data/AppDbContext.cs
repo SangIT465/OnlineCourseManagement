@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineCourseManagement.Models;
+using OnlineCourseManagement.Security;
 
 namespace OnlineCourseManagement.Data
 {
@@ -36,10 +37,21 @@ namespace OnlineCourseManagement.Data
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+            modelBuilder.Entity<User>().Property(u => u.Role)
+                .HasDefaultValue(AppRoles.User);
+            modelBuilder.Entity<User>().Property(u => u.SecurityStamp)
+                .HasDefaultValueSql("REPLACE(CONVERT(varchar(36), NEWID()), '-', '')");
+            modelBuilder.Entity<User>().ToTable(table => table.HasCheckConstraint(
+                "CK_Users_Role", "[Role] IN (N'Admin', N'Staff', N'Instructor', N'User')"));
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.Instructor)
                 .WithMany()
                 .HasForeignKey(c => c.InstructorId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Staff)
+                .WithMany()
+                .HasForeignKey(c => c.StaffId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Enrollment>(entity =>
             {

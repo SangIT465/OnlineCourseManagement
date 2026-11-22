@@ -22,6 +22,9 @@ namespace OnlineCourseManagement.Models
         public int? InstructorId { get; set; }
         public User? Instructor { get; set; }
 
+        public int? StaffId { get; set; }
+        public User? Staff { get; set; }
+
         public DateTime CreatedAt { get; set; }
             = DateTime.UtcNow;
     }

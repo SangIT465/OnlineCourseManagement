@@ -20,9 +20,9 @@ BEGIN
 	IF @i % 15 = 0
 		SET @Role = 'Admin';
 	ELSE IF @i % 5 = 0
-		SET @Role = 'Instructor';
+		SET @Role = 'Staff';
 	ELSE
-		SET @Role = 'Student';
+		SET @Role = 'User';
 
 	SET @PasswordHash = CONCAT('hash_password_', @i);
 
@@ -45,9 +45,9 @@ END
 SELECT COUNT(*) as TotalUsers FROM [Users];
 SELECT 'Admin' as Role, COUNT(*) as Count FROM [Users] WHERE Role = 'Admin'
 UNION ALL
-SELECT 'Instructor', COUNT(*) FROM [Users] WHERE Role = 'Instructor'
+SELECT 'Staff', COUNT(*) FROM [Users] WHERE Role = 'Staff'
 UNION ALL
-SELECT 'Student', COUNT(*) FROM [Users] WHERE Role = 'Student';
+SELECT 'User', COUNT(*) FROM [Users] WHERE Role = 'User';
 
 SELECT TOP 10 Id, FullName, Email, Role, CreatedAt 
 FROM [Users] 

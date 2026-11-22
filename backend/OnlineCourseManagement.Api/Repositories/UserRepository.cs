@@ -28,6 +28,9 @@ namespace OnlineCourseManagement.Repositories
         {
             var query = _db.Users.AsNoTracking().AsQueryable();
 
+            if (queryParams.AllowedRoles is { Length: > 0 })
+                query = query.Where(user => queryParams.AllowedRoles.Contains(user.Role));
+
             // 1. SEARCH (Tìm kiếm tương đối)
             if (!string.IsNullOrWhiteSpace(queryParams.SearchTerm))
             {

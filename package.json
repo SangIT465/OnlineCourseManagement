@@ -14,6 +14,9 @@
     "build": "node scripts/build.mjs",
     "build:frontend": "npm run build --workspace frontend",
     "build:backend": "dotnet build OnlineCourseManagement.sln",
-    "test": "npm run test --workspace frontend"
+    "test": "node scripts/test.mjs",
+    "test:authorization": "node backend/tests/authorization.integration.mjs",
+    "test:crud": "node backend/tests/crud.integration.mjs",
+    "seed:catalog": "dotnet run --project backend/OnlineCourseManagement.Api --configuration Release --launch-profile http -- --seed-catalog --Logging:LogLevel:Microsoft.EntityFrameworkCore=Warning"
   }
 }

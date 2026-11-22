@@ -10,6 +10,7 @@ OnlineCourseManagement/
 │   ├── public/                    # Tài nguyên tĩnh
 │   ├── src/
 │   │   ├── api/client.js          # HTTP client, JWT, lỗi API
+│   │   ├── auth/permissions.js    # Quyền và điều hướng theo vai trò
 │   │   ├── components/icons.js    # Thành phần SVG dùng chung
 │   │   ├── styles/main.css        # Giao diện responsive
 │   │   ├── app.js                 # Màn hình, biểu mẫu, định tuyến
@@ -24,6 +25,7 @@ OnlineCourseManagement/
 │       ├── Controllers/           # API endpoints và phân quyền
 │       ├── DTOs/                  # Hợp đồng request/response
 │       ├── Services/              # Nghiệp vụ, JWT, mật khẩu
+│       ├── Security/              # Bốn vai trò và kiểm tra quyền theo khóa
 │       ├── Repositories/          # Truy cập dữ liệu người dùng
 │       ├── Models/                # Thực thể dữ liệu
 │       ├── Data/                  # DbContext và tạo Admin ban đầu
@@ -32,7 +34,7 @@ OnlineCourseManagement/
 │       ├── Uploads/               # File ảnh/PDF hiện có
 │       ├── Program.cs
 │       └── OnlineCourseManagement.Api.csproj
-├── database/seeds/                # Script SQL chạy thủ công
+├── database/seeds/                # Script SQL và catalog khóa học mẫu
 ├── docs/architecture.md           # Kiến trúc và luồng xử lý
 ├── scripts/                      # Chạy/build cả hai ứng dụng
 ├── archive/legacy-razor/           # Giao diện Razor cũ để đối chiếu
@@ -91,6 +93,24 @@ dotnet ef database update --project backend/OnlineCourseManagement.Api --startup
 
 Script trong `database/seeds/` là dữ liệu thử nghiệm chạy thủ công; kiểm tra nội dung trước khi chạy vào database đang sử dụng.
 
+## Nạp nhiều khóa học và bài học mẫu
+
+Sau khi database đã áp dụng các migration, chạy từ thư mục gốc:
+
+```powershell
+npm.cmd run seed:catalog
+```
+
+Lệnh bổ sung **6 danh mục, 24 khóa học và 192 bài học** (8 bài/khóa), gồm 6 khóa miễn phí và 18 khóa có học phí. Các lĩnh vực: Lập trình Web, Backend & Cơ sở dữ liệu, Dữ liệu & AI, Thiết kế & Sáng tạo, Kinh doanh & Marketing, Ngoại ngữ & Kỹ năng. Bài học có tiêu đề, thời lượng, bài tập và nội dung tự kiểm tra để thử luồng học tập.
+
+Chỉ lệnh chủ động này mới nạp catalog; khởi động ứng dụng bình thường không tự nạp lại. Lệnh chạy bằng cấu hình Release trong môi trường Development, không mở cổng HTTP, nên có thể dùng trong lúc ứng dụng development đang chạy.
+
+Nạp lại không tạo trùng với danh mục/khóa học còn giữ tên và bài học còn giữ thứ tự. Các bản ghi có sẵn được giữ nguyên, gồm học phí, nhân viên và nội dung đã sửa. Danh mục được nhận diện bằng tên, khóa học bằng danh mục + tên, bài học bằng khóa học + thứ tự. Nếu đổi tên danh mục/khóa học hoặc xóa bài học rồi chạy lại, phần mẫu tương ứng có thể được thêm lại. Toàn bộ lần nạp nằm trong một giao dịch.
+
+Dữ liệu được lưu ở `database/seeds/course-catalog.json`. Lệnh không tạo tài khoản, ghi danh hoặc tiến độ. Khóa mới chưa phân công nhân viên để Admin có thể thử thao tác phân công. Video và PDF có thể được thêm từ màn hình quản lý bài học.
+
+Sau khi nạp, làm mới giao diện để thử tìm kiếm, lọc miễn phí/có học phí, phân trang, chỉnh sửa và ghi danh. Xem [hướng dẫn dữ liệu mẫu](database/README.md).
+
 ## Kết nối frontend với API
 
 Mặc định frontend gọi `/api`, Vite chuyển tiếp request đến `http://localhost:5106`. Khi thay đổi môi trường, sao chép `frontend/.env.example` thành `frontend/.env.local` rồi cập nhật cấu hình. Xem [hướng dẫn frontend](frontend/README.md).
@@ -114,11 +134,16 @@ Khi triển khai API, bố trí `Uploads/` dưới content root của ứng dụ
 
 ## Chức năng theo vai trò
 
+Hệ thống có bốn vai trò: **Admin**, **Staff (nhân viên)**, **Instructor (giảng viên)** và **User (sinh viên)**. Xem [ma trận quyền và cách cấp quyền](docs/permissions.md). Migration mới tách `StaffId` và `InstructorId`, giữ nguyên các phân công nhân viên cũ. Admin chủ động cấp quyền giảng viên và phân công giảng dạy.
+
 | Vai trò | Chức năng |
 | --- | --- |
 | Khách | Khám phá/tìm/lọc khóa học, xem chương trình và danh mục, đăng nhập/đăng ký. |
-| Student | Ghi danh, học bài, tải tài liệu, cập nhật tiến độ học tập. |
-| Instructor | Tạo và quản lý khóa học phụ trách, bài học, học liệu, theo dõi học viên. |
-| Admin | Quản lý danh mục/khóa học/người dùng, phân quyền, phân công giảng viên và theo dõi ghi danh. |
+| User (sinh viên) | Ghi danh, học bài, tải tài liệu, cập nhật tiến độ học tập. |
+| Staff (nhân viên) | Quản lý danh mục, khóa học, bài học, học liệu, ghi danh và hỗ trợ tài khoản User. |
+| Instructor (giảng viên) | Tạo khóa học, quản lý bài học/học liệu và xem tiến độ học viên chỉ trong khóa mình phụ trách. |
+| Admin | Quản lý danh mục/khóa học/người dùng, phân quyền, phân công giảng viên/nhân viên và theo dõi ghi danh. |
 
 Hệ thống hiện hỗ trợ ghi danh, chưa tích hợp thanh toán. Phân quyền cuối cùng luôn do backend kiểm tra.
+
+Sau khi chạy API và cập nhật database, có thể kiểm tra phân quyền thực tế bằng `npm.cmd run test:authorization`. Lệnh tạo và dọn các bản ghi QA tạm, không thay đổi tài khoản người dùng hiện có.

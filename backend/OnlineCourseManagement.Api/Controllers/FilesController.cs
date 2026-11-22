@@ -1,3 +1,4 @@
+using OnlineCourseManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,13 +33,7 @@ public class FilesController : ControllerBase
             ? id : null;
     }
 
-    private bool CanManage(Course course)
-    {
-        return User.IsInRole("Admin") ||
-            (User.IsInRole("Instructor") &&
-             CurrentUserId() != null &&
-             course.InstructorId == CurrentUserId());
-    }
+    private bool CanManage(Course course) => AppRoles.CanManageCourse(User, course);
 
     private static bool IsValidSignature(
         byte[] header, string extension)
@@ -76,7 +71,7 @@ public class FilesController : ControllerBase
     }
 
     // POST: api/files/courses/1/image
-    [Authorize(Roles = "Admin,Instructor")]
+    [Authorize(Roles = AppRoles.CourseEditors)]
     [HttpPost("courses/{courseId:int}/image")]
     [RequestSizeLimit(6_000_000)]
     public async Task<IActionResult> UploadCourseImage(
@@ -97,7 +92,7 @@ public class FilesController : ControllerBase
     }
 
     // POST: api/files/lessons/1/document
-    [Authorize(Roles = "Admin,Instructor")]
+    [Authorize(Roles = AppRoles.CourseEditors)]
     [HttpPost("lessons/{lessonId:int}/document")]
     [RequestSizeLimit(12_000_000)]
     public async Task<IActionResult> UploadLessonDocument(
@@ -246,7 +241,7 @@ public class FilesController : ControllerBase
 
         bool allowed = CanManage(course);
 
-        if (!allowed && User.IsInRole("Student"))
+        if (!allowed && User.IsInRole(AppRoles.User))
         {
             var userId = CurrentUserId();
 
@@ -333,7 +328,7 @@ public class FilesController : ControllerBase
 
         bool allowed = CanManage(lesson.Course);
 
-        if (!allowed && User.IsInRole("Student"))
+        if (!allowed && User.IsInRole(AppRoles.User))
         {
             var userId = CurrentUserId();
 
@@ -364,7 +359,7 @@ public class FilesController : ControllerBase
     }
 
     // DELETE: api/files/1
-    [Authorize(Roles = "Admin,Instructor")]
+    [Authorize(Roles = AppRoles.CourseEditors)]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

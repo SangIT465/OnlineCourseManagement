@@ -17,7 +17,7 @@ namespace OnlineCourseManagement.DTOs
         public string Password { get; set; } = "";
 
         [Required]
-        public string Role { get; set; } = "Student";
+        public string Role { get; set; } = "User";
     }
 
     public class UpdateUserDto

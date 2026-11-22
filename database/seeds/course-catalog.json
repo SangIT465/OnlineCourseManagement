@@ -1,0 +1,1169 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "name": "Lập trình Web",
+      "description": "Xây dựng giao diện và ứng dụng web từ nền tảng đến sản phẩm thực hành.",
+      "courses": [
+        {
+          "title": "HTML & CSS: Xây dựng website đầu tiên",
+          "description": "Bắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.",
+          "price": 0,
+          "lessons": [
+            {
+              "title": "Cấu trúc một trang HTML",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Cấu trúc một trang HTML\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: cấu trúc một trang html.\n\nBÀI TẬP THỰC HÀNH\nTạo index.html có tiêu đề, tên của bạn, đoạn giới thiệu, danh sách kỹ năng và liên kết liên hệ. Kiểm tra thứ tự các tiêu đề.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Biểu mẫu và nhãn nhập liệu",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Biểu mẫu và nhãn nhập liệu\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: biểu mẫu và nhãn nhập liệu.\n\nBÀI TẬP THỰC HÀNH\nTạo biểu mẫu đăng ký khóa học gồm họ tên, email và khóa muốn học. Gắn nhãn cho từng trường và thử bỏ trống trường bắt buộc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "CSS và mô hình hộp",
+              "durationMinutes": 40,
+              "content": "BÀI 3: CSS và mô hình hộp\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: css và mô hình hộp.\n\nBÀI TẬP THỰC HÀNH\nThiết kế một thẻ khóa học có padding, border và margin. Thay đổi từng giá trị rồi giải thích ảnh hưởng đến kích thước và khoảng cách.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Bố cục với Flexbox",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Bố cục với Flexbox\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: bố cục với flexbox.\n\nBÀI TẬP THỰC HÀNH\nTạo thanh điều hướng có logo bên trái và các mục menu bên phải. Thử căn giữa theo chiều dọc và cho phép xuống dòng khi thiếu chỗ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Danh sách với CSS Grid",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Danh sách với CSS Grid\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: danh sách với css grid.\n\nBÀI TẬP THỰC HÀNH\nHiển thị sáu thẻ khóa học thành lưới có khoảng cách thống nhất. Thử bố cục một, hai và ba cột.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thiết kế responsive",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Thiết kế responsive\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: thiết kế responsive.\n\nBÀI TẬP THỰC HÀNH\nKiểm tra trang ở chiều rộng 390 px và 1440 px. Tìm phần tử gây tràn ngang, điều chỉnh chữ và vùng nhấn để dùng được trên điện thoại.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Khả năng truy cập cơ bản",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Khả năng truy cập cơ bản\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: khả năng truy cập cơ bản.\n\nBÀI TẬP THỰC HÀNH\nDuyệt toàn bộ trang bằng phím Tab. Bổ sung nhãn cho nút biểu tượng và kiểm tra người dùng có nhận ra vị trí focus hay không.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Trang giới thiệu cá nhân",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Trang giới thiệu cá nhân\n\nTỔNG QUAN\nBắt đầu từ cấu trúc trang, bố cục và thiết kế responsive. Hoàn thiện trang giới thiệu cá nhân có thể dùng trên điện thoại.\nTrọng tâm của buổi học: dự án: trang giới thiệu cá nhân.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện trang gồm giới thiệu, kỹ năng, dự án và liên hệ. Kiểm tra trên hai kích thước màn hình và ghi lại ba điểm đã cải thiện.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "JavaScript thực hành cho giao diện web",
+          "description": "Làm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.",
+          "price": 199000,
+          "lessons": [
+            {
+              "title": "Biến và kiểu dữ liệu",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Biến và kiểu dữ liệu\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: biến và kiểu dữ liệu.\n\nBÀI TẬP THỰC HÀNH\nMô tả một khóa học bằng tên, học phí, thời lượng và trạng thái đã đăng ký. In giá trị và kiểu của từng thuộc tính.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Điều kiện và vòng lặp",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Điều kiện và vòng lặp\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: điều kiện và vòng lặp.\n\nBÀI TẬP THỰC HÀNH\nDuyệt danh sách khóa học, tách khóa miễn phí và khóa có học phí. Thử với danh sách rỗng và danh sách chỉ có một khóa.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hàm và phạm vi biến",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Hàm và phạm vi biến\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: hàm và phạm vi biến.\n\nBÀI TẬP THỰC HÀNH\nViết hàm tính tổng thời lượng bài học nhận danh sách làm tham số. Thử dữ liệu rỗng và kiểm tra hàm không sửa đầu vào.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Mảng và đối tượng",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Mảng và đối tượng\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: mảng và đối tượng.\n\nBÀI TẬP THỰC HÀNH\nLọc khóa học theo danh mục, sắp xếp theo học phí và lấy danh sách tên. Giải thích dữ liệu trước và sau mỗi thao tác.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "DOM và sự kiện",
+              "durationMinutes": 45,
+              "content": "BÀI 5: DOM và sự kiện\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: dom và sự kiện.\n\nBÀI TẬP THỰC HÀNH\nTạo biểu mẫu thêm công việc và nút hoàn thành. Không tải lại trang khi gửi biểu mẫu và không chấp nhận tên chỉ có khoảng trắng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Bất đồng bộ và gọi API",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Bất đồng bộ và gọi API\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: bất đồng bộ và gọi api.\n\nBÀI TẬP THỰC HÀNH\nGọi API danh sách khóa học của CourseFlow. Hiển thị trạng thái tải, trạng thái rỗng và lỗi khi backend dừng hoạt động.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lưu trạng thái trong trình duyệt",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Lưu trạng thái trong trình duyệt\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: lưu trạng thái trong trình duyệt.\n\nBÀI TẬP THỰC HÀNH\nLưu danh sách công việc hoặc bộ lọc tại trình duyệt, tải lại trang và kiểm tra khôi phục dữ liệu. Không lưu bí mật máy chủ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Danh sách công việc",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Danh sách công việc\n\nTỔNG QUAN\nLàm chủ dữ liệu, sự kiện, biểu mẫu và gọi API qua ứng dụng danh sách công việc có tìm kiếm và lưu trạng thái.\nTrọng tâm của buổi học: dự án: danh sách công việc.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện chức năng thêm, sửa, xóa, tìm kiếm và hoàn thành công việc. Kiểm tra thao tác bàn phím và trạng thái sau khi tải lại trang.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "React: Tư duy component và quản lý trạng thái",
+          "description": "Tổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.",
+          "price": 299000,
+          "lessons": [
+            {
+              "title": "Tư duy chia nhỏ giao diện",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Tư duy chia nhỏ giao diện\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: tư duy chia nhỏ giao diện.\n\nBÀI TẬP THỰC HÀNH\nVẽ sơ đồ thành phần của trang khóa học: bộ lọc, danh sách, thẻ và phân trang. Nêu trách nhiệm của mỗi thành phần.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Props và luồng dữ liệu",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Props và luồng dữ liệu\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: props và luồng dữ liệu.\n\nBÀI TẬP THỰC HÀNH\nThiết kế thẻ khóa học nhận tên, học phí và danh mục từ bên ngoài. Hiển thị ba thẻ với dữ liệu khác nhau.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "State và sự kiện tương tác",
+              "durationMinutes": 40,
+              "content": "BÀI 3: State và sự kiện tương tác\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: state và sự kiện tương tác.\n\nBÀI TẬP THỰC HÀNH\nThêm lựa chọn chế độ lưới hoặc danh sách. Giữ nguyên dữ liệu khóa học khi thay đổi cách trình bày.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Danh sách và trạng thái rỗng",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Danh sách và trạng thái rỗng\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: danh sách và trạng thái rỗng.\n\nBÀI TẬP THỰC HÀNH\nHiển thị danh sách có định danh ổn định. Tạo màn hình riêng cho bộ lọc không có kết quả, kèm thao tác bỏ bộ lọc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Biểu mẫu có kiểm tra dữ liệu",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Biểu mẫu có kiểm tra dữ liệu\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: biểu mẫu có kiểm tra dữ liệu.\n\nBÀI TẬP THỰC HÀNH\nTạo biểu mẫu đăng ký kiểm tra tên, email và mật khẩu. Hiển thị lỗi theo trường và khóa nút trong khi gửi yêu cầu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tải dữ liệu và xử lý lỗi",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Tải dữ liệu và xử lý lỗi\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: tải dữ liệu và xử lý lỗi.\n\nBÀI TẬP THỰC HÀNH\nTạo danh sách gọi API khóa học có nút thử lại. Kiểm tra tình huống chuyển trang trong lúc yêu cầu trước chưa kết thúc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tổ chức module dùng chung",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Tổ chức module dùng chung\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: tổ chức module dùng chung.\n\nBÀI TẬP THỰC HÀNH\nTách HTTP client, nút, dialog và thẻ khóa học thành module. Ghi rõ dữ liệu đầu vào và sự kiện của từng thành phần.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Danh mục khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Danh mục khóa học\n\nTỔNG QUAN\nTổ chức giao diện thành các thành phần, quản lý biểu mẫu và dữ liệu bất đồng bộ qua dự án danh mục khóa học.\nTrọng tâm của buổi học: dự án: danh mục khóa học.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện trang danh sách, chi tiết và biểu mẫu kết nối backend có thật. Kiểm tra trạng thái tải, lỗi và giao diện điện thoại.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "ASP.NET Core Web API: Xây dựng backend khóa học",
+          "description": "Thiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.",
+          "price": 399000,
+          "lessons": [
+            {
+              "title": "Cấu trúc ứng dụng API",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Cấu trúc ứng dụng API\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: cấu trúc ứng dụng api.\n\nBÀI TẬP THỰC HÀNH\nMở backend CourseFlow, mô tả vai trò của Program.cs, Controllers, DTOs và Data. Theo dõi một yêu cầu xem danh mục.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Route và phương thức HTTP",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Route và phương thức HTTP\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: route và phương thức http.\n\nBÀI TẬP THỰC HÀNH\nLiệt kê endpoint để xem, tạo, cập nhật và xóa danh mục. Mô tả đầu vào và kết quả của từng endpoint.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "DTO và validation",
+              "durationMinutes": 40,
+              "content": "BÀI 3: DTO và validation\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: dto và validation.\n\nBÀI TẬP THỰC HÀNH\nThiết kế DTO tạo khóa học với tên bắt buộc, danh mục hợp lệ và học phí không âm. Thử ba trường hợp dữ liệu không hợp lệ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dependency injection và service",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Dependency injection và service\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: dependency injection và service.\n\nBÀI TẬP THỰC HÀNH\nTách một nghiệp vụ người dùng ra service. Xác định các phụ thuộc cần đăng ký và cách controller nhận service.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Kết nối SQL Server qua EF Core",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Kết nối SQL Server qua EF Core\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: kết nối sql server qua ef core.\n\nBÀI TẬP THỰC HÀNH\nTheo dõi yêu cầu xem khóa học từ controller đến bảng dữ liệu. Xác định truy vấn lấy những cột nào và cách phản hồi cho frontend.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Xác thực JWT và phân quyền",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Xác thực JWT và phân quyền\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: xác thực jwt và phân quyền.\n\nBÀI TẬP THỰC HÀNH\nLập bảng quyền Admin, Instructor, Student cho thao tác xem và sửa bài học. Phân biệt quyền theo vai trò với quyền sở hữu khóa học.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lỗi nghiệp vụ và phản hồi HTTP",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Lỗi nghiệp vụ và phản hồi HTTP\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: lỗi nghiệp vụ và phản hồi http.\n\nBÀI TẬP THỰC HÀNH\nThử tạo tên rỗng, truy cập bản ghi không có và xóa danh mục đang có khóa học. Ghi lại phản hồi mà giao diện cần xử lý.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: API quản lý khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: API quản lý khóa học\n\nTỔNG QUAN\nThiết kế endpoint, validation, truy cập dữ liệu và phân quyền cho hệ thống khóa học có frontend độc lập.\nTrọng tâm của buổi học: dự án: api quản lý khóa học.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện bộ yêu cầu kiểm thử CRUD khóa học, ghi danh và tiến độ theo ba vai trò, có cả trường hợp thất bại.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Backend & Cơ sở dữ liệu",
+      "description": "Nền tảng lập trình phía máy chủ, thiết kế dữ liệu và xây dựng API dễ bảo trì.",
+      "courses": [
+        {
+          "title": "C# nền tảng và lập trình hướng đối tượng",
+          "description": "Học kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.",
+          "price": 0,
+          "lessons": [
+            {
+              "title": "Kiểu dữ liệu và biến trong C#",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Kiểu dữ liệu và biến trong C#\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: kiểu dữ liệu và biến trong c#.\n\nBÀI TẬP THỰC HÀNH\nKhai báo tên khóa học, số bài, học phí và thời điểm tạo. Giải thích lựa chọn kiểu dữ liệu cho từng thông tin.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Điều kiện và duyệt tập hợp",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Điều kiện và duyệt tập hợp\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: điều kiện và duyệt tập hợp.\n\nBÀI TẬP THỰC HÀNH\nTính tổng thời lượng các bài học và phân loại khóa học theo học phí. Kiểm tra dữ liệu rỗng và giá trị bằng không.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Phương thức và tham số",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Phương thức và tham số\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: phương thức và tham số.\n\nBÀI TẬP THỰC HÀNH\nViết phương thức tính phần trăm hoàn thành từ số bài đã học và tổng số bài. Xử lý trường hợp khóa học chưa có bài.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lớp và đối tượng",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Lớp và đối tượng\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: lớp và đối tượng.\n\nBÀI TẬP THỰC HÀNH\nTạo lớp Course và Lesson, khởi tạo một khóa học có ba bài học. Phân biệt lớp và đối tượng trong ví dụ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đóng gói và quy tắc nghiệp vụ",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Đóng gói và quy tắc nghiệp vụ\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: đóng gói và quy tắc nghiệp vụ.\n\nBÀI TẬP THỰC HÀNH\nThiết kế thao tác thay đổi học phí, từ chối giá trị âm. Giải thích nơi thích hợp để kiểm tra quy tắc này.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Interface và đa hình",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Interface và đa hình\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: interface và đa hình.\n\nBÀI TẬP THỰC HÀNH\nMô tả interface truy vấn khóa học và hai cách cung cấp dữ liệu: bộ nhớ và cơ sở dữ liệu. Chỉ ra phần có thể thay thế.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Ngoại lệ và xử lý lỗi",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Ngoại lệ và xử lý lỗi\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: ngoại lệ và xử lý lỗi.\n\nBÀI TẬP THỰC HÀNH\nXử lý trường hợp nhập học phí sai định dạng hoặc yêu cầu khóa học không tồn tại. Viết thông báo dễ hiểu cho người sử dụng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Quản lý khóa học bằng console",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Quản lý khóa học bằng console\n\nTỔNG QUAN\nHọc kiểu dữ liệu, hàm, lớp và xử lý lỗi bằng các ví dụ gần với nghiệp vụ khóa học.\nTrọng tâm của buổi học: dự án: quản lý khóa học bằng console.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện chương trình thêm, sửa, tìm và thống kê khóa học. Kiểm tra dữ liệu trước khi ghi và thử các giá trị biên.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "SQL Server: Thiết kế và truy vấn dữ liệu",
+          "description": "Từ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.",
+          "price": 249000,
+          "lessons": [
+            {
+              "title": "Bảng, hàng và khóa chính",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Bảng, hàng và khóa chính\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: bảng, hàng và khóa chính.\n\nBÀI TẬP THỰC HÀNH\nVẽ bảng Users, Courses và Lessons. Xác định khóa chính, thuộc tính bắt buộc và ý nghĩa của mỗi hàng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "SELECT và điều kiện WHERE",
+              "durationMinutes": 35,
+              "content": "BÀI 2: SELECT và điều kiện WHERE\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: select và điều kiện where.\n\nBÀI TẬP THỰC HÀNH\nViết truy vấn lấy khóa học miễn phí và bài học có thời lượng trên 30 phút. Chỉ chọn các cột cần hiển thị.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Sắp xếp và phân trang",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Sắp xếp và phân trang\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: sắp xếp và phân trang.\n\nBÀI TẬP THỰC HÀNH\nViết truy vấn lấy trang thứ hai của danh sách khóa học, mỗi trang chín bản ghi. Bổ sung tiêu chí sắp xếp ổn định.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Quan hệ và JOIN",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Quan hệ và JOIN\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: quan hệ và join.\n\nBÀI TẬP THỰC HÀNH\nKết hợp bảng để lấy tên khóa học, tên danh mục và tên giảng viên. Kiểm tra khóa học chưa có giảng viên.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "GROUP BY và thống kê",
+              "durationMinutes": 45,
+              "content": "BÀI 5: GROUP BY và thống kê\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: group by và thống kê.\n\nBÀI TẬP THỰC HÀNH\nĐếm khóa học theo danh mục và lượt ghi danh theo khóa học. So sánh phép đếm bản ghi với phép cộng giá trị.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Ràng buộc và tính toàn vẹn",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Ràng buộc và tính toàn vẹn\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: ràng buộc và tính toàn vẹn.\n\nBÀI TẬP THỰC HÀNH\nĐề xuất ràng buộc ngăn học viên đăng ký trùng một khóa học. Mô tả phản hồi khi xóa một danh mục có khóa học.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Giao dịch và tính nhất quán",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Giao dịch và tính nhất quán\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: giao dịch và tính nhất quán.\n\nBÀI TẬP THỰC HÀNH\nMô tả cách thêm khóa học cùng các bài trong một giao dịch. Thử một lỗi giữa chừng và kiểm tra toàn bộ thay đổi được rollback.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Báo cáo học tập",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Báo cáo học tập\n\nTỔNG QUAN\nTừ SELECT đến quan hệ bảng, thống kê và giao dịch qua mô hình quản lý khóa học trực tuyến.\nTrọng tâm của buổi học: dự án: báo cáo học tập.\n\nBÀI TẬP THỰC HÀNH\nViết truy vấn thống kê khóa học, lượt ghi danh và tỷ lệ hoàn thành. Giải thích cách xử lý nhóm chưa có dữ liệu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Entity Framework Core: Truy cập dữ liệu thực tế",
+          "description": "Mô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.",
+          "price": 299000,
+          "lessons": [
+            {
+              "title": "Entity và DbContext",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Entity và DbContext\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: entity và dbcontext.\n\nBÀI TẬP THỰC HÀNH\nĐối chiếu các entity CourseFlow với DbSet trong AppDbContext. Theo dõi một thao tác đọc và một thao tác ghi dữ liệu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Ánh xạ quan hệ giữa các bảng",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Ánh xạ quan hệ giữa các bảng\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: ánh xạ quan hệ giữa các bảng.\n\nBÀI TẬP THỰC HÀNH\nGiải thích quan hệ Category–Course, Course–Lesson và Enrollment–LessonProgress. Phân tích lựa chọn khi xóa bản ghi liên quan.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Migration và lịch sử schema",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Migration và lịch sử schema\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: migration và lịch sử schema.\n\nBÀI TẬP THỰC HÀNH\nLiệt kê migration có sẵn, tìm migration thêm ghi danh. Giải thích vì sao di chuyển thư mục không yêu cầu tạo schema mới.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Truy vấn chỉ đọc và projection",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Truy vấn chỉ đọc và projection\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: truy vấn chỉ đọc và projection.\n\nBÀI TẬP THỰC HÀNH\nViết truy vấn chỉ trả tên khóa học, danh mục và số bài học. So sánh với việc trả toàn bộ entity.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lọc, sắp xếp và phân trang",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Lọc, sắp xếp và phân trang\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: lọc, sắp xếp và phân trang.\n\nBÀI TẬP THỰC HÀNH\nXây dựng truy vấn người dùng theo vai trò và từ khóa. Trả tổng số bản ghi cùng trang hiện tại và thử trang không có kết quả.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thêm, sửa và lưu thay đổi",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Thêm, sửa và lưu thay đổi\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: thêm, sửa và lưu thay đổi.\n\nBÀI TẬP THỰC HÀNH\nThêm khóa học, lưu và đọc lại. Cập nhật học phí, sau đó kiểm tra dữ liệu thực tế trong SQL Server.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Giao dịch và thao tác chạy lại",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Giao dịch và thao tác chạy lại\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: giao dịch và thao tác chạy lại.\n\nBÀI TẬP THỰC HÀNH\nThiết kế cách nạp dữ liệu mẫu có thể chạy nhiều lần. Xác định điều kiện nhận biết danh mục, khóa học và bài học đã có.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Kho dữ liệu khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Kho dữ liệu khóa học\n\nTỔNG QUAN\nMô hình hóa quan hệ, migration, truy vấn và lưu thay đổi với các tình huống có trong CourseFlow.\nTrọng tâm của buổi học: dự án: kho dữ liệu khóa học.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện tìm, thêm và cập nhật khóa học. Thử trường hợp danh mục không tồn tại và xung đột dữ liệu liên quan.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Thiết kế REST API và tích hợp frontend",
+          "description": "Thiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.",
+          "price": 349000,
+          "lessons": [
+            {
+              "title": "Tài nguyên và cách đặt tên route",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Tài nguyên và cách đặt tên route\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: tài nguyên và cách đặt tên route.\n\nBÀI TẬP THỰC HÀNH\nĐề xuất route cho danh mục, khóa học, bài học, ghi danh và tiến độ. Giải thích cách đặt tên nhất quán.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Request, response và mã trạng thái",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Request, response và mã trạng thái\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: request, response và mã trạng thái.\n\nBÀI TẬP THỰC HÀNH\nViết hợp đồng tạo khóa học gồm kiểu dữ liệu, trường bắt buộc, kết quả thành công và lỗi validation.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tìm kiếm và phân trang",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Tìm kiếm và phân trang\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: tìm kiếm và phân trang.\n\nBÀI TẬP THỰC HÀNH\nThiết kế query tìm người dùng theo tên/email và vai trò. Bổ sung số trang, tổng kết quả và tình huống trang rỗng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Phân quyền theo tài nguyên",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Phân quyền theo tài nguyên\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: phân quyền theo tài nguyên.\n\nBÀI TẬP THỰC HÀNH\nLập ma trận quyền cho ba vai trò. Mô tả cách giảng viên bị chặn khi sửa khóa học không thuộc quyền quản lý.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Xử lý lỗi nhất quán",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Xử lý lỗi nhất quán\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: xử lý lỗi nhất quán.\n\nBÀI TẬP THỰC HÀNH\nThiết kế lỗi cho dữ liệu không hợp lệ, hết phiên, không có quyền và xung đột. Không trả thông tin bí mật của máy chủ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "CORS và cấu hình môi trường",
+              "durationMinutes": 40,
+              "content": "BÀI 6: CORS và cấu hình môi trường\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: cors và cấu hình môi trường.\n\nBÀI TẬP THỰC HÀNH\nVẽ đường đi request từ cổng 5173 qua Vite proxy đến cổng 5106. Mô tả cấu hình khi triển khai khác nguồn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tải file và giới hạn tài nguyên",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Tải file và giới hạn tài nguyên\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: tải file và giới hạn tài nguyên.\n\nBÀI TẬP THỰC HÀNH\nĐặt quy tắc quyền, kích thước, định dạng và tên lưu trữ cho PDF. Viết các trường hợp nhận file không hợp lệ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Hợp đồng API CourseFlow",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Hợp đồng API CourseFlow\n\nTỔNG QUAN\nThiết kế hợp đồng, lỗi, phân trang và xác thực để frontend/backend có thể phát triển độc lập.\nTrọng tâm của buổi học: dự án: hợp đồng api courseflow.\n\nBÀI TẬP THỰC HÀNH\nTạo bộ yêu cầu mẫu cho đăng nhập, CRUD, ghi danh, tải file và tiến độ. Dùng nhiều vai trò để đối chiếu quyền truy cập.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dữ liệu & AI",
+      "description": "Khai thác dữ liệu, lập báo cáo và hiểu các bước cơ bản của bài toán học máy.",
+      "courses": [
+        {
+          "title": "Python căn bản cho người mới",
+          "description": "Học cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.",
+          "price": 0,
+          "lessons": [
+            {
+              "title": "Biến và kiểu dữ liệu Python",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Biến và kiểu dữ liệu Python\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: biến và kiểu dữ liệu python.\n\nBÀI TẬP THỰC HÀNH\nLưu thông tin một khóa học và in bản tóm tắt tên, số bài, tổng thời lượng. Kiểm tra kiểu dữ liệu trước khi tính toán.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Điều kiện và vòng lặp",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Điều kiện và vòng lặp\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: điều kiện và vòng lặp.\n\nBÀI TẬP THỰC HÀNH\nPhân loại khóa học miễn phí và có học phí từ một danh sách. Thử danh sách rỗng và khóa có học phí bằng không.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "List, tuple và dictionary",
+              "durationMinutes": 40,
+              "content": "BÀI 3: List, tuple và dictionary\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: list, tuple và dictionary.\n\nBÀI TẬP THỰC HÀNH\nMô tả danh sách học viên bằng dictionary. Tìm theo tên và giải thích sự khác nhau giữa tập hợp và từng bản ghi.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hàm và tổ chức chương trình",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Hàm và tổ chức chương trình\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: hàm và tổ chức chương trình.\n\nBÀI TẬP THỰC HÀNH\nViết hàm tính tiến độ từ số bài đã học và tổng bài. Kiểm tra trường hợp tổng bằng không và giá trị không hợp lệ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đọc và ghi file văn bản",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Đọc và ghi file văn bản\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: đọc và ghi file văn bản.\n\nBÀI TẬP THỰC HÀNH\nGhi tên khóa học ra file UTF-8 rồi đọc lại. Kiểm tra tiếng Việt và xử lý trường hợp file không tồn tại.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dữ liệu CSV và JSON",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Dữ liệu CSV và JSON\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: dữ liệu csv và json.\n\nBÀI TẬP THỰC HÀNH\nĐọc JSON khóa học và xuất CSV gồm tên, học phí, số bài. Đối chiếu số bản ghi trước và sau chuyển đổi.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Ngoại lệ và dữ liệu không hợp lệ",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Ngoại lệ và dữ liệu không hợp lệ\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: ngoại lệ và dữ liệu không hợp lệ.\n\nBÀI TẬP THỰC HÀNH\nThử đọc học phí từ một chuỗi không phải số. Bổ sung thông báo giúp người dùng biết cách nhập lại.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Thống kê thư viện khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Thống kê thư viện khóa học\n\nTỔNG QUAN\nHọc cú pháp, tập hợp, hàm và xử lý file qua bài tập thống kê dữ liệu khóa học.\nTrọng tâm của buổi học: dự án: thống kê thư viện khóa học.\n\nBÀI TẬP THỰC HÀNH\nViết chương trình thống kê khóa theo danh mục, tổng thời lượng và danh sách miễn phí. Đối chiếu kết quả với phép tính tay.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Excel: Phân tích dữ liệu học viên",
+          "description": "Làm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.",
+          "price": 149000,
+          "lessons": [
+            {
+              "title": "Tổ chức bảng dữ liệu sạch",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Tổ chức bảng dữ liệu sạch\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: tổ chức bảng dữ liệu sạch.\n\nBÀI TẬP THỰC HÀNH\nTạo bảng học viên có mã, tên, email, khóa học và ngày ghi danh. Mỗi hàng là một lượt ghi danh, mỗi cột là một thuộc tính.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Kiểu dữ liệu và lỗi nhập liệu",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Kiểu dữ liệu và lỗi nhập liệu\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: kiểu dữ liệu và lỗi nhập liệu.\n\nBÀI TẬP THỰC HÀNH\nTìm ngày đang lưu dạng văn bản và học phí không hợp lệ. Ghi lại nguyên tắc chuẩn hóa trước khi sửa dữ liệu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Công thức tính toán cơ bản",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Công thức tính toán cơ bản\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: công thức tính toán cơ bản.\n\nBÀI TẬP THỰC HÀNH\nTính số bài còn lại và phần trăm hoàn thành. Kiểm tra với học viên chưa học bài nào và khóa học chưa có bài.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hàm điều kiện và xử lý chuỗi",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Hàm điều kiện và xử lý chuỗi\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: hàm điều kiện và xử lý chuỗi.\n\nBÀI TẬP THỰC HÀNH\nChuẩn hóa khoảng trắng trong tên. Phân loại học viên thành hoàn thành, đang học hoặc chưa bắt đầu theo quy tắc rõ ràng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tra cứu và đối chiếu dữ liệu",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Tra cứu và đối chiếu dữ liệu\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: tra cứu và đối chiếu dữ liệu.\n\nBÀI TẬP THỰC HÀNH\nĐối chiếu bảng ghi danh với danh sách khóa học theo mã. Tìm mã thiếu và mã bị lặp trước khi lập báo cáo.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Pivot và bảng tổng hợp",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Pivot và bảng tổng hợp\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: pivot và bảng tổng hợp.\n\nBÀI TẬP THỰC HÀNH\nTổng hợp số lượt ghi danh theo danh mục và tháng. Giải thích sự khác biệt giữa phép đếm và phép cộng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Biểu đồ và trình bày kết quả",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Biểu đồ và trình bày kết quả\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: biểu đồ và trình bày kết quả.\n\nBÀI TẬP THỰC HÀNH\nTạo biểu đồ ghi danh theo tháng, có nhãn và đơn vị. Viết ba nhận xét chỉ dựa trên số liệu được thể hiện.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Báo cáo tiến độ học tập",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Báo cáo tiến độ học tập\n\nTỔNG QUAN\nLàm sạch, tính toán, tổng hợp và trình bày dữ liệu học tập bằng bảng tính.\nTrọng tâm của buổi học: dự án: báo cáo tiến độ học tập.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện bảng theo dõi có bộ lọc, tỷ lệ hoàn thành và biểu đồ. Tách nguồn dữ liệu khỏi phần tính toán và trình bày.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "SQL cho phân tích dữ liệu kinh doanh",
+          "description": "Chuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.",
+          "price": 249000,
+          "lessons": [
+            {
+              "title": "Chuyển câu hỏi thành truy vấn",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Chuyển câu hỏi thành truy vấn\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: chuyển câu hỏi thành truy vấn.\n\nBÀI TẬP THỰC HÀNH\nĐịnh nghĩa cách tính số học viên mới và số lượt ghi danh trong một tháng. Chỉ ra đối tượng, mốc thời gian và đơn vị đếm.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lọc dữ liệu và xử lý NULL",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Lọc dữ liệu và xử lý NULL\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: lọc dữ liệu và xử lý null.\n\nBÀI TẬP THỰC HÀNH\nTìm khóa học chưa được phân công giảng viên. Phân biệt giá trị thiếu, chuỗi rỗng và số không trong báo cáo.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tổng hợp theo nhóm",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Tổng hợp theo nhóm\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: tổng hợp theo nhóm.\n\nBÀI TẬP THỰC HÀNH\nĐếm khóa học và tính học phí trung bình theo danh mục. Giữ mã danh mục để có thể đối chiếu kết quả.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "JOIN và nguy cơ đếm trùng",
+              "durationMinutes": 30,
+              "content": "BÀI 4: JOIN và nguy cơ đếm trùng\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: join và nguy cơ đếm trùng.\n\nBÀI TẬP THỰC HÀNH\nSo sánh số học viên và số lượt ghi danh. Tạo ví dụ một học viên học nhiều khóa để giải thích khác biệt.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Phân tích theo thời gian",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Phân tích theo thời gian\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: phân tích theo thời gian.\n\nBÀI TẬP THỰC HÀNH\nThống kê lượt ghi danh từng tháng, kể cả tháng bằng không. Xác định rõ mốc bắt đầu và kết thúc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Xếp hạng và so sánh nhóm",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Xếp hạng và so sánh nhóm\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: xếp hạng và so sánh nhóm.\n\nBÀI TẬP THỰC HÀNH\nTìm khóa nhiều ghi danh nhất trong từng danh mục. Nêu quy tắc xử lý khi hai khóa có số ghi danh bằng nhau.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Kiểm tra độ đúng của số liệu",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Kiểm tra độ đúng của số liệu\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: kiểm tra độ đúng của số liệu.\n\nBÀI TẬP THỰC HÀNH\nKiểm tra báo cáo với khóa chưa có học viên, chưa có bài và học viên học nhiều khóa. Đối chiếu tổng theo nhiều cách.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Báo cáo hiệu quả khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Báo cáo hiệu quả khóa học\n\nTỔNG QUAN\nChuyển câu hỏi thành truy vấn, tổng hợp, so sánh theo thời gian và kiểm tra độ đúng của báo cáo.\nTrọng tâm của buổi học: dự án: báo cáo hiệu quả khóa học.\n\nBÀI TẬP THỰC HÀNH\nXây dựng báo cáo ghi danh và hoàn thành theo khóa. Viết định nghĩa của từng chỉ số và giới hạn khi diễn giải kết quả.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Nhập môn học máy qua bài toán thực tế",
+          "description": "Hiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.",
+          "price": 349000,
+          "lessons": [
+            {
+              "title": "Bài toán dự đoán và dữ liệu đầu vào",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Bài toán dự đoán và dữ liệu đầu vào\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: bài toán dự đoán và dữ liệu đầu vào.\n\nBÀI TẬP THỰC HÀNH\nMô tả bài toán dự đoán khả năng hoàn thành khóa học. Liệt kê dữ liệu thực sự có sẵn ở thời điểm cần dự đoán.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Khám phá và kiểm tra dữ liệu",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Khám phá và kiểm tra dữ liệu\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: khám phá và kiểm tra dữ liệu.\n\nBÀI TẬP THỰC HÀNH\nLập bảng số bản ghi, trường thiếu và giá trị bất thường. Không mặc định dữ liệu thu thập ban đầu đã đúng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tập huấn luyện và tập kiểm tra",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Tập huấn luyện và tập kiểm tra\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: tập huấn luyện và tập kiểm tra.\n\nBÀI TẬP THỰC HÀNH\nĐề xuất cách chia dữ liệu để đánh giá độc lập. Giải thích vì sao không dùng kết quả hoàn thành làm đầu vào dự đoán.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đặc trưng và tiền xử lý",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Đặc trưng và tiền xử lý\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: đặc trưng và tiền xử lý.\n\nBÀI TẬP THỰC HÀNH\nĐề xuất cách biểu diễn số bài đã học, thời gian hoạt động và danh mục. Ghi rõ cách xử lý giá trị thiếu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Mốc so sánh và mô hình đơn giản",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Mốc so sánh và mô hình đơn giản\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: mốc so sánh và mô hình đơn giản.\n\nBÀI TẬP THỰC HÀNH\nXây dựng một quy tắc dự đoán đơn giản. Ghi kết quả để làm mốc trước khi thử cách phức tạp hơn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đánh giá và phân tích lỗi",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Đánh giá và phân tích lỗi\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: đánh giá và phân tích lỗi.\n\nBÀI TẬP THỰC HÀNH\nPhân tích ví dụ dự đoán sai người có thể hoàn thành và người cần hỗ trợ. Nêu hậu quả của từng loại sai.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Quá khớp và khả năng khái quát",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Quá khớp và khả năng khái quát\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: quá khớp và khả năng khái quát.\n\nBÀI TẬP THỰC HÀNH\nSo sánh kết quả trên dữ liệu huấn luyện và kiểm tra. Đề xuất việc cần làm khi hai kết quả chênh lệch lớn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Báo cáo mô hình thử nghiệm",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Báo cáo mô hình thử nghiệm\n\nTỔNG QUAN\nHiểu quy trình dữ liệu, tập huấn luyện/kiểm tra, mô hình và đánh giá qua một bài toán đơn giản.\nTrọng tâm của buổi học: dự án: báo cáo mô hình thử nghiệm.\n\nBÀI TẬP THỰC HÀNH\nViết báo cáo có câu hỏi, dữ liệu, quy trình, mốc so sánh, kết quả và giới hạn. Nêu những việc cần kiểm chứng thêm.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Thiết kế & Sáng tạo",
+      "description": "Tư duy trải nghiệm, thiết kế giao diện và xây dựng hệ thống thành phần dễ sử dụng.",
+      "courses": [
+        {
+          "title": "UI/UX cơ bản: Thiết kế lấy người dùng làm trung tâm",
+          "description": "Tìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.",
+          "price": 0,
+          "lessons": [
+            {
+              "title": "Hiểu người dùng và bối cảnh",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Hiểu người dùng và bối cảnh\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: hiểu người dùng và bối cảnh.\n\nBÀI TẬP THỰC HÀNH\nViết ba tình huống sử dụng CourseFlow của học viên, giảng viên và quản trị viên. Nêu công việc mỗi người muốn hoàn thành.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Xác định vấn đề cần giải quyết",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Xác định vấn đề cần giải quyết\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: xác định vấn đề cần giải quyết.\n\nBÀI TẬP THỰC HÀNH\nMô tả khó khăn khi học viên muốn tiếp tục bài học còn dang dở. Nêu kết quả mong đợi trước khi chọn giải pháp.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Kiến trúc thông tin",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Kiến trúc thông tin\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: kiến trúc thông tin.\n\nBÀI TẬP THỰC HÀNH\nSắp xếp menu hệ thống khóa học, đặt tên các mục và giải thích nhóm thông tin theo công việc của người dùng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Luồng thao tác và trạng thái",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Luồng thao tác và trạng thái\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: luồng thao tác và trạng thái.\n\nBÀI TẬP THỰC HÀNH\nVẽ luồng tìm khóa học, đăng nhập, ghi danh và vào bài đầu tiên. Bổ sung trạng thái rỗng, lỗi và đăng ký trùng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Wireframe cho màn hình chính",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Wireframe cho màn hình chính\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: wireframe cho màn hình chính.\n\nBÀI TẬP THỰC HÀNH\nPhác thảo trang danh sách và chi tiết khóa học. Ưu tiên thứ tự thông tin trước khi chọn màu sắc hoặc hiệu ứng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Phân cấp thị giác",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Phân cấp thị giác\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: phân cấp thị giác.\n\nBÀI TẬP THỰC HÀNH\nChỉnh một thẻ khóa học để tên, danh mục, thời lượng và học phí dễ phân biệt. Nêu mục đích của cỡ chữ và khoảng cách.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Kiểm thử khả năng sử dụng",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Kiểm thử khả năng sử dụng\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: kiểm thử khả năng sử dụng.\n\nBÀI TẬP THỰC HÀNH\nNhờ một người tìm và đăng ký khóa học. Ghi lại các bước họ do dự hoặc thao tác sai thay vì chỉ hỏi có thích giao diện hay không.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Cải thiện luồng học tập",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Cải thiện luồng học tập\n\nTỔNG QUAN\nTìm hiểu người dùng, xác định luồng thao tác và kiểm chứng thiết kế qua màn hình quản lý khóa học.\nTrọng tâm của buổi học: dự án: cải thiện luồng học tập.\n\nBÀI TẬP THỰC HÀNH\nThiết kế lại luồng tiếp tục học. Ghi rõ vấn đề, thay đổi và cách kiểm tra trước/sau bằng cùng một nhiệm vụ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Figma thực hành: Từ wireframe đến prototype",
+          "description": "Tổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.",
+          "price": 199000,
+          "lessons": [
+            {
+              "title": "Tổ chức file và đặt tên",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Tổ chức file và đặt tên\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: tổ chức file và đặt tên.\n\nBÀI TẬP THỰC HÀNH\nTạo khu vực nghiên cứu, wireframe, giao diện và thành phần dùng chung. Chọn tên diễn tả mục đích để người khác tìm được nội dung.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Frame, bố cục và khoảng cách",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Frame, bố cục và khoảng cách\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: frame, bố cục và khoảng cách.\n\nBÀI TẬP THỰC HÀNH\nTạo khung desktop và điện thoại cho trang khóa học. Xác định lề, khoảng cách giữa thẻ và cách sắp xếp nội dung.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Typography và màu sắc",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Typography và màu sắc\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: typography và màu sắc.\n\nBÀI TẬP THỰC HÀNH\nXây dựng bảng kiểu chữ và màu cho ứng dụng học tập. Bổ sung ví dụ thông báo lỗi và thành công không chỉ phân biệt bằng màu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thành phần và biến thể",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Thành phần và biến thể\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: thành phần và biến thể.\n\nBÀI TẬP THỰC HÀNH\nTạo nút primary/secondary và các trạng thái focus, loading, disabled. Ghi rõ khi nào dùng mỗi biến thể.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thiết kế biểu mẫu",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Thiết kế biểu mẫu\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: thiết kế biểu mẫu.\n\nBÀI TẬP THỰC HÀNH\nThiết kế dialog tạo khóa học với nhãn, gợi ý và lỗi tên rỗng/học phí không hợp lệ. Kiểm tra thứ tự nhập liệu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Prototype và chuyển màn hình",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Prototype và chuyển màn hình\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: prototype và chuyển màn hình.\n\nBÀI TẬP THỰC HÀNH\nNối luồng danh sách đến chi tiết, đăng nhập và xác nhận ghi danh. Chỉ mô phỏng những tương tác cần kiểm chứng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Bàn giao cho lập trình",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Bàn giao cho lập trình\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: bàn giao cho lập trình.\n\nBÀI TẬP THỰC HÀNH\nGhi chú quy tắc responsive, trạng thái rỗng và phản hồi lỗi. Bàn giao dữ liệu và hành vi cùng với hình ảnh màn hình.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Prototype CourseFlow",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Prototype CourseFlow\n\nTỔNG QUAN\nTổ chức file thiết kế, tạo thành phần, xây dựng màn hình và mô phỏng một luồng sử dụng hoàn chỉnh.\nTrọng tâm của buổi học: dự án: prototype courseflow.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện prototype từ khám phá khóa học đến học bài. Nhờ một người thực hiện nhiệm vụ và ghi nhận điểm khó hiểu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Thiết kế responsive và khả năng truy cập",
+          "description": "Thiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.",
+          "price": 249000,
+          "lessons": [
+            {
+              "title": "Nội dung và không gian hiển thị",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Nội dung và không gian hiển thị\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: nội dung và không gian hiển thị.\n\nBÀI TẬP THỰC HÀNH\nXác định thông tin bắt buộc trên thẻ khóa học ở màn hình nhỏ. Nêu những phần có thể giảm ưu tiên mà không mất ý nghĩa.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lưới và điểm chuyển bố cục",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Lưới và điểm chuyển bố cục\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: lưới và điểm chuyển bố cục.\n\nBÀI TẬP THỰC HÀNH\nĐề xuất bố cục một, hai và ba cột. Thay đổi chiều rộng liên tục để tìm thời điểm nội dung cần đổi bố cục.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Chữ dễ đọc và độ tương phản",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Chữ dễ đọc và độ tương phản\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: chữ dễ đọc và độ tương phản.\n\nBÀI TẬP THỰC HÀNH\nRà soát mô tả, nhãn và metadata của trang chi tiết. Cải thiện độ đọc thay vì thu nhỏ chữ chỉ để vừa không gian.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Vùng thao tác và trạng thái focus",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Vùng thao tác và trạng thái focus\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: vùng thao tác và trạng thái focus.\n\nBÀI TẬP THỰC HÀNH\nKiểm tra nút bài học, menu điện thoại và nút dialog. Đảm bảo người dùng nhìn thấy vị trí focus và dễ nhấn đúng mục tiêu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Biểu mẫu có nhãn rõ ràng",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Biểu mẫu có nhãn rõ ràng\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: biểu mẫu có nhãn rõ ràng.\n\nBÀI TẬP THỰC HÀNH\nThiết kế biểu mẫu đăng ký có nhãn riêng, gợi ý và lỗi theo trường. Không dùng placeholder để thay hoàn toàn nhãn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hộp thoại và bàn phím",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Hộp thoại và bàn phím\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: hộp thoại và bàn phím.\n\nBÀI TẬP THỰC HÀNH\nMô tả thứ tự focus khi mở, sử dụng và đóng dialog. Kiểm tra người dùng hoàn thành biểu mẫu mà không cần chuột.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Bảng dữ liệu trên điện thoại",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Bảng dữ liệu trên điện thoại\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: bảng dữ liệu trên điện thoại.\n\nBÀI TẬP THỰC HÀNH\nThiết kế bảng người dùng có nhiều cột. Giữ thông tin quan trọng và tránh khiến toàn bộ trang bị tràn ngang.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Rà soát một giao diện",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Rà soát một giao diện\n\nTỔNG QUAN\nThiết kế giao diện dễ đọc, dễ thao tác trên nhiều thiết bị và hỗ trợ điều hướng bàn phím.\nTrọng tâm của buổi học: dự án: rà soát một giao diện.\n\nBÀI TẬP THỰC HÀNH\nLập danh sách lỗi responsive và khả năng truy cập. Sửa năm lỗi có ảnh hưởng lớn rồi thử lại cùng thao tác ban đầu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Design System: Xây dựng thư viện thành phần",
+          "description": "Tạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.",
+          "price": 299000,
+          "lessons": [
+            {
+              "title": "Vai trò của một design system",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Vai trò của một design system\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: vai trò của một design system.\n\nBÀI TẬP THỰC HÀNH\nLiệt kê các vấn đề lặp lại khi nhiều người cùng phát triển giao diện. Xác định phần cần thống nhất và phần cần linh hoạt.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Token màu sắc và khoảng cách",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Token màu sắc và khoảng cách\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: token màu sắc và khoảng cách.\n\nBÀI TẬP THỰC HÀNH\nĐặt tên theo ý nghĩa cho màu nội dung, nền, viền, hành động và khoảng cách. Minh họa cách thay đổi một token ảnh hưởng các màn hình.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hệ thống chữ và phân cấp",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Hệ thống chữ và phân cấp\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: hệ thống chữ và phân cấp.\n\nBÀI TẬP THỰC HÀNH\nTạo kiểu tiêu đề, nội dung, nhãn và metadata. Kiểm tra trên desktop và điện thoại để giữ sự nhất quán.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Nút, liên kết và biểu tượng",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Nút, liên kết và biểu tượng\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: nút, liên kết và biểu tượng.\n\nBÀI TẬP THỰC HÀNH\nThiết kế nút lưu, hủy, xóa theo mức độ quan trọng. Bổ sung tên truy cập cho nút chỉ có biểu tượng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Input, select và thông báo lỗi",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Input, select và thông báo lỗi\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: input, select và thông báo lỗi.\n\nBÀI TẬP THỰC HÀNH\nTạo input/select có trạng thái mặc định, focus, invalid, disabled. Viết thông báo lỗi nêu rõ cách sửa.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thành phần phức hợp",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Thành phần phức hợp\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: thành phần phức hợp.\n\nBÀI TẬP THỰC HÀNH\nThiết kế thẻ khóa học thường, đã ghi danh và có tiến độ. Xác định dữ liệu đầu vào và phần tương tác của thẻ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tài liệu và quy trình thay đổi",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Tài liệu và quy trình thay đổi\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: tài liệu và quy trình thay đổi.\n\nBÀI TẬP THỰC HÀNH\nViết hướng dẫn cho dialog xác nhận, có ví dụ dùng đúng và giới hạn. Đề xuất cách tiếp nhận yêu cầu thành phần mới.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Thư viện UI CourseFlow",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Thư viện UI CourseFlow\n\nTỔNG QUAN\nTạo ngôn ngữ thiết kế, token và hướng dẫn sử dụng để giao diện phát triển nhất quán.\nTrọng tâm của buổi học: dự án: thư viện ui courseflow.\n\nBÀI TẬP THỰC HÀNH\nTổng hợp token, nút, input, thẻ, bảng và dialog thành thư viện nhỏ có ví dụ thật. Kiểm tra đầy đủ các trạng thái.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Kinh doanh & Marketing",
+      "description": "Lập kế hoạch, xây dựng nội dung và tổ chức công việc cho sản phẩm, dịch vụ và đội nhóm.",
+      "courses": [
+        {
+          "title": "Digital Marketing: Lập kế hoạch cho người mới",
+          "description": "Xác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.",
+          "price": 0,
+          "lessons": [
+            {
+              "title": "Mục tiêu và kết quả mong đợi",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Mục tiêu và kết quả mong đợi\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: mục tiêu và kết quả mong đợi.\n\nBÀI TẬP THỰC HÀNH\nViết mục tiêu cho chiến dịch giới thiệu khóa học mới. Nêu thời gian, kết quả cần đạt và cách lấy số liệu để kiểm tra.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Khách hàng và vấn đề",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Khách hàng và vấn đề\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: khách hàng và vấn đề.\n\nBÀI TẬP THỰC HÀNH\nMô tả hai nhóm quan tâm đến khóa học web cơ bản. Với mỗi nhóm, nêu khó khăn, động lực và thông tin họ cần.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hành trình tiếp cận và quyết định",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Hành trình tiếp cận và quyết định\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: hành trình tiếp cận và quyết định.\n\nBÀI TẬP THỰC HÀNH\nVẽ hành trình biết đến khóa học, xem chi tiết, so sánh và đăng ký. Nêu thông tin cùng hành động phù hợp tại mỗi bước.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thông điệp và giá trị khác biệt",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Thông điệp và giá trị khác biệt\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: thông điệp và giá trị khác biệt.\n\nBÀI TẬP THỰC HÀNH\nViết ba thông điệp giới thiệu cùng khóa học cho nhu cầu khác nhau. Loại bỏ lời hứa không có căn cứ kiểm chứng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lựa chọn kênh và phân công",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Lựa chọn kênh và phân công\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: lựa chọn kênh và phân công.\n\nBÀI TẬP THỰC HÀNH\nLập danh sách kênh, loại nội dung, người phụ trách và lịch xuất bản hai tuần. Giải thích vì sao mỗi kênh phù hợp.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Trang giới thiệu và hành động",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Trang giới thiệu và hành động\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: trang giới thiệu và hành động.\n\nBÀI TẬP THỰC HÀNH\nRà soát trang chi tiết khóa học. Bổ sung đối tượng phù hợp, kết quả học tập và câu trả lời cho ba băn khoăn thường gặp.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Chỉ số và đánh giá chiến dịch",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Chỉ số và đánh giá chiến dịch\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: chỉ số và đánh giá chiến dịch.\n\nBÀI TẬP THỰC HÀNH\nThiết kế bảng đo từ tiếp cận đến ghi danh. Phân biệt lượt xem, người quan tâm và người thực sự đăng ký.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Kế hoạch ra mắt khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Kế hoạch ra mắt khóa học\n\nTỔNG QUAN\nXác định khách hàng, thông điệp, kênh tiếp cận và cách đo kết quả của một chiến dịch nhỏ.\nTrọng tâm của buổi học: dự án: kế hoạch ra mắt khóa học.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện kế hoạch bốn tuần có mục tiêu, khách hàng, thông điệp, lịch, người phụ trách và tiêu chí đánh giá.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Content Marketing: Viết nội dung có mục tiêu",
+          "description": "Từ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.",
+          "price": 149000,
+          "lessons": [
+            {
+              "title": "Mục tiêu nội dung và người đọc",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Mục tiêu nội dung và người đọc\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: mục tiêu nội dung và người đọc.\n\nBÀI TẬP THỰC HÀNH\nChọn một khóa học và xác định ba câu hỏi của người học. Nêu hành động mong đợi sau khi đọc từng nội dung.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Nghiên cứu chủ đề và dàn ý",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Nghiên cứu chủ đề và dàn ý\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: nghiên cứu chủ đề và dàn ý.\n\nBÀI TẬP THỰC HÀNH\nLập dàn ý bài lộ trình học web cho người mới. Ghi nguồn cần kiểm tra và câu hỏi mà mỗi phần sẽ trả lời.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tiêu đề và phần mở đầu",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Tiêu đề và phần mở đầu\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: tiêu đề và phần mở đầu.\n\nBÀI TẬP THỰC HÀNH\nViết năm tiêu đề và hai đoạn mở đầu cho bài hướng dẫn chọn khóa học. Kiểm tra tiêu đề phản ánh đúng nội dung.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Cấu trúc và diễn đạt",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Cấu trúc và diễn đạt\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: cấu trúc và diễn đạt.\n\nBÀI TẬP THỰC HÀNH\nViết đoạn giải thích một lợi ích học tập bằng ví dụ. Loại câu lặp, tính từ chung chung và lời hứa không có bằng chứng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Nội dung cho nhiều kênh",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Nội dung cho nhiều kênh\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: nội dung cho nhiều kênh.\n\nBÀI TẬP THỰC HÀNH\nChuyển một bài giới thiệu thành email ngắn và bài đăng mạng xã hội. Điều chỉnh cách diễn đạt theo bối cảnh đọc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lịch nội dung và phối hợp",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Lịch nội dung và phối hợp\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: lịch nội dung và phối hợp.\n\nBÀI TẬP THỰC HÀNH\nTạo lịch hai tuần với chủ đề, người phụ trách, trạng thái và thời hạn. Thiết kế cách phản hồi và duyệt bài.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đo hiệu quả và cập nhật",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Đo hiệu quả và cập nhật\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: đo hiệu quả và cập nhật.\n\nBÀI TẬP THỰC HÀNH\nChọn ba nội dung cần cập nhật dựa trên câu hỏi người đọc hoặc số liệu. Nêu bằng chứng và đề xuất thay đổi cụ thể.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Bộ nội dung cho khóa học",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Bộ nội dung cho khóa học\n\nTỔNG QUAN\nTừ hiểu người đọc đến lập lịch, viết bài và cải thiện nội dung dựa trên phản hồi.\nTrọng tâm của buổi học: dự án: bộ nội dung cho khóa học.\n\nBÀI TẬP THỰC HÀNH\nViết trang giới thiệu, email chào mừng và ba bài đăng. Kiểm tra thông điệp thống nhất nhưng phù hợp từng điểm chạm.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "SEO cơ bản: Tổ chức nội dung dễ tìm kiếm",
+          "description": "Hiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.",
+          "price": 199000,
+          "lessons": [
+            {
+              "title": "Người tìm kiếm và nhu cầu",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Người tìm kiếm và nhu cầu\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: người tìm kiếm và nhu cầu.\n\nBÀI TẬP THỰC HÀNH\nLiệt kê câu hỏi trước khi đăng ký khóa SQL cơ bản. Chọn câu hỏi mà mỗi trang cần giải quyết rõ ràng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Nhóm chủ đề và cấu trúc website",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Nhóm chủ đề và cấu trúc website\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: nhóm chủ đề và cấu trúc website.\n\nBÀI TẬP THỰC HÀNH\nNhóm trang khóa học thành danh mục. Đề xuất trang giải đáp cho từng nhóm và tránh các trang trùng nội dung không cần thiết.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tiêu đề trang và mô tả",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Tiêu đề trang và mô tả\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: tiêu đề trang và mô tả.\n\nBÀI TẬP THỰC HÀNH\nViết tiêu đề và mô tả ngắn cho ba khóa học. Tóm tắt trung thực thay vì đưa lời giới thiệu không xuất hiện trên trang.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Tiêu đề nội dung và liên kết",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Tiêu đề nội dung và liên kết\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: tiêu đề nội dung và liên kết.\n\nBÀI TẬP THỰC HÀNH\nSắp xếp các phần của trang chi tiết. Thêm liên kết đến kiến thức nền tảng với tên cho biết người dùng sẽ đọc gì.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Nội dung hữu ích và có căn cứ",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Nội dung hữu ích và có căn cứ\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: nội dung hữu ích và có căn cứ.\n\nBÀI TẬP THỰC HÀNH\nBổ sung đối tượng phù hợp, kiến thức cần có và đầu ra thực tế cho một khóa học. Ghi rõ giới hạn của nội dung.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Hiệu năng và trải nghiệm trang",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Hiệu năng và trải nghiệm trang\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: hiệu năng và trải nghiệm trang.\n\nBÀI TẬP THỰC HÀNH\nKiểm tra ảnh, độ đọc và biểu mẫu trên điện thoại. Ghi lại các điểm cản trở người dùng hoàn thành nhiệm vụ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đo lường và kiểm tra thay đổi",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Đo lường và kiểm tra thay đổi\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: đo lường và kiểm tra thay đổi.\n\nBÀI TẬP THỰC HÀNH\nLập bảng theo dõi trang, nội dung đã sửa, ngày sửa và chỉ số cần xem lại. Nêu giới hạn khi diễn giải biến động số liệu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Kế hoạch cải thiện website",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Kế hoạch cải thiện website\n\nTỔNG QUAN\nHiểu ý định tìm kiếm, tổ chức trang, nội dung và cách rà soát chất lượng website.\nTrọng tâm của buổi học: dự án: kế hoạch cải thiện website.\n\nBÀI TẬP THỰC HÀNH\nRà soát một website học tập. Chọn năm việc ưu tiên theo tác động và mô tả tiêu chí kiểm tra sau khi sửa.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Quản lý dự án Agile cho đội phát triển nhỏ",
+          "description": "Tổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.",
+          "price": 249000,
+          "lessons": [
+            {
+              "title": "Mục tiêu sản phẩm và phạm vi",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Mục tiêu sản phẩm và phạm vi\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: mục tiêu sản phẩm và phạm vi.\n\nBÀI TẬP THỰC HÀNH\nViết mục tiêu phiên bản đầu của hệ thống khóa học. Liệt kê chức năng cần có và những phần chưa đưa vào giai đoạn này.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "User story và tiêu chí chấp nhận",
+              "durationMinutes": 35,
+              "content": "BÀI 2: User story và tiêu chí chấp nhận\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: user story và tiêu chí chấp nhận.\n\nBÀI TẬP THỰC HÀNH\nViết yêu cầu ghi danh gồm vai trò, nhu cầu và lợi ích. Bổ sung tiêu chí thành công, đăng ký trùng và chưa đăng nhập.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Backlog và ưu tiên công việc",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Backlog và ưu tiên công việc\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: backlog và ưu tiên công việc.\n\nBÀI TẬP THỰC HÀNH\nSắp xếp danh mục, khóa học, ghi danh và tiến độ theo thứ tự triển khai. Giải thích giá trị, phụ thuộc và rủi ro.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Chia nhỏ và ước lượng",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Chia nhỏ và ước lượng\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: chia nhỏ và ước lượng.\n\nBÀI TẬP THỰC HÀNH\nChia chức năng tải tài liệu thành đầu việc kiểm tra độc lập. Nêu giả định khiến ước lượng có thể thay đổi.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lập kế hoạch và theo dõi",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Lập kế hoạch và theo dõi\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: lập kế hoạch và theo dõi.\n\nBÀI TẬP THỰC HÀNH\nLập kế hoạch một tuần cho nhóm ba người nhằm hoàn thiện ghi danh. Xác định công việc đang chờ và cách xử lý vướng mắc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Phối hợp và phản hồi",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Phối hợp và phản hồi\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: phối hợp và phản hồi.\n\nBÀI TẬP THỰC HÀNH\nThiết kế cách bàn giao API giữa frontend/backend, có hợp đồng, ví dụ thành công, ví dụ lỗi và người xác nhận.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Review và cải tiến cách làm",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Review và cải tiến cách làm\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: review và cải tiến cách làm.\n\nBÀI TẬP THỰC HÀNH\nTổ chức buổi xem bản chạy thử. Ghi hai thay đổi cho sản phẩm và hai cải tiến cho cách phối hợp của đội.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Kế hoạch triển khai CourseFlow",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Kế hoạch triển khai CourseFlow\n\nTỔNG QUAN\nTổ chức backlog, lập kế hoạch, phối hợp và cải tiến công việc qua dự án quản lý khóa học.\nTrọng tâm của buổi học: dự án: kế hoạch triển khai courseflow.\n\nBÀI TẬP THỰC HÀNH\nTạo backlog, kế hoạch hai giai đoạn và checklist bàn giao. Gắn từng đầu việc với kết quả có thể kiểm tra.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ngoại ngữ & Kỹ năng",
+      "description": "Phát triển cách giao tiếp, trình bày và tự học để sử dụng kiến thức hiệu quả trong công việc.",
+      "courses": [
+        {
+          "title": "Tiếng Anh cho lập trình viên mới bắt đầu",
+          "description": "Làm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.",
+          "price": 0,
+          "lessons": [
+            {
+              "title": "Giới thiệu bản thân và công việc",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Giới thiệu bản thân và công việc\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: giới thiệu bản thân và công việc.\n\nBÀI TẬP THỰC HÀNH\nViết bốn câu tiếng Anh nêu vai trò, công việc đang làm và điều muốn trao đổi. Tự đọc thành tiếng và ghi âm.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Từ vựng về ứng dụng web",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Từ vựng về ứng dụng web\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: từ vựng về ứng dụng web.\n\nBÀI TẬP THỰC HÀNH\nLập bảng từ frontend, backend, endpoint, request, response. Viết ví dụ gắn với CourseFlow thay vì chỉ dịch từng từ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đọc đoạn tài liệu kỹ thuật",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Đọc đoạn tài liệu kỹ thuật\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: đọc đoạn tài liệu kỹ thuật.\n\nBÀI TẬP THỰC HÀNH\nChọn đoạn tài liệu ngắn, xác định mục đích rồi tóm tắt bằng ba ý. Ghi năm thuật ngữ kèm ví dụ sử dụng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Mô tả lỗi và bước tái hiện",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Mô tả lỗi và bước tái hiện\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: mô tả lỗi và bước tái hiện.\n\nBÀI TẬP THỰC HÀNH\nViết báo lỗi tiếng Anh cho biểu mẫu không báo email sai. Nêu điều mong đợi, thực tế và các bước tạo lại vấn đề.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Viết commit và mô tả thay đổi",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Viết commit và mô tả thay đổi\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: viết commit và mô tả thay đổi.\n\nBÀI TẬP THỰC HÀNH\nViết ba commit message và một mô tả cho chức năng lọc khóa học. Nêu thay đổi và lý do giúp người đọc hiểu kết quả.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Trao đổi và hỏi làm rõ",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Trao đổi và hỏi làm rõ\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: trao đổi và hỏi làm rõ.\n\nBÀI TẬP THỰC HÀNH\nSoạn tin nhắn hỏi cách xử lý khi học viên đã đăng ký một khóa. Nêu bối cảnh và thông tin cần để quyết định.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Trình bày tiến độ ngắn gọn",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Trình bày tiến độ ngắn gọn\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: trình bày tiến độ ngắn gọn.\n\nBÀI TẬP THỰC HÀNH\nChuẩn bị cập nhật bằng tiếng Anh trong một phút gồm kết quả đã có, vướng mắc và bước tiếp theo.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Giới thiệu tính năng tiếng Anh",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Giới thiệu tính năng tiếng Anh\n\nTỔNG QUAN\nLàm quen từ vựng, đọc tài liệu và viết trao đổi ngắn trong bối cảnh phát triển phần mềm.\nTrọng tâm của buổi học: dự án: giới thiệu tính năng tiếng anh.\n\nBÀI TẬP THỰC HÀNH\nViết kịch bản và trình bày một tính năng trong hai phút. Cho thấy người dùng làm được gì bằng một ví dụ cụ thể.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Thuyết trình dự án phần mềm tự tin",
+          "description": "Xây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.",
+          "price": 149000,
+          "lessons": [
+            {
+              "title": "Người nghe và mục tiêu",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Người nghe và mục tiêu\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: người nghe và mục tiêu.\n\nBÀI TẬP THỰC HÀNH\nMô tả người nghe của buổi bảo vệ dự án. Chọn ba điều quan trọng họ cần hiểu sau phần trình bày.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Cấu trúc câu chuyện dự án",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Cấu trúc câu chuyện dự án\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: cấu trúc câu chuyện dự án.\n\nBÀI TẬP THỰC HÀNH\nLập dàn ý năm phút từ vấn đề, giải pháp, cách thực hiện đến kết quả. Tránh mở đầu bằng danh sách công nghệ quá dài.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Trình bày kiến trúc dễ hiểu",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Trình bày kiến trúc dễ hiểu\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: trình bày kiến trúc dễ hiểu.\n\nBÀI TẬP THỰC HÀNH\nVẽ frontend, API, SQL Server và file học liệu. Giải thích đường đi của một yêu cầu ghi danh bằng sơ đồ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Slide có trọng tâm",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Slide có trọng tâm\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: slide có trọng tâm.\n\nBÀI TẬP THỰC HÀNH\nTạo ba slide cho vấn đề, luồng sử dụng và kiến trúc. Mỗi slide có một ý chính và ví dụ hỗ trợ.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Chuẩn bị kịch bản demo",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Chuẩn bị kịch bản demo\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: chuẩn bị kịch bản demo.\n\nBÀI TẬP THỰC HÀNH\nViết kịch bản Admin tạo khóa, học viên ghi danh và học bài. Chuẩn bị dữ liệu và phương án khi kết nối lỗi.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Diễn đạt và quản lý thời gian",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Diễn đạt và quản lý thời gian\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: diễn đạt và quản lý thời gian.\n\nBÀI TẬP THỰC HÀNH\nGhi âm phần trình bày, đo thời gian, rút gọn chỗ lặp và thêm chuyển ý. Thử lại đến khi nằm trong thời lượng đã chọn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Trả lời câu hỏi và nêu giới hạn",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Trả lời câu hỏi và nêu giới hạn\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: trả lời câu hỏi và nêu giới hạn.\n\nBÀI TẬP THỰC HÀNH\nChuẩn bị câu trả lời về phân quyền, dữ liệu trùng và mở rộng. Dùng bằng chứng và nêu phần chưa kiểm chứng.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Buổi demo hoàn chỉnh",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Buổi demo hoàn chỉnh\n\nTỔNG QUAN\nXây dựng câu chuyện, trình bày bản demo và trả lời câu hỏi bằng một dự án có thật.\nTrọng tâm của buổi học: dự án: buổi demo hoàn chỉnh.\n\nBÀI TẬP THỰC HÀNH\nThực hiện demo mười phút với thời gian hỏi đáp. Nhờ người khác phản hồi và ghi lại ba điều sẽ cải thiện.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Giao tiếp và làm việc nhóm trong dự án IT",
+          "description": "Làm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.",
+          "price": 199000,
+          "lessons": [
+            {
+              "title": "Mục tiêu chung và vai trò",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Mục tiêu chung và vai trò\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: mục tiêu chung và vai trò.\n\nBÀI TẬP THỰC HÀNH\nLập bảng trách nhiệm frontend, backend, kiểm thử và tài liệu. Xác định ai nhận kết quả và ai quyết định khi có vướng mắc.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lắng nghe và hỏi làm rõ",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Lắng nghe và hỏi làm rõ\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: lắng nghe và hỏi làm rõ.\n\nBÀI TẬP THỰC HÀNH\nThực hành làm rõ cách hiển thị tiến độ của khóa chưa có bài. Tóm tắt lại yêu cầu bằng một ví dụ để kiểm tra cách hiểu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Viết yêu cầu và bàn giao API",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Viết yêu cầu và bàn giao API\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: viết yêu cầu và bàn giao api.\n\nBÀI TẬP THỰC HÀNH\nViết bản bàn giao đăng nhập hoặc ghi danh cho frontend. Cung cấp đầu vào, đầu ra, trường hợp lỗi và cách kiểm tra.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Cập nhật tiến độ và vướng mắc",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Cập nhật tiến độ và vướng mắc\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: cập nhật tiến độ và vướng mắc.\n\nBÀI TẬP THỰC HÀNH\nViết ba đoạn ngắn: đã hoàn thành, đang bị chặn, bước tiếp theo. Nêu tác động và sự hỗ trợ cần thiết.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Phản hồi có bằng chứng",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Phản hồi có bằng chứng\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: phản hồi có bằng chứng.\n\nBÀI TẬP THỰC HÀNH\nViết phản hồi cho giao diện khó dùng trên điện thoại. Nêu hành vi quan sát được, ảnh hưởng và đề xuất sửa cụ thể.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Xử lý bất đồng kỹ thuật",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Xử lý bất đồng kỹ thuật\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: xử lý bất đồng kỹ thuật.\n\nBÀI TẬP THỰC HÀNH\nSo sánh hai cách tổ chức frontend/backend theo cùng tiêu chí. Đề xuất thử nghiệm nhỏ để giảm phần chưa chắc chắn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Họp và ghi nhận quyết định",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Họp và ghi nhận quyết định\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: họp và ghi nhận quyết định.\n\nBÀI TẬP THỰC HÀNH\nLập chương trình họp chốt phạm vi demo. Chuẩn bị mẫu ghi quyết định, người thực hiện và thời hạn.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Quy trình phối hợp đội nhỏ",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Quy trình phối hợp đội nhỏ\n\nTỔNG QUAN\nLàm rõ yêu cầu, phản hồi, bàn giao và xử lý bất đồng trong một nhóm phát triển nhỏ.\nTrọng tâm của buổi học: dự án: quy trình phối hợp đội nhỏ.\n\nBÀI TẬP THỰC HÀNH\nThiết lập quy tắc bàn giao, phản hồi, báo lỗi và cập nhật tiến độ. Thử quy trình trong một chức năng thực tế.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        },
+        {
+          "title": "Kỹ năng tự học và xây dựng lộ trình cá nhân",
+          "description": "Chọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.",
+          "price": 149000,
+          "lessons": [
+            {
+              "title": "Xác định mục tiêu học tập",
+              "durationMinutes": 25,
+              "content": "BÀI 1: Xác định mục tiêu học tập\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: xác định mục tiêu học tập.\n\nBÀI TẬP THỰC HÀNH\nViết điều bạn muốn làm được sau bốn tuần. Chọn sản phẩm hoặc bài tập để kiểm tra thay vì chỉ đếm giờ xem video.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Đánh giá kiến thức hiện tại",
+              "durationMinutes": 35,
+              "content": "BÀI 2: Đánh giá kiến thức hiện tại\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: đánh giá kiến thức hiện tại.\n\nBÀI TẬP THỰC HÀNH\nTự kiểm tra ba kỹ năng cần cho mục tiêu. Ghi phần đã làm được, còn thiếu và thứ tự cần bổ sung.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Chia mục tiêu thành chặng",
+              "durationMinutes": 40,
+              "content": "BÀI 3: Chia mục tiêu thành chặng\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: chia mục tiêu thành chặng.\n\nBÀI TẬP THỰC HÀNH\nLập lộ trình bốn tuần, mỗi tuần có một kết quả nhỏ có thể kiểm tra. Xác định phần nào phụ thuộc vào tuần trước.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Lập lịch và bảo vệ thời gian",
+              "durationMinutes": 30,
+              "content": "BÀI 4: Lập lịch và bảo vệ thời gian\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: lập lịch và bảo vệ thời gian.\n\nBÀI TẬP THỰC HÀNH\nSắp xếp ba buổi học mỗi tuần phù hợp sinh hoạt. Dự phòng thời gian và chọn cách xử lý khi bỏ lỡ một buổi.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Ghi chú và tự giải thích",
+              "durationMinutes": 45,
+              "content": "BÀI 5: Ghi chú và tự giải thích\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: ghi chú và tự giải thích.\n\nBÀI TẬP THỰC HÀNH\nViết tóm tắt năm dòng sau một bài học. Giải thích lại không nhìn tài liệu để tìm phần chưa thực sự hiểu.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Thực hành và nhận phản hồi",
+              "durationMinutes": 40,
+              "content": "BÀI 6: Thực hành và nhận phản hồi\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: thực hành và nhận phản hồi.\n\nBÀI TẬP THỰC HÀNH\nChọn bài tập nhỏ, tự kiểm tra kết quả rồi nhờ người khác góp ý. Ghi rõ bạn đã thay đổi gì sau phản hồi.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Theo dõi và điều chỉnh",
+              "durationMinutes": 50,
+              "content": "BÀI 7: Theo dõi và điều chỉnh\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: theo dõi và điều chỉnh.\n\nBÀI TẬP THỰC HÀNH\nTạo bảng gồm bài học, bài tập, kết quả tự kiểm tra và việc cần làm lại. Điều chỉnh kế hoạch theo năng lực thực tế.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            },
+            {
+              "title": "Dự án: Lộ trình học bốn tuần",
+              "durationMinutes": 60,
+              "content": "BÀI 8: Dự án: Lộ trình học bốn tuần\n\nTỔNG QUAN\nChọn mục tiêu, tổ chức thời gian, thực hành có phản hồi và theo dõi kết quả học tập.\nTrọng tâm của buổi học: dự án: lộ trình học bốn tuần.\n\nBÀI TẬP THỰC HÀNH\nHoàn thiện mục tiêu, lịch, bài tập và tiêu chí đánh giá. Thực hiện buổi học đầu tiên và lưu một sản phẩm cụ thể.\n\nSẢN PHẨM CẦN LƯU\nLưu kết quả bài tập hoặc ảnh chụp minh họa. Ghi lại các bước đã thực hiện để có thể tự làm lại.\n\nTỰ KIỂM TRA\n• Giải thích cách làm bằng lời của bạn.\n• Thử một trường hợp thông thường và một trường hợp đặc biệt.\n• Ghi lại một khó khăn cùng cách khắc phục trước khi chuyển sang bài tiếp theo."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

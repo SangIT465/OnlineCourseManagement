@@ -66,6 +66,9 @@ namespace OnlineCourseManagement.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("StaffId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -76,6 +79,8 @@ namespace OnlineCourseManagement.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("InstructorId");
+
+                    b.HasIndex("StaffId");
 
                     b.ToTable("Courses");
                 });
@@ -253,14 +258,26 @@ namespace OnlineCourseManagement.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("User");
+
+                    b.Property<string>("SecurityStamp")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasDefaultValueSql("REPLACE(CONVERT(varchar(36), NEWID()), '-', '')");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", t =>
+                        {
+                            t.HasCheckConstraint("CK_Users_Role", "[Role] IN (N'Admin', N'Staff', N'Instructor', N'User')");
+                        });
                 });
 
             modelBuilder.Entity("OnlineCourseManagement.Models.Course", b =>
@@ -276,9 +293,16 @@ namespace OnlineCourseManagement.Migrations
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("OnlineCourseManagement.Models.User", "Staff")
+                        .WithMany()
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Category");
 
                     b.Navigation("Instructor");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("OnlineCourseManagement.Models.Enrollment", b =>

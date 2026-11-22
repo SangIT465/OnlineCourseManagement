@@ -8,8 +8,12 @@ using OnlineCourseManagement.Services;
 using OnlineCourseManagement.Repositories;
 using System.Text;
 using Microsoft.OpenApi;
+using OnlineCourseManagement.Security;
+using System.Security.Claims;
 
-var builder = WebApplication.CreateBuilder(args);
+var seedCatalog = args.Contains("--seed-catalog", StringComparer.Ordinal);
+var builder = WebApplication.CreateBuilder(
+    args.Where(argument => argument != "--seed-catalog").ToArray());
 
 // Controllers và Swagger
 builder.Services.AddControllers();
@@ -103,11 +107,52 @@ builder.Services
 
                 ClockSkew = TimeSpan.Zero
             };
+
+        // Re-check account state so role changes, password resets and deletion
+        // invalidate previously issued tokens immediately.
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                var principal = context.Principal;
+                if (!int.TryParse(principal?.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
+                {
+                    context.Fail("Tài khoản không hợp lệ.");
+                    return;
+                }
+
+                var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+                var account = await db.Users.AsNoTracking()
+                    .Where(user => user.Id == userId)
+                    .Select(user => new { user.Role, user.SecurityStamp })
+                    .SingleOrDefaultAsync(context.HttpContext.RequestAborted);
+
+                if (account == null || AppRoles.Normalize(account.Role) == null ||
+                    principal!.FindFirstValue(ClaimTypes.Role) != account.Role ||
+                    principal.FindFirstValue(AppRoles.SecurityStampClaim) != account.SecurityStamp)
+                    context.Fail("Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại.");
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Explicit development command: seed the catalog and exit without opening a port.
+if (seedCatalog)
+{
+    if (!app.Environment.IsDevelopment())
+        throw new InvalidOperationException(
+            "Chỉ được nạp dữ liệu khóa học mẫu trong môi trường Development.");
+
+    await using var scope = app.Services.CreateAsyncScope();
+    await CourseCatalogSeeder.SeedAsync(
+        scope.ServiceProvider.GetRequiredService<AppDbContext>(),
+        scope.ServiceProvider.GetRequiredService<ILoggerFactory>()
+            .CreateLogger("CourseCatalogSeeder"));
+    return;
+}
 
 if (app.Environment.IsDevelopment())
 {

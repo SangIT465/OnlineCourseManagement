@@ -1,3 +1,4 @@
+using OnlineCourseManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,17 +30,7 @@ namespace OnlineCourseManagement.Controllers
                 : null;
         }
 
-        private bool IsAdmin()
-        {
-            return User.IsInRole("Admin");
-        }
-
-        private bool CanManage(Course course)
-        {
-            return IsAdmin() ||
-                (User.IsInRole("Instructor") &&
-                 course.InstructorId == CurrentUserId());
-        }
+        private bool CanManage(Course course) => AppRoles.CanManageCourse(User, course);
 
         // GET: api/courses
         [HttpGet]
@@ -71,6 +62,8 @@ namespace OnlineCourseManagement.Controllers
                     CategoryName = c.Category != null
                         ? c.Category.Name : null,
                     c.InstructorId,
+                    c.StaffId,
+                    StaffName = c.Staff != null ? c.Staff.FullName : null,
                     InstructorName = c.Instructor != null
                         ? c.Instructor.FullName : null,
                     c.CreatedAt
@@ -97,6 +90,8 @@ namespace OnlineCourseManagement.Controllers
                     CategoryName = c.Category != null
                         ? c.Category.Name : null,
                     c.InstructorId,
+                    c.StaffId,
+                    StaffName = c.Staff != null ? c.Staff.FullName : null,
                     InstructorName = c.Instructor != null
                         ? c.Instructor.FullName : null,
                     c.CreatedAt
@@ -110,7 +105,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/courses/my
-        [Authorize(Roles = "Instructor")]
+        [Authorize(Roles = AppRoles.AssignedOperators)]
         [HttpGet("my")]
         public async Task<IActionResult> MyCourses()
         {
@@ -119,9 +114,10 @@ namespace OnlineCourseManagement.Controllers
             if (userId == null)
                 return Unauthorized();
 
+            var isInstructor = User.IsInRole(AppRoles.Instructor);
             var courses = await _context.Courses
                 .AsNoTracking()
-                .Where(c => c.InstructorId == userId)
+                .Where(c => isInstructor ? c.InstructorId == userId : c.StaffId == userId)
                 .OrderByDescending(c => c.CreatedAt)
                 .Select(c => new
                 {
@@ -130,7 +126,8 @@ namespace OnlineCourseManagement.Controllers
                     c.Description,
                     c.Price,
                     c.CategoryId,
-                    c.InstructorId
+                    c.InstructorId,
+                    c.StaffId
                 })
                 .ToListAsync();
 
@@ -138,7 +135,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // POST: api/courses
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         [HttpPost]
         public async Task<IActionResult> Create(
             [FromBody] CreateCourseDto dto)
@@ -163,8 +160,9 @@ namespace OnlineCourseManagement.Controllers
                 Description = dto.Description,
                 Price = dto.Price,
                 CategoryId = dto.CategoryId,
-                InstructorId = User.IsInRole("Instructor")
+                InstructorId = User.IsInRole(AppRoles.Instructor)
                     ? userId : null,
+                StaffId = User.IsInRole(AppRoles.Staff) ? userId : null,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -179,12 +177,13 @@ namespace OnlineCourseManagement.Controllers
                     message = "Tạo khóa học thành công",
                     course.Id,
                     course.Title,
-                    course.InstructorId
+                    course.InstructorId,
+                    course.StaffId
                 });
         }
 
         // PUT: api/courses/{id}
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(
             int id,
@@ -221,12 +220,19 @@ namespace OnlineCourseManagement.Controllers
             });
         }
 
-        // PUT: api/courses/{id}/instructor
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppRoles.Admin)]
+        [HttpPut("{id:int}/staff")]
+        public Task<IActionResult> AssignStaff(int id, [FromBody] AssignStaffDto dto) =>
+            AssignCourseOperator(id, dto.StaffId, AppRoles.Staff);
+
+        // Teaching assignment is separate from the operational Staff assignment.
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpPut("{id:int}/instructor")]
-        public async Task<IActionResult> AssignInstructor(
+        public Task<IActionResult> AssignInstructor(
             int id,
-            [FromBody] AssignInstructorDto dto)
+            [FromBody] AssignInstructorDto dto) => AssignCourseOperator(id, dto.InstructorId, AppRoles.Instructor);
+
+        private async Task<IActionResult> AssignCourseOperator(int id, int operatorId, string role)
         {
             var course = await _context.Courses
                 .FindAsync(id);
@@ -236,16 +242,17 @@ namespace OnlineCourseManagement.Controllers
 
             var instructor = await _context.Users
                 .FirstOrDefaultAsync(u =>
-                    u.Id == dto.InstructorId &&
-                    u.Role == "Instructor");
+                    u.Id == operatorId &&
+                    u.Role == role);
 
             if (instructor == null)
                 return BadRequest(new
                 {
-                    message = "Giảng viên không tồn tại"
+                    message = "Tài khoản được phân công không tồn tại hoặc không đúng vai trò."
                 });
 
-            course.InstructorId = instructor.Id;
+            if (role == AppRoles.Instructor) course.InstructorId = instructor.Id;
+            else course.StaffId = instructor.Id;
             await _context.SaveChangesAsync();
 
             return Ok(new
@@ -253,12 +260,14 @@ namespace OnlineCourseManagement.Controllers
                 message = "Phân công thành công",
                 course.Id,
                 course.InstructorId,
-                InstructorName = instructor.FullName
+                course.StaffId,
+                AssignedRole = role,
+                AssignedName = instructor.FullName
             });
         }
 
         // DELETE: api/courses/{id}
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

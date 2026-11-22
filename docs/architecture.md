@@ -28,6 +28,8 @@ Frontend được build bằng Vite, phát hành thành file tĩnh. Backend đư
 5. Controller sử dụng service/repository hoặc DbContext theo nghiệp vụ hiện có để đọc/ghi SQL Server.
 6. Frontend cập nhật giao diện theo phản hồi; các lỗi được hiển thị trong biểu mẫu hoặc thông báo.
 
+Admin và Staff quản lý catalog toàn hệ thống. Instructor được tạo khóa và chỉ quản lý các khóa có `InstructorId` trùng định danh tài khoản; `StaffId` lưu nhân viên vận hành độc lập. User học qua quan hệ ghi danh. Quyền theo khóa áp dụng cả bài học, file và báo cáo tiến độ. Vai trò và SecurityStamp trong JWT được đối chiếu với database trên từng request xác thực.
+
 Ảnh/PDF được tải qua API và lưu ngoài mã frontend. Quyền tải tài liệu phụ thuộc vào quyền quản lý hoặc trạng thái ghi danh. Dữ liệu tiến độ nằm trong SQL Server, không được mô phỏng trong trình duyệt.
 
 ## Ranh giới mã nguồn

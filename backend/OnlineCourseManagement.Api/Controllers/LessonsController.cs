@@ -1,3 +1,4 @@
+using OnlineCourseManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,15 +29,7 @@ namespace OnlineCourseManagement.Controllers
                 ? id : null;
         }
 
-        private bool CanManage(Course course)
-        {
-            return User.IsInRole("Admin") ||
-                (
-                    User.IsInRole("Instructor") &&
-                    CurrentUserId() != null &&
-                    course.InstructorId == CurrentUserId()
-                );
-        }
+        private bool CanManage(Course course) => AppRoles.CanManageCourse(User, course);
 
         // GET: api/lessons
         [HttpGet]
@@ -76,7 +69,7 @@ namespace OnlineCourseManagement.Controllers
                 });
 
             // Admin được xem tất cả
-            if (User.IsInRole("Admin"))
+            if (AppRoles.CanManageCatalog(User))
                 return Ok(lesson);
 
             var userId = CurrentUserId();
@@ -84,22 +77,15 @@ namespace OnlineCourseManagement.Controllers
             if (userId == null)
                 return Unauthorized();
 
-            // Giảng viên xem bài học của chính mình
-            if (User.IsInRole("Instructor"))
+            if (User.IsInRole(AppRoles.Instructor))
             {
-                var isOwner = await _context.Courses
-                    .AnyAsync(c =>
-                        c.Id == lesson.CourseId &&
-                        c.InstructorId == userId.Value);
-
-                if (!isOwner)
-                    return Forbid();
-
-                return Ok(lesson);
+                var assigned = await _context.Courses.AnyAsync(course =>
+                    course.Id == lesson.CourseId && course.InstructorId == userId.Value);
+                return assigned ? Ok(lesson) : Forbid();
             }
 
-            // Student phải đăng ký khóa học
-            if (User.IsInRole("Student"))
+            // User (sinh viên) phải đăng ký khóa học.
+            if (User.IsInRole(AppRoles.User))
             {
                 var enrolled = await _context.Enrollments
                     .AnyAsync(e =>
@@ -149,7 +135,7 @@ namespace OnlineCourseManagement.Controllers
 
         // POST: api/lessons
         [HttpPost]
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         public async Task<IActionResult> Create(
             [FromBody] CreateLessonDto dto)
         {
@@ -203,7 +189,7 @@ namespace OnlineCourseManagement.Controllers
 
         // PUT: api/lessons/{id}
         [HttpPut("{id:int}")]
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         public async Task<IActionResult> Update(
             int id,
             [FromBody] UpdateLessonDto dto)
@@ -262,7 +248,7 @@ namespace OnlineCourseManagement.Controllers
 
         // DELETE: api/lessons/{id}
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Admin,Instructor")]
+        [Authorize(Roles = AppRoles.CourseEditors)]
         public async Task<IActionResult> Delete(int id)
         {
             var lesson = await _context.Lessons
