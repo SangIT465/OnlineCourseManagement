@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using OnlineCourseManagement.Validation;
 
 namespace OnlineCourseManagement.DTOs
 {
@@ -11,6 +12,7 @@ namespace OnlineCourseManagement.DTOs
         public string? Content { get; set; }
 
         [MaxLength(1000)]
+        [HttpUrl]
         public string? VideoUrl { get; set; }
 
         [Range(0, int.MaxValue)]

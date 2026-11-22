@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { adminCredentials as credentials } from "./support/admin-credentials.mjs";
 import { existsSync, readFileSync, unlinkSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
@@ -39,17 +39,6 @@ function snapshot() {
   ).join(" UNION ALL ")}) AS Counts ORDER BY TableName`);
 }
 
-async function credentials() {
-  if (process.env.COURSEFLOW_TEST_ADMIN_EMAIL && process.env.COURSEFLOW_TEST_ADMIN_PASSWORD)
-    return { email: process.env.COURSEFLOW_TEST_ADMIN_EMAIL, password: process.env.COURSEFLOW_TEST_ADMIN_PASSWORD };
-  const root = process.env.APPDATA
-    ? path.join(process.env.APPDATA, "Microsoft", "UserSecrets")
-    : path.join(os.homedir(), ".microsoft", "usersecrets");
-  const secrets = JSON.parse((await readFile(path.join(root, "57665c0f-8f02-41c2-8d81-b48d6e592b4e", "secrets.json"), "utf8")).replace(/^\uFEFF/, ""));
-  const email = secrets["AdminSeed:Email"], password = secrets["AdminSeed:Password"];
-  assert.ok(email && password, "Configure development Admin credentials through environment variables or User Secrets.");
-  return { email, password };
-}
 
 async function api(route, { method = "GET", body, status = 200 } = {}) {
   const response = await fetch(base + route, {

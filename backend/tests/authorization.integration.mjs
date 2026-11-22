@@ -1,8 +1,6 @@
 import assert from "node:assert/strict";
+import { adminCredentials as credentials } from "./support/admin-credentials.mjs";
 import { randomBytes } from "node:crypto";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import os from "node:os";
 
 // Run explicitly against a local development API. Only temporary QA records are modified.
 const base = (
@@ -26,38 +24,6 @@ let adminToken,
   course,
   enrolled = false;
 
-async function credentials() {
-  if (
-    process.env.COURSEFLOW_TEST_ADMIN_EMAIL &&
-    process.env.COURSEFLOW_TEST_ADMIN_PASSWORD
-  )
-    return {
-      email: process.env.COURSEFLOW_TEST_ADMIN_EMAIL,
-      password: process.env.COURSEFLOW_TEST_ADMIN_PASSWORD,
-    };
-  const id = "57665c0f-8f02-41c2-8d81-b48d6e592b4e";
-  const file = process.env.APPDATA
-    ? path.join(
-        process.env.APPDATA,
-        "Microsoft",
-        "UserSecrets",
-        id,
-        "secrets.json",
-      )
-    : path.join(os.homedir(), ".microsoft", "usersecrets", id, "secrets.json");
-  const secrets = JSON.parse(
-    (await readFile(file, "utf8")).replace(/^\uFEFF/, ""),
-  );
-  const result = {
-    email: secrets["AdminSeed:Email"],
-    password: secrets["AdminSeed:Password"],
-  };
-  if (!result.email || !result.password)
-    throw new Error(
-      "Configure a development Admin through environment variables or User Secrets.",
-    );
-  return result;
-}
 
 async function call(
   route,

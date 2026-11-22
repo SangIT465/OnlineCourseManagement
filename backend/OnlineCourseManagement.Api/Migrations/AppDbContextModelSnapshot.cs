@@ -40,6 +40,9 @@ namespace OnlineCourseManagement.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Categories");
                 });
 
@@ -146,7 +149,8 @@ namespace OnlineCourseManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("CourseId", "OrderIndex")
+                        .IsUnique();
 
                     b.ToTable("Lessons");
                 });

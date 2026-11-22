@@ -15,7 +15,7 @@ namespace OnlineCourseManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = AppRoles.CatalogManagers)]
+    [Authorize(Policy = AppPolicies.StudentSupport)]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -81,7 +81,7 @@ namespace OnlineCourseManagement.Controllers
 
         // POST: api/users
         [HttpPost]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppPolicies.AccountAdministration)]
         public async Task<IActionResult> Create(
             [FromBody] CreateUserDto dto)
         {
@@ -143,7 +143,7 @@ namespace OnlineCourseManagement.Controllers
 
         // PUT: api/users/1/role
         [HttpPut("{id:int}/role")]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppPolicies.AccountAdministration)]
         public async Task<IActionResult> UpdateRole(
             int id,
             [FromBody] UpdateUserRoleDto dto)
@@ -255,7 +255,7 @@ namespace OnlineCourseManagement.Controllers
         }
         // DELETE: api/users/1
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppPolicies.AccountAdministration)]
         public async Task<IActionResult> Delete(int id)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);

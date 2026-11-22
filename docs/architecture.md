@@ -21,6 +21,8 @@ Frontend được build bằng Vite, phát hành thành file tĩnh. Backend đư
 
 ## Luồng nghiệp vụ
 
+Middleware ghi nhận request và `X-Request-ID`; exception handler chuẩn hóa lỗi mới thành ProblemDetails. JWT, storage và CORS được bind qua Options Pattern và kiểm tra cấu hình khi khởi động. Permission claims được server sinh từ vai trò; named policies và `ManageCourseHandler` kiểm tra quyền theo từng khóa.
+
 1. Đăng nhập gửi email/mật khẩu đến `/api/auth/login`.
 2. Backend xác minh password hash, tạo JWT chứa định danh và vai trò.
 3. Frontend giữ JWT trong sessionStorage, gửi qua `Authorization: Bearer`.
@@ -43,6 +45,8 @@ Admin và Staff quản lý catalog toàn hệ thống. Instructor được tạo
 | `archive/legacy-razor/` | Mã Razor và thư viện tĩnh cũ được giữ để đối chiếu, không tham gia build hiện tại. |
 
 Backend vẫn là một project ASP.NET với các thư mục chức năng; chưa chuyển sang kiến trúc nhiều project Domain/Application/Infrastructure. Frontend vẫn giữ JavaScript ES modules, chưa chuyển framework. Lần tái cấu trúc này tập trung làm rõ ranh giới FE/BE và khả năng chạy, build, triển khai riêng.
+
+Đăng nhập, danh mục, khóa học và bài học có service riêng; IFileStorage xử lý file qua cấu hình. Project xUnit `backend/OnlineCourseManagement.Api.Tests/` kiểm tra các thành phần backend, còn `backend/tests/` chứa kiểm thử HTTP/SQL. Endpoint `/paged` được bổ sung riêng để giữ tương thích các response mảng mà frontend đang dùng. Xem [checklist chuyên đề](backend-checklist.md) để đối chiếu source và các lệnh kiểm thử.
 
 ## Bảo toàn sau di chuyển
 

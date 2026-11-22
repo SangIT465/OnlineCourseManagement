@@ -7,7 +7,7 @@ namespace OnlineCourseManagement.DTOs
         [Required, MaxLength(100)]
         public string FullName { get; set; } = "";
 
-        [Required, EmailAddress]
+        [Required, EmailAddress, MaxLength(255)]
         public string Email { get; set; } = "";
 
         [Required, MinLength(8)]
@@ -18,7 +18,7 @@ namespace OnlineCourseManagement.DTOs
 
     public class LoginDto
     {
-        [Required, EmailAddress]
+        [Required, EmailAddress, MaxLength(255)]
         public string Email { get; set; } = "";
 
         [Required]

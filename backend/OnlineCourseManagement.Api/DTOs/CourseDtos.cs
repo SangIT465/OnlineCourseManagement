@@ -9,14 +9,13 @@ namespace OnlineCourseManagement.DTOs
 
         public string? Description { get; set; }
 
-        [Range(0, double.MaxValue)]
+        [Range(typeof(decimal), "0", "9999999999999999.99")]
         public decimal Price { get; set; }
 
         [Range(1, int.MaxValue)]
         public int CategoryId { get; set; }
 
-        // Legacy field; assignment is controlled by /courses/{id}/staff.
-        // Staff-created courses are assigned to the current Staff account.
+        // Compatibility field only; teaching/staff assignments use dedicated Admin endpoints.
         public int? InstructorId { get; set; }
     }
 

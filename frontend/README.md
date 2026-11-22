@@ -26,6 +26,7 @@ Từ thư mục gốc có thể dùng `npm.cmd run dev:frontend`, hoặc `npm.cm
 - `src/components/icons.js`: SVG icons dùng chung.
 - `src/styles/main.css`: giao diện desktop/tablet/điện thoại.
 - `public/`: file tĩnh được đưa vào kết quả build.
+- `public/fonts/`: Be Vietnam Pro được phục vụ từ chính frontend, hỗ trợ tiếng Việt; giấy phép SIL Open Font License nằm trong `OFL.txt`.
 - `tests/`: kiểm tra hợp đồng HTTP client và cấu hình.
 
 ## Môi trường API

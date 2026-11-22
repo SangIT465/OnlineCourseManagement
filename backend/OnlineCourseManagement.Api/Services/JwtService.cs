@@ -4,26 +4,26 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using OnlineCourseManagement.Security;
+using Microsoft.Extensions.Options;
+using OnlineCourseManagement.Options;
 
 namespace OnlineCourseManagement.Services
 {
     public class JwtService
     {
-        private readonly IConfiguration _config;
+        private readonly JwtOptions _options;
+        private readonly TimeProvider _time;
 
-        public JwtService(IConfiguration config)
+        public JwtService(IOptions<JwtOptions> options, TimeProvider time)
         {
-            _config = config;
+            _options = options.Value;
+            _time = time;
         }
 
         public string GenerateToken(User user)
         {
-            var secret = _config["Jwt:Key"]
-                ?? throw new InvalidOperationException(
-                    "Chưa cấu hình Jwt:Key");
-
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(secret));
+                Encoding.UTF8.GetBytes(_options.Key));
 
             var credentials = new SigningCredentials(
                 key,
@@ -49,12 +49,14 @@ namespace OnlineCourseManagement.Services
 
                 new Claim(AppRoles.SecurityStampClaim, user.SecurityStamp)
             };
+            claims.AddRange(AppPermissions.ForRole(user.Role)
+                .Select(permission => new Claim(AppPermissions.ClaimType, permission)));
 
             var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
+                issuer: _options.Issuer,
+                audience: _options.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
+                expires: _time.GetUtcNow().UtcDateTime.AddMinutes(_options.ExpirationMinutes),
                 signingCredentials: credentials
             );
 

@@ -1,187 +1,167 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using OnlineCourseManagement.Data;
-using OnlineCourseManagement.Models;
-using OnlineCourseManagement.Services;
-using OnlineCourseManagement.Repositories;
+﻿using System.Reflection;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using OnlineCourseManagement.Data;
+using OnlineCourseManagement.Health;
+using OnlineCourseManagement.Middleware;
+using OnlineCourseManagement.Models;
+using OnlineCourseManagement.OpenApi;
+using OnlineCourseManagement.Options;
+using OnlineCourseManagement.Repositories;
 using OnlineCourseManagement.Security;
-using System.Security.Claims;
+using OnlineCourseManagement.Services;
 
 var seedCatalog = args.Contains("--seed-catalog", StringComparer.Ordinal);
-var builder = WebApplication.CreateBuilder(
-    args.Where(argument => argument != "--seed-catalog").ToArray());
-
-// Controllers và Swagger
-builder.Services.AddControllers();
-builder.Services.AddHealthChecks();
-builder.Services.AddCors(options =>
+var builder = WebApplication.CreateBuilder(args.Where(argument => argument != "--seed-catalog").ToArray());
+builder.Logging.AddJsonConsole(options =>
 {
-    options.AddPolicy("Frontend", policy =>
-    {
-        var origins = builder.Configuration
-            .GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
-
-        if (origins.Length > 0)
-            policy.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod();
-    });
+    options.IncludeScopes = true;
+    options.UseUtcTimestamp = true;
+    options.TimestampFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 });
+
+builder.Services.AddOptions<JwtOptions>().BindConfiguration(JwtOptions.SectionName)
+    .ValidateDataAnnotations().ValidateOnStart();
+builder.Services.AddSingleton<IValidateOptions<JwtOptions>, JwtOptionsValidator>();
+builder.Services.AddOptions<FileStorageOptions>().BindConfiguration(FileStorageOptions.SectionName)
+    .ValidateDataAnnotations().ValidateOnStart();
+builder.Services.AddOptions<FrontendCorsOptions>().BindConfiguration(FrontendCorsOptions.SectionName)
+    .Validate(options => options.HasValidOrigins(), "Cors:AllowedOrigins must contain exact HTTP(S) origins.")
+    .ValidateOnStart();
+builder.Services.AddOptions<FormOptions>().Configure<IOptions<FileStorageOptions>>((form, storage) =>
+    form.MultipartBodyLengthLimit = storage.Value.MaxRequestBytes);
+builder.Services.AddOptions<KestrelServerOptions>().Configure<IOptions<FileStorageOptions>>((server, storage) =>
+    server.Limits.MaxRequestBodySize = storage.Value.MaxRequestBytes);
+
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var problem = new ValidationProblemDetails(context.ModelState)
+        {
+            Status = 400, Title = "Vui lòng kiểm tra các trường dữ liệu.", Instance = context.HttpContext.Request.Path
+        };
+        problem.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+        return new BadRequestObjectResult(problem) { ContentTypes = { "application/problem+json" } };
+    };
+});
+builder.Services.AddProblemDetails(options => options.CustomizeProblemDetails = context =>
+{
+    context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+    context.ProblemDetails.Extensions.TryAdd("message", context.ProblemDetails.Title);
+});
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddHealthChecks().AddCheck<DatabaseHealthCheck>("database", tags: ["ready"]);
+builder.Services.AddCors();
+builder.Services.AddOptions<Microsoft.AspNetCore.Cors.Infrastructure.CorsOptions>()
+    .Configure<IOptions<FrontendCorsOptions>>((cors, frontend) =>
+        cors.AddPolicy("Frontend", policy =>
+        {
+            if (frontend.Value.AllowedOrigins.Length > 0)
+                policy.WithOrigins(frontend.Value.AllowedOrigins.Select(origin => origin.TrimEnd('/')).ToArray())
+                    .AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("X-Request-ID");
+        }));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Online Course Management API",
-        Version = "v1"
+        Title = "Online Course Management API", Version = "v1",
+        Description = "Course catalog, enrollment, learning progress and four-role account management."
     });
-
-    options.AddSecurityDefinition("Bearer",
-        new OpenApiSecurityScheme
-        {
-            Name = "Authorization",
-            Description = "Nhap JWT Token",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.Http,
-            Scheme = "bearer",
-            BearerFormat = "JWT"
-        });
-
-    options.AddSecurityRequirement(document =>
-        new OpenApiSecurityRequirement
-        {
-            [new OpenApiSecuritySchemeReference(
-                "Bearer", document)] = new List<string>()
-        });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization", Description = "JWT returned by POST /api/auth/login",
+        In = ParameterLocation.Header, Type = SecuritySchemeType.Http, Scheme = "bearer", BearerFormat = "JWT"
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
+    });
+    options.OperationFilter<ApiDocumentationFilter>();
+    var xml = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+    if (File.Exists(xml)) options.IncludeXmlComments(xml, includeControllerXmlComments: true);
 });
 
-// Database
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString(
-            "DefaultConnection")));
-
-// Services
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<CurrentSessionJwtEvents>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<
-    IPasswordHasher<User>,
-    PasswordHasher<User>>();
-
-// JWT
-var jwtKey = builder.Configuration["Jwt:Key"];
-
-if (string.IsNullOrWhiteSpace(jwtKey) ||
-    Encoding.UTF8.GetByteCount(jwtKey) < 32)
-{
-    throw new InvalidOperationException(
-        "Jwt:Key phải có ít nhất 32 byte.");
-}
-
-builder.Services
-    .AddAuthentication(
-        JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddScoped<ICourseAccessService, CourseAccessService>();
+builder.Services.AddSingleton<IAuthorizationHandler, ManageCourseHandler>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<IOptions<JwtOptions>>((options, configured) =>
     {
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-
-                ValidIssuer =
-                    builder.Configuration["Jwt:Issuer"],
-
-                ValidAudience =
-                    builder.Configuration["Jwt:Audience"],
-
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtKey)),
-
-                ClockSkew = TimeSpan.Zero
-            };
-
-        // Re-check account state so role changes, password resets and deletion
-        // invalidate previously issued tokens immediately.
-        options.Events = new JwtBearerEvents
+        var jwt = configured.Value;
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            OnTokenValidated = async context =>
-            {
-                var principal = context.Principal;
-                if (!int.TryParse(principal?.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
-                {
-                    context.Fail("Tài khoản không hợp lệ.");
-                    return;
-                }
-
-                var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
-                var account = await db.Users.AsNoTracking()
-                    .Where(user => user.Id == userId)
-                    .Select(user => new { user.Role, user.SecurityStamp })
-                    .SingleOrDefaultAsync(context.HttpContext.RequestAborted);
-
-                if (account == null || AppRoles.Normalize(account.Role) == null ||
-                    principal!.FindFirstValue(ClaimTypes.Role) != account.Role ||
-                    principal.FindFirstValue(AppRoles.SecurityStampClaim) != account.SecurityStamp)
-                    context.Fail("Phiên đăng nhập không còn hiệu lực. Vui lòng đăng nhập lại.");
-            }
+            ValidateIssuer = true, ValidateAudience = true, ValidateLifetime = true, ValidateIssuerSigningKey = true,
+            ValidIssuer = jwt.Issuer, ValidAudience = jwt.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)), ClockSkew = TimeSpan.Zero
         };
+        options.EventsType = typeof(CurrentSessionJwtEvents);
     });
-
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(AppPolicies.Configure);
 
 var app = builder.Build();
-
-// Explicit development command: seed the catalog and exit without opening a port.
 if (seedCatalog)
 {
-    if (!app.Environment.IsDevelopment())
-        throw new InvalidOperationException(
-            "Chỉ được nạp dữ liệu khóa học mẫu trong môi trường Development.");
-
+    if (!app.Environment.IsDevelopment()) throw new InvalidOperationException("Sample catalog seeding requires Development.");
     await using var scope = app.Services.CreateAsyncScope();
-    await CourseCatalogSeeder.SeedAsync(
-        scope.ServiceProvider.GetRequiredService<AppDbContext>(),
-        scope.ServiceProvider.GetRequiredService<ILoggerFactory>()
-            .CreateLogger("CourseCatalogSeeder"));
+    await CourseCatalogSeeder.SeedAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>(),
+        scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("CourseCatalogSeeder"));
     return;
 }
 
-if (app.Environment.IsDevelopment())
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseExceptionHandler(new ExceptionHandlerOptions { AllowStatusCode404Response = true });
+app.UseStatusCodePages(async context =>
+{
+    var http = context.HttpContext;
+    await Results.Problem(statusCode: http.Response.StatusCode, title: http.Response.StatusCode switch
+    {
+        401 => "Vui lòng đăng nhập hoặc đăng nhập lại khi phiên đã hết hiệu lực.",
+        403 => "Bạn không có quyền thực hiện thao tác này.",
+        404 => "Không tìm thấy dữ liệu được yêu cầu.",
+        _ => "Không thể xử lý yêu cầu. Vui lòng thử lại."
+    }, instance: http.Request.Path).ExecuteAsync(http);
+});
+if (app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("Swagger:Enabled"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-if (!app.Environment.IsDevelopment())
-    app.UseHttpsRedirection();
-
+if (!app.Environment.IsDevelopment()) app.UseHttpsRedirection();
 app.UseCors("Frontend");
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new HealthCheckOptions { Predicate = _ => false });
+app.MapHealthChecks("/health/ready", new HealthCheckOptions { Predicate = check => check.Tags.Contains("ready") });
 app.MapGet("/", () => Results.Ok(new
 {
-    name = "CourseFlow API",
-    documentation = "/swagger",
-    health = "/health"
+    name = "CourseFlow API", documentation = "/swagger", health = "/health", readiness = "/health/ready"
 })).ExcludeFromDescription();
-
-if (app.Environment.IsDevelopment())
-{
-    await DevAdminSeeder.SeedAsync(
-        app.Services,
-        app.Configuration);
-}
-
+if (app.Environment.IsDevelopment()) await DevAdminSeeder.SeedAsync(app.Services, app.Configuration);
 app.Run();

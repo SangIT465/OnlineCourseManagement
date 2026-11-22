@@ -1,111 +1,45 @@
-using OnlineCourseManagement.Security;
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourseManagement.Data;
-using OnlineCourseManagement.Models;
+using OnlineCourseManagement.DTOs;
+using OnlineCourseManagement.Security;
+using OnlineCourseManagement.Services;
 
-namespace OnlineCourseManagement.Controllers
+namespace OnlineCourseManagement.Controllers;
+
+[ApiController]
+[Route("api/categories")]
+public sealed class CategoriesController(ICategoryService categories) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CategoriesController : ControllerBase
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<ActionResult<List<CategoryResponseDto>>> GetAll(CancellationToken token) => Ok(await categories.GetAllAsync(token));
+
+    [AllowAnonymous]
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<CategoryResponseDto>> GetById(int id, CancellationToken token) => Ok(await categories.GetByIdAsync(id, token));
+
+    [Authorize(Policy = AppPolicies.CatalogManagement)]
+    [HttpPost]
+    [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> Create([FromBody] CategoryInputDto input, CancellationToken token)
     {
-        private readonly AppDbContext _context;
+        var category = await categories.CreateAsync(input, token);
+        return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+    }
 
-        public CategoriesController(AppDbContext context)
-        {
-            _context = context;
-        }
+    [Authorize(Policy = AppPolicies.CatalogManagement)]
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, [FromBody] CategoryInputDto input, CancellationToken token)
+    {
+        await categories.UpdateAsync(id, input, token);
+        return NoContent();
+    }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAll()
-        {
-            var categories = await _context.Categories
-                .AsNoTracking()
-                .ToListAsync();
-
-            return Ok(categories);
-        }
-
-        [HttpGet("{id:int}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var category = await _context.Categories
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (category == null)
-                return NotFound();
-
-            return Ok(category);
-        }
-
-        // Chỉ Admin được tạo danh mục
-        [HttpPost]
-        [Authorize(Roles = AppRoles.CatalogManagers)]
-        public async Task<IActionResult> Create(
-            [FromBody] Category category)
-        {
-            category.Id = 0;
-
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = category.Id },
-                category);
-        }
-
-        // Chỉ Admin được cập nhật danh mục
-        [HttpPut("{id:int}")]
-        [Authorize(Roles = AppRoles.CatalogManagers)]
-        public async Task<IActionResult> Update(
-            int id,
-            [FromBody] Category input)
-        {
-            var category = await _context.Categories
-                .FindAsync(id);
-
-            if (category == null)
-                return NotFound();
-
-            category.Name = input.Name;
-            category.Description = input.Description;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // Chỉ Admin được xóa danh mục
-        [HttpDelete("{id:int}")]
-        [Authorize(Roles = AppRoles.CatalogManagers)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var category = await _context.Categories
-                .FindAsync(id);
-
-            if (category == null)
-                return NotFound();
-
-            if (await _context.Courses
-                .AnyAsync(c => c.CategoryId == id))
-            {
-                return Conflict(new
-                {
-                    message =
-                        "Danh mục đang có khóa học, không thể xóa"
-                });
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+    [Authorize(Policy = AppPolicies.CatalogManagement)]
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id, CancellationToken token)
+    {
+        await categories.DeleteAsync(id, token);
+        return NoContent();
     }
 }

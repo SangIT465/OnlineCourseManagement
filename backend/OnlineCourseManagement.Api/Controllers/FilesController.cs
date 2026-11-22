@@ -1,4 +1,5 @@
 using OnlineCourseManagement.Security;
+using OnlineCourseManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +14,14 @@ namespace OnlineCourseManagement.Controllers;
 public class FilesController : ControllerBase
 {
     private readonly AppDbContext _db;
-    private readonly string _storageRoot;
+    private readonly IFileStorage _storage;
+    private readonly ICourseAccessService _access;
 
-    public FilesController(
-        AppDbContext db,
-        IWebHostEnvironment env)
+    public FilesController(AppDbContext db, IFileStorage storage, ICourseAccessService access)
     {
         _db = db;
-        _storageRoot = Path.Combine(
-            env.ContentRootPath, "Uploads");
+        _storage = storage;
+        _access = access;
     }
 
     private int? CurrentUserId()
@@ -33,47 +33,11 @@ public class FilesController : ControllerBase
             ? id : null;
     }
 
-    private bool CanManage(Course course) => AppRoles.CanManageCourse(User, course);
-
-    private static bool IsValidSignature(
-        byte[] header, string extension)
-    {
-        return extension switch
-        {
-            ".jpg" or ".jpeg" =>
-                header.Length >= 3 &&
-                header[0] == 0xFF &&
-                header[1] == 0xD8 &&
-                header[2] == 0xFF,
-
-            ".png" =>
-                header.Length >= 8 &&
-                header.Take(8).SequenceEqual(
-                    new byte[]
-                    {
-                        137, 80, 78, 71, 13, 10, 26, 10
-                    }),
-
-            ".webp" =>
-                header.Length >= 12 &&
-                System.Text.Encoding.ASCII
-                    .GetString(header, 0, 4) == "RIFF" &&
-                System.Text.Encoding.ASCII
-                    .GetString(header, 8, 4) == "WEBP",
-
-            ".pdf" =>
-                header.Length >= 5 &&
-                System.Text.Encoding.ASCII
-                    .GetString(header, 0, 5) == "%PDF-",
-
-            _ => false
-        };
-    }
+    private Task<bool> CanManage(Course course) => _access.CanManageAsync(User, course);
 
     // POST: api/files/courses/1/image
-    [Authorize(Roles = AppRoles.CourseEditors)]
+    [Authorize(Policy = AppPolicies.CourseEditing)]
     [HttpPost("courses/{courseId:int}/image")]
-    [RequestSizeLimit(6_000_000)]
     public async Task<IActionResult> UploadCourseImage(
         int courseId,
         IFormFile file)
@@ -84,7 +48,7 @@ public class FilesController : ControllerBase
         if (course == null)
             return NotFound("Khóa học không tồn tại");
 
-        if (!CanManage(course))
+        if (!await CanManage(course))
             return Forbid();
 
         return await SaveFile(
@@ -92,9 +56,8 @@ public class FilesController : ControllerBase
     }
 
     // POST: api/files/lessons/1/document
-    [Authorize(Roles = AppRoles.CourseEditors)]
+    [Authorize(Policy = AppPolicies.CourseEditing)]
     [HttpPost("lessons/{lessonId:int}/document")]
-    [RequestSizeLimit(12_000_000)]
     public async Task<IActionResult> UploadLessonDocument(
         int lessonId,
         IFormFile file)
@@ -107,7 +70,7 @@ public class FilesController : ControllerBase
             return NotFound("Bài học không tồn tại");
 
         if (lesson.Course == null ||
-            !CanManage(lesson.Course))
+            !await CanManage(lesson.Course))
             return Forbid();
 
         return await SaveFile(
@@ -115,107 +78,26 @@ public class FilesController : ControllerBase
             lesson.CourseId, lesson.Id);
     }
 
-    private async Task<IActionResult> SaveFile(
-        IFormFile file,
-        string type,
-        int courseId,
-        int? lessonId)
+    private async Task<IActionResult> SaveFile(IFormFile file, string type, int courseId, int? lessonId)
     {
-        if (file == null || file.Length == 0)
-            return BadRequest("Vui lòng chọn file");
-
-        var maxSize = type == "CourseImage"
-            ? 5_000_000L : 10_000_000L;
-
-        if (file.Length > maxSize)
-            return BadRequest("File vượt quá dung lượng");
-
-        var extension = Path.GetExtension(
-            file.FileName).ToLowerInvariant();
-
-        string[] allowed = type == "CourseImage"
-            ? [".jpg", ".jpeg", ".png", ".webp"]
-            : [".pdf"];
-
-        if (!allowed.Contains(extension))
-            return BadRequest("Định dạng file không hợp lệ");
-
-        var contentType = extension switch
+        var stored = await _storage.SaveAsync(file, type, HttpContext.RequestAborted);
+        var record = new UploadedFile
         {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".webp" => "image/webp",
-            ".pdf" => "application/pdf",
-            _ => "application/octet-stream"
+            OriginalName = Path.GetFileName(file.FileName), StoredName = stored.StoredName,
+            ContentType = stored.ContentType, Size = stored.Size, FileType = type,
+            CourseId = courseId, LessonId = lessonId, UploadedById = User.RequireUserId()
         };
-
-        await using var input = file.OpenReadStream();
-
-        var header = new byte[12];
-        var read = await input.ReadAsync(
-            header.AsMemory());
-
-        if (!IsValidSignature(
-            header[..read], extension))
-            return BadRequest("Nội dung file không hợp lệ");
-
-        input.Position = 0;
-
-        var directory = Path.Combine(
-            _storageRoot,
-            type == "CourseImage"
-                ? "course-images"
-                : "lesson-documents");
-
-        Directory.CreateDirectory(directory);
-
-        var storedName =
-            $"{Guid.NewGuid():N}{extension}";
-
-        var path = Path.Combine(
-            directory, storedName);
-
         try
         {
-            await using (var output = new FileStream(
-                path, FileMode.CreateNew,
-                FileAccess.Write, FileShare.None))
-            {
-                await input.CopyToAsync(output);
-            }
-
-            var record = new UploadedFile
-            {
-                OriginalName = Path.GetFileName(
-                    file.FileName),
-                StoredName = storedName,
-                ContentType = contentType,
-                Size = file.Length,
-                FileType = type,
-                CourseId = courseId,
-                LessonId = lessonId,
-                UploadedById = CurrentUserId()!.Value
-            };
-
             _db.UploadedFiles.Add(record);
-            await _db.SaveChangesAsync();
-
-            return StatusCode(201, new
-            {
-                message = "Upload thành công",
-                record.Id,
-                record.OriginalName,
-                record.Size,
-                record.FileType
-            });
+            await _db.SaveChangesAsync(HttpContext.RequestAborted);
         }
         catch
         {
-            if (System.IO.File.Exists(path))
-                System.IO.File.Delete(path);
-
+            _storage.Delete(type, stored.StoredName);
             throw;
         }
+        return StatusCode(201, new { message = "Upload thành công", record.Id, record.OriginalName, record.Size, record.FileType });
     }
 
     // GET: api/files/1/download
@@ -239,7 +121,7 @@ public class FilesController : ControllerBase
         if (course == null)
             return NotFound();
 
-        bool allowed = CanManage(course);
+        bool allowed = await CanManage(course);
 
         if (!allowed && User.IsInRole(AppRoles.User))
         {
@@ -264,8 +146,7 @@ public class FilesController : ControllerBase
         if (folder == null)
             return NotFound();
 
-        var path = Path.Combine(
-            _storageRoot, folder, file.StoredName);
+        var path = _storage.GetPath(file.FileType, file.StoredName);
 
         if (!System.IO.File.Exists(path))
             return NotFound("File không tồn tại trên ổ đĩa");
@@ -326,7 +207,7 @@ public class FilesController : ControllerBase
         if (lesson.Course == null)
             return NotFound();
 
-        bool allowed = CanManage(lesson.Course);
+        bool allowed = await CanManage(lesson.Course);
 
         if (!allowed && User.IsInRole(AppRoles.User))
         {
@@ -359,7 +240,7 @@ public class FilesController : ControllerBase
     }
 
     // DELETE: api/files/1
-    [Authorize(Roles = AppRoles.CourseEditors)]
+    [Authorize(Policy = AppPolicies.CourseEditing)]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -376,7 +257,7 @@ public class FilesController : ControllerBase
         if (course == null)
             return NotFound();
 
-        if (!CanManage(course))
+        if (!await CanManage(course))
             return Forbid();
 
         var folder = file.FileType switch
@@ -389,8 +270,7 @@ public class FilesController : ControllerBase
         if (folder == null)
             return BadRequest("Loại file không hợp lệ");
 
-        var path = Path.Combine(
-            _storageRoot, folder, file.StoredName);
+        var path = _storage.GetPath(file.FileType, file.StoredName);
 
         _db.UploadedFiles.Remove(file);
         await _db.SaveChangesAsync();

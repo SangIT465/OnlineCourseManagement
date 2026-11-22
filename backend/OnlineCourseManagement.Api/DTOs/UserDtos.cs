@@ -10,6 +10,7 @@ namespace OnlineCourseManagement.DTOs
 
         [Required]
         [EmailAddress]
+        [MaxLength(255)]
         public string Email { get; set; } = "";
 
         [Required]

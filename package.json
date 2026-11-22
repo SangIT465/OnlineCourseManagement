@@ -17,6 +17,9 @@
     "test": "node scripts/test.mjs",
     "test:authorization": "node backend/tests/authorization.integration.mjs",
     "test:crud": "node backend/tests/crud.integration.mjs",
-    "seed:catalog": "dotnet run --project backend/OnlineCourseManagement.Api --configuration Release --launch-profile http -- --seed-catalog --Logging:LogLevel:Microsoft.EntityFrameworkCore=Warning"
+    "seed:catalog": "dotnet run --project backend/OnlineCourseManagement.Api --configuration Release --launch-profile http -- --seed-catalog --Logging:LogLevel:Microsoft.EntityFrameworkCore=Warning",
+    "test:backend": "dotnet test backend/OnlineCourseManagement.Api.Tests --configuration Release",
+    "test:contracts": "node backend/tests/backend-contract.integration.mjs",
+    "publish:backend": "dotnet publish backend/OnlineCourseManagement.Api --configuration Release --output artifacts/backend"
   }
 }

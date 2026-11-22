@@ -1,4 +1,5 @@
 using OnlineCourseManagement.Security;
+using OnlineCourseManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,12 @@ namespace OnlineCourseManagement.Controllers
     public class LessonProgressController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ICourseAccessService _courseAccess;
 
-        public LessonProgressController(AppDbContext context)
+        public LessonProgressController(AppDbContext context, ICourseAccessService courseAccess)
         {
             _context = context;
+            _courseAccess = courseAccess;
         }
 
         private int? CurrentUserId()
@@ -30,7 +33,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // POST: api/progress/lessons/1/complete
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpPost("lessons/{lessonId:int}/complete")]
         public async Task<IActionResult> CompleteLesson(
             int lessonId)
@@ -106,7 +109,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // DELETE: api/progress/lessons/1/complete
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpDelete("lessons/{lessonId:int}/complete")]
         public async Task<IActionResult> UndoComplete(
             int lessonId)
@@ -143,7 +146,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/progress/courses/1
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpGet("courses/{courseId:int}")]
         public async Task<IActionResult> GetCourseProgress(
             int courseId)
@@ -219,7 +222,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/progress/my
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpGet("my")]
         public async Task<IActionResult> MyProgress()
         {
@@ -264,7 +267,7 @@ namespace OnlineCourseManagement.Controllers
         }
 
         // GET: api/progress/courses/1/students
-        [Authorize(Roles = AppRoles.CourseEditors)]
+        [Authorize(Policy = AppPolicies.CourseEditing)]
         [HttpGet("courses/{courseId:int}/students")]
         public async Task<IActionResult> GetStudentsProgress(
             int courseId)
@@ -276,7 +279,7 @@ namespace OnlineCourseManagement.Controllers
             if (course == null)
                 return NotFound();
 
-            if (!AppRoles.CanManageCourse(User, course))
+            if (!await _courseAccess.CanManageAsync(User, course))
                 return Forbid();
 
             var totalLessons = await _context.Lessons

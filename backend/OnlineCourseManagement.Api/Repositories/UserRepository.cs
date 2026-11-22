@@ -46,7 +46,7 @@ namespace OnlineCourseManagement.Repositories
             }
 
             // 3. SORTING
-            query = queryParams.SortBy?.ToLower() switch
+            var sorted = queryParams.SortBy?.ToLower() switch
             {
                 "email" => queryParams.IsDescending
                     ? query.OrderByDescending(u => u.Email)
@@ -65,9 +65,11 @@ namespace OnlineCourseManagement.Repositories
             var totalCount = await query.CountAsync();
 
             // 5. PAGINATION (Chỉ lấy đúng PageSize dòng từ DB)
-            var items = await query
-                .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+            var items = await sorted
+                .ThenBy(u => u.Id)
+                .Skip(queryParams.Skip)
                 .Take(queryParams.PageSize)
+                .Select(u => new User { Id = u.Id, FullName = u.FullName, Email = u.Email, Role = u.Role, CreatedAt = u.CreatedAt })
                 .ToListAsync();
 
             return new PagedResult<User>(items, totalCount, queryParams.PageNumber, queryParams.PageSize);

@@ -1,0 +1,37 @@
+name: Build and test CourseFlow
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-dotnet@v6.1.0
+        with:
+          dotnet-version: '10.0.x'
+      - run: npm ci
+      - run: npm test
+      - run: dotnet restore OnlineCourseManagement.sln
+      - name: Test backend without modifying a SQL database
+        run: dotnet test OnlineCourseManagement.sln --configuration Release --no-restore --logger trx --results-directory artifacts/test-results
+      - run: npm run build:frontend
+      - run: npm run publish:backend -- --no-restore
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: courseflow-build
+          path: |
+            artifacts/test-results
+            artifacts/backend
+            frontend/dist

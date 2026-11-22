@@ -26,6 +26,8 @@
 
 ## Thực thi tại backend
 
+JWT mới có claim `permission` do `AppPermissions` sinh từ vai trò. `AppPolicies` kết hợp role/permission; `ManageCourseHandler` kiểm tra tài nguyên khóa học qua `IAuthorizationService`. Khi chuyển từ token cũ chưa có permission claims, cần đăng nhập lại. Phân công lại vẫn được kiểm tra bằng dữ liệu hiện tại trên từng request.
+
 - `Security/AppRoles.cs` định nghĩa bốn mã và quyền quản lý từng khóa.
 - Admin/Staff vận hành catalog. Instructor phải có `Courses.InstructorId` trùng định danh trong JWT. Chuyển bài học kiểm tra cả khóa nguồn lẫn khóa đích.
 - Kiểm tra quan hệ áp dụng cho sửa/xóa, upload/download và báo cáo học viên. Đổi HTML hoặc ID trong request không cấp thêm quyền.

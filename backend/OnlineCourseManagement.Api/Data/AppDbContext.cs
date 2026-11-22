@@ -24,6 +24,9 @@ namespace OnlineCourseManagement.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Category>().HasIndex(category => category.Name).IsUnique();
+            modelBuilder.Entity<Lesson>().HasIndex(lesson => new { lesson.CourseId, lesson.OrderIndex }).IsUnique();
+
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.Category)
                 .WithMany()

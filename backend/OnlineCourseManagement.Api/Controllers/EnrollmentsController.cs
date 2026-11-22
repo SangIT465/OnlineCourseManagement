@@ -1,4 +1,5 @@
 using OnlineCourseManagement.Security;
+using OnlineCourseManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace OnlineCourseManagement.Controllers
     public class EnrollmentsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ICourseAccessService _courseAccess;
 
-        public EnrollmentsController(AppDbContext context)
+        public EnrollmentsController(AppDbContext context, ICourseAccessService courseAccess)
         {
             _context = context;
+            _courseAccess = courseAccess;
         }
 
         private int? CurrentUserId()
@@ -32,7 +35,7 @@ namespace OnlineCourseManagement.Controllers
 
         // POST: api/enrollments
         // Student đăng ký khóa học
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpPost]
         public async Task<IActionResult> Enroll(
             [FromBody] EnrollCourseDto dto)
@@ -105,7 +108,7 @@ namespace OnlineCourseManagement.Controllers
 
         // GET: api/enrollments/my
         // Student xem các khóa học đã đăng ký
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpGet("my")]
         public async Task<IActionResult> MyCourses()
         {
@@ -134,7 +137,7 @@ namespace OnlineCourseManagement.Controllers
 
         // GET: api/enrollments
         // Admin xem tất cả lượt đăng ký
-        [Authorize(Roles = AppRoles.CatalogManagers)]
+        [Authorize(Policy = AppPolicies.CatalogManagement)]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -158,7 +161,7 @@ namespace OnlineCourseManagement.Controllers
 
         // GET: api/enrollments/course/1
         // Admin hoặc giảng viên phụ trách xem học viên
-        [Authorize(Roles = AppRoles.CourseEditors)]
+        [Authorize(Policy = AppPolicies.CourseEditing)]
         [HttpGet("course/{courseId:int}")]
         public async Task<IActionResult> GetStudents(
             int courseId)
@@ -173,7 +176,7 @@ namespace OnlineCourseManagement.Controllers
                     message = "Khóa học không tồn tại"
                 });
 
-            if (!AppRoles.CanManageCourse(User, course))
+            if (!await _courseAccess.CanManageAsync(User, course))
             {
                 return Forbid();
             }
@@ -203,7 +206,7 @@ namespace OnlineCourseManagement.Controllers
 
         // DELETE: api/enrollments/{courseId}
         // Student hủy đăng ký khóa học
-        [Authorize(Roles = AppRoles.User)]
+        [Authorize(Policy = AppPolicies.Learning)]
         [HttpDelete("{courseId:int}")]
         public async Task<IActionResult> Cancel(int courseId)
         {

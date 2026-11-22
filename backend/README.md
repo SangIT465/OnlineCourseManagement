@@ -2,6 +2,8 @@
 
 Thư mục `OnlineCourseManagement.Api/` là ứng dụng API độc lập. Backend không phục vụ HTML, CSS hoặc JavaScript của frontend.
 
+Đối chiếu đầy đủ các chuyên đề Buổi 2–15 tại [checklist backend](../docs/backend-checklist.md). Có [collection Postman](../docs/postman/README.md), [hướng dẫn publish](../docs/backend-deployment.md) và [báo cáo/kịch bản bảo vệ](../docs/backend-report.md).
+
 ## Chạy riêng
 
 Từ thư mục gốc repository:
@@ -23,13 +25,20 @@ Swagger: http://localhost:5106/swagger. Endpoint `/` trả thông tin API, `/hea
 - `Controllers/`: route, xác thực/phân quyền, HTTP request và response.
 - `DTOs/`: định dạng và validation dữ liệu trao đổi.
 - `Services/`: nghiệp vụ người dùng, JWT và xử lý mật khẩu.
+- `Middleware/`: exception handler và logging/correlation cho request.
+- `Options/`: cấu hình JWT, upload và CORS có validation khi khởi động.
+- `Security/`: vai trò, permission claims, named policies và quyền theo khóa.
+- `OpenApi/`: metadata tài liệu và response/security cho Swagger.
+- `Health/`: kiểm tra kết nối database qua `/health/ready`.
 - `Repositories/`: truy vấn người dùng, lọc, sắp xếp và phân trang.
 - `Data/`: EF Core DbContext, tạo Admin ban đầu và lệnh nạp catalog mẫu trong Development.
 - `Models/`: các thực thể Course, Lesson, User, Enrollment, LessonProgress và UploadedFile.
 - `Migrations/`: các migration hiện có; giữ nguyên namespace và lịch sử database.
 - `Uploads/`: dữ liệu ảnh/PDF, tên file được giữ nguyên sau khi di chuyển.
 
-Một số controller khóa học/bài học/ghi danh của mã nguồn hiện tại vẫn gọi DbContext trực tiếp. Lần sắp xếp này giữ nguyên nghiệp vụ đó; chưa tách thành nhiều assembly Domain/Application/Infrastructure.
+Đăng nhập, danh mục, khóa học và bài học đi qua service riêng; lưu file qua IFileStorage. Các controller người dùng/ghi danh/tiến độ còn một số thao tác DbContext trực tiếp. Backend chưa tách thành nhiều assembly Domain/Application/Infrastructure.
+
+Project `OnlineCourseManagement.Api.Tests/` nằm cạnh API trong solution, chạy bằng `npm.cmd run test:backend`. Các suite `backend/tests/*.integration.mjs` gọi API/SQL thật và cần môi trường Development đã cấu hình; xem checklist để chạy tuần tự.
 
 ## Cấu hình trên máy mới
 

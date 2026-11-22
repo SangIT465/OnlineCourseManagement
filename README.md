@@ -2,6 +2,8 @@
 
 Hệ thống quản lý khóa học trực tuyến được tổ chức thành hai ứng dụng độc lập: frontend JavaScript/Vite và backend ASP.NET Core Web API (.NET 10), sử dụng SQL Server, Entity Framework Core và JWT.
 
+Xem [checklist backend theo Buổi 2–15](docs/backend-checklist.md), [Postman](docs/postman/README.md), [publish/triển khai](docs/backend-deployment.md) và [báo cáo/demo bảo vệ](docs/backend-report.md).
+
 ## Cấu trúc
 
 ```text
@@ -21,19 +23,21 @@ OnlineCourseManagement/
 │   ├── package.json
 │   └── vite.config.js
 ├── backend/
-│   └── OnlineCourseManagement.Api/
-│       ├── Controllers/           # API endpoints và phân quyền
-│       ├── DTOs/                  # Hợp đồng request/response
-│       ├── Services/              # Nghiệp vụ, JWT, mật khẩu
-│       ├── Security/              # Bốn vai trò và kiểm tra quyền theo khóa
-│       ├── Repositories/          # Truy cập dữ liệu người dùng
-│       ├── Models/                # Thực thể dữ liệu
-│       ├── Data/                  # DbContext và tạo Admin ban đầu
-│       ├── Migrations/            # Lịch sử schema EF Core
-│       ├── Properties/            # Hồ sơ khởi chạy
-│       ├── Uploads/               # File ảnh/PDF hiện có
-│       ├── Program.cs
-│       └── OnlineCourseManagement.Api.csproj
+│   ├── OnlineCourseManagement.Api/
+│   │   ├── Controllers/           # API endpoints và phân quyền
+│   │   ├── DTOs/                  # Hợp đồng request/response
+│   │   ├── Services/              # Nghiệp vụ, JWT, mật khẩu
+│   │   ├── Security/              # Bốn vai trò và kiểm tra quyền theo khóa
+│   │   ├── Repositories/          # Truy cập dữ liệu người dùng
+│   │   ├── Models/                # Thực thể dữ liệu
+│   │   ├── Data/                  # DbContext và tạo Admin ban đầu
+│   │   ├── Migrations/            # Lịch sử schema EF Core
+│   │   ├── Properties/            # Hồ sơ khởi chạy
+│   │   ├── Uploads/               # File ảnh/PDF hiện có
+│   │   ├── Program.cs
+│   │   └── OnlineCourseManagement.Api.csproj
+│   ├── OnlineCourseManagement.Api.Tests/ # Kiểm thử xUnit backend
+│   └── tests/                     # Kiểm thử HTTP/SQL tích hợp
 ├── database/seeds/                # Script SQL và catalog khóa học mẫu
 ├── docs/architecture.md           # Kiến trúc và luồng xử lý
 ├── scripts/                      # Chạy/build cả hai ứng dụng
@@ -123,6 +127,7 @@ Khi triển khai hai ứng dụng khác tên miền, đặt `VITE_API_BASE_URL=h
 npm.cmd ci
 npm.cmd run build
 npm.cmd test
+npm.cmd run test:backend
 ```
 
 - Frontend production: `frontend/dist/`.
