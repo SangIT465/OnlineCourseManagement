@@ -1,122 +1,124 @@
-OnlineCourseManagement
-Backend quản lý khóa học trực tuyến xây dựng bằng ASP.NET Core Web API (.NET 10), Entity Framework Core, SQL Server và JWT Authentication.
-1. Chức năng
-- Đăng nhập bằng JWT; phân quyền Admin, Instructor, Student.
-- Quản lý người dùng, vai trò, đặt lại mật khẩu Student (Admin).
-- Quản lý danh mục, khóa học, bài học; phân công giảng viên.
-- API ghi danh khóa học, theo dõi tiến độ bài học và quản lý file học liệu (tùy phiên bản code hiện tại).
-- Kiểm thử API qua Swagger UI.
-2. Yêu cầu
-- .NET SDK 10
-- SQL Server và SQL Server Management Studio (SSMS)
-- Visual Studio có hỗ trợ ASP.NET hoặc Visual Studio Code
-- Công cụ Entity Framework Core (dotnet-ef)
-Kiểm tra:
-dotnet --version
-dotnet ef --version
-Nếu chưa có dotnet ef:
-dotnet tool install --global dotnet-ef --version 10.*
-Nếu đã cài, bảo đảm phiên bản công cụ tương thích với EF Core của dự án.
-3. Tải mã nguồn
-git clone <URL_REPOSITORY_GITHUB>
-cd <THU_MUC_CHUA_FILE_OnlineCourseManagement.csproj>
-Nếu đã tải dự án, chỉ cần mở Terminal tại thư mục chứa OnlineCourseManagement.csproj.
+# CourseFlow — Online Course Management
 
-4. Cấu hình SQL Server
-Mở file appsettings.json và thiết lập chuỗi kết nối cho SQL Server trên máy:
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=OnlineCourseDB;Trusted_Connection=True;TrustServerCertificate=True;"
-  },
-  "Jwt": {
-    "Issuer": "OnlineCourseManagement",
-    "Audience": "OnlineCourseManagementUsers"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
-}
-- Thay .\\SQLEXPRESS bằng tên SQL Server instance thực tế nếu khác.
-- Nếu sử dụng SQL Server Authentication, cung cấp thông tin kết nối theo cách bảo mật (chẳng hạn User Secrets), không commit mật khẩu vào Git.
-- DefaultConnection phải trùng tên được đọc trong Program.cs.
-5. Cấu hình User Secrets
-Ứng dụng cần JWT Key; cấu hình mẫu trong hướng dẫn này sử dụng Jwt:Key từ User Secrets khi chạy môi trường Development.
-dotnet user-secrets init
+Hệ thống quản lý khóa học trực tuyến được tổ chức thành hai ứng dụng độc lập: frontend JavaScript/Vite và backend ASP.NET Core Web API (.NET 10), sử dụng SQL Server, Entity Framework Core và JWT.
 
-# Sinh khóa ngẫu nhiên, tương thích Windows PowerShell
-$bytes = New-Object byte[] 48
-$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-$rng.GetBytes($bytes)
-$rng.Dispose()
-$key = [Convert]::ToBase64String($bytes)
+## Cấu trúc
 
-dotnet user-secrets set "Jwt:Key" $key
-Nếu ứng dụng có chức năng tự tạo Admin ban đầu từ cấu hình AdminSeed, thiết lập thêm:
-dotnet user-secrets set "AdminSeed:Email" "admin@onlinecourse.local"
-$adminPassword = Read-Host "Nhap mat khau Admin ban dau" -AsSecureString
-$credential = [PSCredential]::new("admin", $adminPassword)
-dotnet user-secrets set "AdminSeed:Password" $credential.GetNetworkCredential().Password
-User Secrets chỉ lưu cấu hình. Tài khoản Admin chỉ được tạo tự động nếu code đã triển khai và gọi Seeder. Không đăng mật khẩu hoặc JWT Key lên GitHub.
+```text
+OnlineCourseManagement/
+├── frontend/                      # Giao diện và cấu hình Vite
+│   ├── public/                    # Tài nguyên tĩnh
+│   ├── src/
+│   │   ├── api/client.js          # HTTP client, JWT, lỗi API
+│   │   ├── components/icons.js    # Thành phần SVG dùng chung
+│   │   ├── styles/main.css        # Giao diện responsive
+│   │   ├── app.js                 # Màn hình, biểu mẫu, định tuyến
+│   │   ├── config.js              # Địa chỉ API theo môi trường
+│   │   └── main.js                # Điểm khởi tạo frontend
+│   ├── tests/                     # Kiểm thử frontend
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+├── backend/
+│   └── OnlineCourseManagement.Api/
+│       ├── Controllers/           # API endpoints và phân quyền
+│       ├── DTOs/                  # Hợp đồng request/response
+│       ├── Services/              # Nghiệp vụ, JWT, mật khẩu
+│       ├── Repositories/          # Truy cập dữ liệu người dùng
+│       ├── Models/                # Thực thể dữ liệu
+│       ├── Data/                  # DbContext và tạo Admin ban đầu
+│       ├── Migrations/            # Lịch sử schema EF Core
+│       ├── Properties/            # Hồ sơ khởi chạy
+│       ├── Uploads/               # File ảnh/PDF hiện có
+│       ├── Program.cs
+│       └── OnlineCourseManagement.Api.csproj
+├── database/seeds/                # Script SQL chạy thủ công
+├── docs/architecture.md           # Kiến trúc và luồng xử lý
+├── scripts/                      # Chạy/build cả hai ứng dụng
+├── archive/legacy-razor/           # Giao diện Razor cũ để đối chiếu
+├── OnlineCourseManagement.sln     # Solution backend
+├── package.json                  # Lệnh điều phối, npm workspaces
+└── package-lock.json             # Phiên bản thư viện được khóa
+```
 
-6. Cài thư viện và cập nhật cơ sở dữ liệu
-dotnet restore
-dotnet build
-dotnet ef migrations list
-dotnet ef database update
-database update áp dụng các Migration có sẵn (ví dụ: AddCourseInstructor, AddEnrollments, AddLessonProgress, AddUploadedFiles) vào database đã cấu hình. Không chạy dotnet ef migrations add chỉ để khởi động dự án đã có Migration.
+## Yêu cầu
 
-Nếu cập nhật thất bại, kiểm tra SQL Server đã chạy, database/instance đúng và appsettings.json là JSON hợp lệ.
-7. Chạy Backend
-dotnet run --environment Development
-Quan sát Now listening on: ... trong Terminal. Ví dụ nếu cổng là 5106:
-- Swagger: http://localhost:5106/swagger
-- API đăng nhập: POST http://localhost:5106/api/auth/login
-Cổng thực tế có thể khác. Để chạy thử cố định ở cổng 5106:
-dotnet run --no-launch-profile --environment Development --urls "http://localhost:5106"
-Giữ Terminal chạy Backend khi sử dụng Swagger. Nhấn Ctrl+C để dừng trước khi build lại.
-8. Kiểm thử trên Swagger
-1. Mở /swagger theo đúng cổng ứng dụng.
-2. Chọn POST /api/auth/login → Try it out; nhập email và mật khẩu của tài khoản đã tồn tại.
-3. Sao chép token được trả về.
-4. Nhấn Authorize và dán JWT (với HTTP Bearer scheme, không thêm tiền tố Bearer ).
-5. Thử các endpoint phù hợp với vai trò đăng nhập.
-Một số endpoint của dự án:
-Phương thức	Endpoint	Mục đích
-POST	/api/auth/login	Đăng nhập
-GET	/api/users	Admin xem người dùng
-POST	/api/users	Admin tạo người dùng
-DELETE	/api/users/{id}	Admin xóa người dùng
-PUT	/api/users/{id}/reset-password	Admin đặt lại mật khẩu Student
-GET	/api/courses	Danh sách khóa học
-GET	/api/courses/my	Khóa học giảng viên phụ trách
-PUT	/api/courses/{id}/instructor	Admin phân công giảng viên
-POST	/api/lessons	Tạo bài học (theo phân quyền)
+- .NET SDK 10.
+- Node.js 22.12 trở lên (máy hiện tại dùng Node.js 24).
+- SQL Server và database `OnlineCourseDB` đã cấu hình.
+- `dotnet-ef` 10.x khi cần cập nhật database.
 
+## Chạy cả frontend và backend
 
-Các endpoint phụ thuộc vào phiên bản controller đang được chạy. Trên Swagger, kiểm tra schema request trước khi gọi.
-9. Xử lý lỗi thường gặp
-Lỗi	Hướng xử lý
-Unable to connect to the remote server	Khởi động Backend; kiểm tra port trong Now listening on
-401 Unauthorized	Đăng nhập lại, kiểm tra JWT, username/password
-403 Forbidden	Vai trò không đủ quyền gọi API
-400 Bad Request	Xem Response body để sửa JSON/validation hoặc dữ liệu liên quan
-MSB3021 / MSB3027	Dừng ứng dụng/Debug đang khóa .exe, rồi build lại
-Không tạo được AppDbContext	Kiểm tra appsettings.json, chuỗi kết nối và đăng ký DbContext trong Program.cs
-NU1902 / NU1903	Kiểm tra và nâng cấp gói NuGet có lỗ hổng lên phiên bản đã vá tương thích
+Mở Terminal tại thư mục gốc:
 
+```powershell
+npm.cmd install
+npm.cmd run dev
+```
 
-10. Bảo mật
-- Không commit JWT Key, mật khẩu Admin, thông tin đăng nhập SQL Server hoặc tệp .env chứa bí mật.
-- Mật khẩu người dùng phải được hash; không lưu mật khẩu thô vào database.
-- Dùng tài khoản và dữ liệu thử nghiệm khi test API xóa/sửa.
-- Các API quản trị yêu cầu JWT có vai trò Admin.
+Trên Windows PowerShell, dùng `npm.cmd` nếu chính sách máy chặn `npm.ps1`. Trên macOS/Linux có thể dùng `npm`.
 
+- Frontend: **http://localhost:5173/**
+- Backend API: **http://localhost:5106/api**
+- Swagger: **http://localhost:5106/swagger**
+- Health endpoint: **http://localhost:5106/health** (kiểm tra ứng dụng đang chạy, không kiểm tra SQL Server).
 
-account admin: {
-     "email": "admin@onlinecourse.local",
-     "password": "Admin@123"
-   }
+Nhấn `Ctrl+C` để dừng cả hai ứng dụng. Lệnh chạy chung tự dừng ứng dụng còn lại nếu một ứng dụng khởi chạy thất bại hoặc kết thúc.
+
+Hoặc chạy riêng ở hai Terminal:
+
+```powershell
+# Terminal 1, từ thư mục gốc
+npm.cmd run dev:backend
+
+# Terminal 2, từ thư mục gốc
+npm.cmd run dev:frontend
+```
+
+## Database và cấu hình backend
+
+Các file cấu hình nằm tại `backend/OnlineCourseManagement.Api/appsettings*.json`. User Secrets ID được giữ nguyên nên cấu hình bí mật trên máy hiện tại tiếp tục được sử dụng. Database và lịch sử migration không bị tạo lại khi thay đổi bố cục thư mục.
+
+Khi cài trên máy mới, cấu hình `ConnectionStrings:DefaultConnection`, `Jwt:Key` (ít nhất 32 byte), `Jwt:Issuer`, `Jwt:Audience`. Nếu cần Admin đầu tiên, cấu hình thêm `AdminSeed:Email` và `AdminSeed:Password` bằng User Secrets. Xem [hướng dẫn backend](backend/README.md).
+
+Áp dụng các migration đã có khi cần:
+
+```powershell
+$env:ASPNETCORE_ENVIRONMENT = "Development"
+dotnet ef database update --project backend/OnlineCourseManagement.Api --startup-project backend/OnlineCourseManagement.Api
+```
+
+Script trong `database/seeds/` là dữ liệu thử nghiệm chạy thủ công; kiểm tra nội dung trước khi chạy vào database đang sử dụng.
+
+## Kết nối frontend với API
+
+Mặc định frontend gọi `/api`, Vite chuyển tiếp request đến `http://localhost:5106`. Khi thay đổi môi trường, sao chép `frontend/.env.example` thành `frontend/.env.local` rồi cập nhật cấu hình. Xem [hướng dẫn frontend](frontend/README.md).
+
+Khi triển khai hai ứng dụng khác tên miền, đặt `VITE_API_BASE_URL=https://api.example.com/api` lúc build frontend và khai báo đúng nguồn frontend trong `Cors:AllowedOrigins` của backend. Khi triển khai cùng tên miền, reverse proxy `/api` đến backend. Không cần đưa frontend vào backend để chạy production.
+
+## Build và kiểm thử
+
+```powershell
+npm.cmd ci
+npm.cmd run build
+npm.cmd test
+```
+
+- Frontend production: `frontend/dist/`.
+- Backend Release: `backend/OnlineCourseManagement.Api/bin/Release/net10.0/`.
+- Build riêng: `npm.cmd run build:frontend` hoặc `npm.cmd run build:backend`.
+- Publish API: `dotnet publish backend/OnlineCourseManagement.Api -c Release -o artifacts/backend`.
+
+Khi triển khai API, bố trí `Uploads/` dưới content root của ứng dụng trên ổ lưu trữ bền vững và chuyển các file hiện có sang đó. Không đặt JWT key hay mật khẩu database trong biến `VITE_*`.
+
+## Chức năng theo vai trò
+
+| Vai trò | Chức năng |
+| --- | --- |
+| Khách | Khám phá/tìm/lọc khóa học, xem chương trình và danh mục, đăng nhập/đăng ký. |
+| Student | Ghi danh, học bài, tải tài liệu, cập nhật tiến độ học tập. |
+| Instructor | Tạo và quản lý khóa học phụ trách, bài học, học liệu, theo dõi học viên. |
+| Admin | Quản lý danh mục/khóa học/người dùng, phân quyền, phân công giảng viên và theo dõi ghi danh. |
+
+Hệ thống hiện hỗ trợ ghi danh, chưa tích hợp thanh toán. Phân quyền cuối cùng luôn do backend kiểm tra.

@@ -1,13 +1,17 @@
 
 .vs/
-bin/
-obj/
+.vscode/*.local.json
+**/bin/
+**/obj/
 *.user
 *.suo
+
+node_modules/
+frontend/dist/
+**/.vite/
+coverage/
+*.log
+
 .env
 .env.*
-.vs/
-bin/
-obj/
-*.user
-*.suo
+!.env.example

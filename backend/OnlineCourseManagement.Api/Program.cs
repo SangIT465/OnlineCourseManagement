@@ -13,6 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Controllers và Swagger
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        var origins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+        if (origins.Length > 0)
+            policy.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod();
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -103,12 +115,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
+
+app.UseCors("Frontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
+app.MapGet("/", () => Results.Ok(new
+{
+    name = "CourseFlow API",
+    documentation = "/swagger",
+    health = "/health"
+})).ExcludeFromDescription();
 
 if (app.Environment.IsDevelopment())
 {
