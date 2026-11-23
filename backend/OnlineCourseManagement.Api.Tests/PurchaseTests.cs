@@ -14,6 +14,29 @@ namespace OnlineCourseManagement.Api.Tests;
 public sealed class PurchaseTests
 {
     [Theory]
+    [InlineData("")]
+    [InlineData("DAN_CLIENT_ID_VAO_DAY")]
+    [InlineData("DAN_API_KEY_VAO_DAY")]
+    [InlineData("DAN_CHECKSUM_KEY_VAO_DAY")]
+    [InlineData("<CLIENT_ID>")]
+    [InlineData("DIEN_API_KEY")]
+    [InlineData("YOUR_CHECKSUM_KEY")]
+    [InlineData(" invalid-key ")]
+    public void Missing_or_example_keys_do_not_enable_payment(string invalid)
+    {
+        var options = new PayOSPaymentOptions { ClientId="test-client", ApiKey="test-api", ChecksumKey="test-checksum" };
+        Assert.True(options.IsConfigured);
+        options.ClientId = invalid;
+        Assert.False(options.IsConfigured);
+        options.ClientId = "test-client";
+        options.ApiKey = invalid;
+        Assert.False(options.IsConfigured);
+        options.ApiKey = "test-api";
+        options.ChecksumKey = invalid;
+        Assert.False(options.IsConfigured);
+    }
+
+    [Theory]
     [InlineData(0, 0)] [InlineData(1000, 1000)] [InlineData(199000.50, 199001)]
     public void Charges_are_server_rounded_to_whole_VND(decimal price, int expected) => Assert.Equal(expected,PurchaseRules.AmountInVnd(price));
 

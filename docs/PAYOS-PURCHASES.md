@@ -6,7 +6,17 @@ User chọn **Mua khóa học**, nhập thông tin người mua và tạo đơn.
 
 Tạo kênh thanh toán tại https://my.payos.vn và kết nối ngân hàng nhận tiền theo hướng dẫn payOS. Lấy Client ID, API Key và Checksum Key của kênh. Đặt khóa ở **backend**, không đặt trong `VITE_*`, không commit và không gửi vào chat.
 
-Ví dụ cấu hình ASP.NET User Secrets từ thư mục gốc; thay placeholder tại máy của bạn:
+Cách nhập khóa không hiển thị ra màn hình và không đưa khóa vào lịch sử lệnh: mở PowerShell tại thư mục gốc và chạy:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/configure-payos.ps1
+```
+
+Dùng nút sao chép cạnh Client ID, API Key và Checksum Key trên kênh payOS, dán lần lượt vào ba ô nhập ẩn rồi Enter. Công cụ chỉ cập nhật ba khóa payOS bằng User Secrets, giữ nguyên JWT và chuỗi kết nối đang có. Khởi động lại backend sau khi nhập.
+
+Nếu cấu hình trước đó lưu nguyên chữ `DAN_CLIENT_ID_VAO_DAY`, `DAN_API_KEY_VAO_DAY`, `DAN_CHECKSUM_KEY_VAO_DAY` hoặc `<CLIENT_ID>`, đó là chữ mẫu, không phải khóa thật. payOS sẽ không nhận diện được kênh. Ứng dụng không coi các chữ mẫu này là cấu hình hợp lệ.
+
+Cách cấu hình bằng lệnh bên dưới cũng được hỗ trợ; **bắt buộc thay toàn bộ placeholder trong dấu ngoặc kép bằng khóa thật trên máy của bạn**:
 
 ```powershell
 dotnet user-secrets set "PayOS:ClientId" "<CLIENT_ID>" --project backend/OnlineCourseManagement.Api
