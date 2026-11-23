@@ -19,6 +19,7 @@ namespace OnlineCourseManagement.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<LessonProgress> LessonProgresses { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<CoursePurchase> CoursePurchases { get; set; }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
@@ -30,6 +31,21 @@ namespace OnlineCourseManagement.Data
             ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<CoursePurchase>(entity =>
+            {
+                entity.HasIndex(p => p.OrderCode).IsUnique();
+                entity.HasIndex(p => new { p.StudentId, p.CourseId }).IsUnique()
+                    .HasFilter("[Status] = N'PendingPayment'");
+                entity.HasOne(p => p.Student).WithMany().HasForeignKey(p => p.StudentId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(p => p.Course).WithMany().HasForeignKey(p => p.CourseId).OnDelete(DeleteBehavior.Restrict);
+                entity.Property(p => p.OriginalPrice).HasColumnType("decimal(18,2)");
+                entity.ToTable(table =>
+                {
+                    table.HasCheckConstraint("CK_CoursePurchases_Amount", "[Amount] >= 0");
+                    table.HasCheckConstraint("CK_CoursePurchases_Status", "[Status] IN (N'PendingPayment', N'Paid', N'Cancelled', N'Expired')");
+                });
+            });
 
             modelBuilder.Entity<Category>().HasIndex(category => category.Name).IsUnique();
             modelBuilder.Entity<Lesson>().HasIndex(lesson => new { lesson.CourseId, lesson.OrderIndex }).IsUnique();

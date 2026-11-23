@@ -97,6 +97,11 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddOptions<PayOSPaymentOptions>().BindConfiguration(PayOSPaymentOptions.SectionName)
+    .Validate(options => options.IsValid(), "PayOS frontend URL and seller details must be valid.")
+    .ValidateOnStart();
+builder.Services.AddScoped<IPayOSGateway, PayOSGateway>();
+builder.Services.AddScoped<PurchaseService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<CurrentSessionJwtEvents>();

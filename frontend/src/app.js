@@ -9,6 +9,7 @@
 
 import { icon } from "./components/icons.js";
 import { API_DOCS_URL } from "./config.js";
+import { purchaseDetail, purchaseList, printPurchase } from "./features/purchases.js";
 import {
   ROLE_NAMES as roleName,
   ROLE_DEFINITIONS,
@@ -72,6 +73,7 @@ let loadingPromise = null;
 let pendingRoute = null;
 let pendingTabFocus = null;
 let sessionTimer;
+let purchasePollTimer;
 const is = (role) => state.user?.role === role;
 const canCreate = () => canCreateCourse(state.user);
 const canManage = (course) => canManageCourse(state.user, course);
@@ -139,6 +141,7 @@ function shell(page) {
       is("Staff") ? "Khóa phụ trách" : is("Instructor") ? "Khóa tôi giảng dạy" : "Khóa học của tôi",
     ]);
   if (is("User")) routes.push(["progress", "chart", "Tiến độ học tập"]);
+  if (is("User") || is("Admin")) routes.push(["purchases", "book", is("Admin") ? "Đơn mua khóa học" : "Đơn mua & hóa đơn"]);
   routes.push(["categories", "layers", "Danh mục"]);
   const management = canManageCatalog(state.user)
     ? [
@@ -621,7 +624,7 @@ async function courseDetail(route, version) {
     );
   else if (is("User") || !state.user)
     actions = button(
-      `${icon("plus")}Đăng ký học`,
+      `${icon("plus")}${Number(course.price) > 0 ? "Mua khóa học" : "Nhận khóa học miễn phí"}`,
       "enroll",
       "primary",
       `data-id="${course.id}"`,
@@ -773,6 +776,36 @@ async function instructorStudentsPage(route) {
     `<form id="enrollment-filter" class="toolbar"><div class="search-field">${icon("search")}<input type="search" name="search" value="${esc(search)}" placeholder="Tìm học viên…" aria-label="Tìm học viên" maxlength="200"/></div><select name="course" aria-label="Khóa học">${courses.map(course => `<option value="${course.id}" ${course.id === selected?.id ? "selected" : ""}>${esc(course.title)}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" type="submit">Tìm kiếm</button><span class="result-count">${count(students.length)} học viên</span></form>` +
     (students.length ? `<div class="table-wrap"><table><thead><tr><th>Học viên</th><th>Ngày ghi danh</th><th>Tiến độ</th></tr></thead><tbody>${students.map(item => `<tr><td><div class="cell-user">${avatar(item.studentName)}<div><strong>${esc(item.studentName)}</strong><small>${esc(item.studentEmail)}</small></div></div></td><td>${date(item.enrolledAt)}</td><td>${progressBar(item)}</td></tr>`).join("")}</tbody></table></div>` : empty(selected ? "Chưa có học viên phù hợp" : "Chưa có khóa học được phân công", selected ? "Học viên ghi danh khóa này sẽ xuất hiện tại đây." : "Tạo khóa học hoặc chờ Admin phân công cho bạn."));
 }
+let displayedPurchase = null;
+async function purchasesPage(route, version) {
+  displayedPurchase = null;
+  if (!route.id) {
+    const page = Math.max(1, Number(route.params.get("page")) || 1);
+    const purchases = await request(`/purchases${is("Admin") ? "" : "/my"}?page=${page}`);
+    return purchaseList(purchases, is("Admin"), page);
+  }
+  const purchase = await request(`/purchases/${route.id}`);
+  if (version !== renderVersion) return "";
+  displayedPurchase = purchase;
+  return purchaseDetail(purchase);
+}
+function schedulePurchasePoll(id, version) {
+  if (version !== renderVersion || displayedPurchase?.status !== "PendingPayment" || !displayedPurchase.checkoutUrl) return;
+  purchasePollTimer = setTimeout(async () => {
+    if (version !== renderVersion || currentRoute().page !== "purchases" || currentRoute().id !== id || !getToken()) return;
+    if (document.visibilityState !== "hidden") {
+      try {
+        const updated = await request(`/purchases/${id}/sync`, { method: "POST" });
+        if (version !== renderVersion) return;
+        if (updated.status !== displayedPurchase.status) {
+          state.ready = false;
+          return render();
+        }
+      } catch { /* Keep the bill visible; the user can retry the explicit check. */ }
+    }
+    schedulePurchasePoll(id, version);
+  }, 10000);
+}
 function profilePage() {
   const user = state.user,
     definition = ROLE_DEFINITIONS[user.role];
@@ -824,6 +857,7 @@ function permissionsPage() {
   );
 }
 async function render() {
+  clearTimeout(purchasePollTimer);
   const version = ++renderVersion,
     route = currentRoute();
   if (route.page === "my-courses" && is("Admin")) {
@@ -834,6 +868,7 @@ async function render() {
   shell(route.page);
   main.setAttribute("aria-busy", "true");
   const privatePages = [
+    "purchases",
     "my-courses",
     "progress",
     "users",
@@ -886,6 +921,7 @@ async function render() {
       html = await enrollmentsPage(route, version);
     else if (route.page === "lesson") html = await lessonPage(route, version);
     else if (route.page === "profile") html = profilePage();
+    else if (route.page === "purchases") html = await purchasesPage(route, version);
     else if (route.page === "permissions") html = permissionsPage();
     else
       html = empty(
@@ -895,6 +931,7 @@ async function render() {
       );
     if (version !== renderVersion) return;
     main.innerHTML = html;
+    if (route.page === "purchases" && route.id) schedulePurchasePoll(route.id, version);
     document.title = `${$("#breadcrumb").textContent} · CourseFlow`;
   } catch (error) {
     if (version === renderVersion) main.innerHTML = errorBox(error.message);
@@ -1376,6 +1413,15 @@ async function handleAction(target) {
     return;
   }
   if (action === "refresh") return refresh();
+  if (action === "purchase-print") {
+    const invoice = await request(`/purchases/${id}/invoice`);
+    return printPurchase(invoice.html);
+  }
+  if (action === "purchase-payment-link" || action === "purchase-sync") {
+    await request(`/purchases/${id}/${action === "purchase-sync" ? "sync" : "payment-link"}`, { method: "POST" });
+    state.ready = false;
+    return render();
+  }
   if (action === "create-course") return courseForm();
   if (action === "edit-course") return courseForm(id);
   if (action === "create-category") return categoryForm();
@@ -1419,19 +1465,24 @@ async function handleAction(target) {
       return authDialog();
     }
     const course = state.courses.find((item) => item.id === id);
-    return confirmAction(
-      "Ghi danh khóa học",
-      `Bạn muốn tham gia “${course?.title || "khóa học này"}”? Học phí niêm yết: ${money(course?.price)}. Hệ thống hiện hỗ trợ ghi danh, chưa tích hợp thanh toán.`,
-      "Xác nhận ghi danh",
-      () =>
-        saved(
-          "/enrollments",
-          "POST",
-          { courseId: id },
-          "Đã ghi danh. Chúc bạn học tập hiệu quả!",
-        ),
-      false,
-    );
+    if (!is("User")) throw new Error("Chức năng mua khóa học dành cho tài khoản User.");
+    return openDialog("Thông tin mua khóa học", course?.title || "Khóa học", modalForm(
+      `<div class="form-info">Học phí: <strong>${money(course?.price)}</strong>. ${Number(course?.price) > 0 ? "Thanh toán bằng QR hoặc trang thanh toán payOS." : "Khóa học miễn phí sẽ được mở ngay."}</div>` +
+      field("Họ tên trên bill", "buyerName", { value: state.user.fullName, maxlength: 100, minimum: 2, autocomplete: "name" }) +
+      `<p class="text-small">Email: ${esc(state.user.email)}</p>` +
+      field("Số điện thoại", "buyerPhone", { required: false, maxlength: 30, type: "tel", autocomplete: "tel" }) +
+      field("Địa chỉ", "buyerAddress", { required: false, maxlength: 300, autocomplete: "street-address" }),
+      Number(course?.price) > 0 ? "Tạo đơn & thanh toán" : "Nhận khóa học và bill"), async form => {
+        const purchase = await request("/purchases", { method: "POST", body: { ...Object.fromEntries(new FormData(form)), courseId: id } });
+        closeDialog();
+        state.ready = false;
+        navigate(`purchases/${purchase.id}`);
+        if (purchase.status === "PendingPayment" && purchase.paymentConfigured) {
+          try { await request(`/purchases/${purchase.id}/payment-link`, { method: "POST" }); }
+          catch (error) { toast(error.message, true); }
+          if (currentRoute().page === "purchases" && currentRoute().id === purchase.id) void render();
+        }
+      });
   }
   if (action === "cancel-enrollment")
     return confirmAction(

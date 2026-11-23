@@ -61,6 +61,7 @@ export function canAccessPage(user, page) {
   if (["dashboard", "courses", "categories"].includes(page)) return true;
   if (!Object.hasOwn(ROLE_DEFINITIONS, user?.role)) return false;
   if (["permissions", "profile", "lesson"].includes(page)) return true;
+  if (page === "purchases") return ["User", "Admin"].includes(user.role);
   if (page === "users") return hasPermission(user, "directory.read");
   if (page === "enrollments") return hasPermission(user, "enrollments.read") || hasPermission(user, "enrollments.own.read");
   if (page === "progress") return hasPermission(user, "learning");

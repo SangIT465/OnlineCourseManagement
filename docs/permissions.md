@@ -3,6 +3,7 @@
 | Chức năng | Admin | Staff (nhân viên) | Instructor (giảng viên) | User (sinh viên) |
 | --- | --- | --- | --- | --- |
 | Xem thư viện và hồ sơ của mình | Có | Có | Có | Có |
+| Mua khóa, thanh toán payOS, xem/in bill | Xem tất cả đơn và bill | Không | Không | Tạo và xem đơn của mình; có quyền học sau xác minh thanh toán |
 | Ghi danh, học bài, cập nhật tiến độ | Không | Không | Không | Khóa đã ghi danh, tiến độ của mình |
 | Quản lý danh mục | Có | Có | Không | Không |
 | Tạo khóa học | Có | Có | Có, tự phân công cho mình | Không |

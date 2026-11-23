@@ -120,8 +120,9 @@ public sealed class CourseService(AppDbContext db, ICourseAccessService access, 
         if (await db.Lessons.AnyAsync(lesson => lesson.CourseId == id, token))
             throw BusinessException.Conflict("Hãy xử lý các bài học trước khi xóa khóa học.");
         if (await db.Enrollments.AnyAsync(enrollment => enrollment.CourseId == id, token) ||
+            await db.CoursePurchases.AnyAsync(purchase => purchase.CourseId == id, token) ||
             await db.UploadedFiles.AnyAsync(file => file.CourseId == id, token))
-            throw BusinessException.Conflict("Khóa học đang có ghi danh hoặc học liệu liên quan.");
+            throw BusinessException.Conflict("Khóa học đang có ghi danh, đơn mua hoặc học liệu liên quan.");
         db.Courses.Remove(course);
         await db.SaveChangesAsync(token);
     }

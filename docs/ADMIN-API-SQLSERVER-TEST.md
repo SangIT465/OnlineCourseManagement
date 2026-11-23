@@ -534,6 +534,8 @@ Các đuôi được chấp nhận hiện tại: ảnh .jpg, .jpeg, .png, .webp;
 
 ### E01 Chuẩn bị dữ liệu bằng đúng vai trò User
 
+Sau khi bổ sung payOS, khóa có phí cần đơn Paid trước khi User ghi danh. Để giữ bài test CRUD Admin này không phát sinh thanh toán hoặc hóa đơn cần lưu lịch sử, dùng Admin PUT Course A về `price: 0` trước E01 (giữ đủ title, description, categoryId). Nếu muốn kiểm tra thanh toán thật, dùng một bộ fixture riêng theo `docs/PAYOS-PURCHASES.md`; khóa/người dùng đã có CoursePurchases bị chặn xóa để giữ chứng từ.
+
 Phần này cần một bước tạo dữ liệu của User để Admin có dữ liệu kiểm tra. Đăng nhập `{{run}}.user@example.test`, lưu userToken. Nếu mật khẩu đã đổi, dùng mật khẩu mới.
 
 **Với userToken**, gọi `POST {{baseUrl}}/api/enrollments`:
@@ -546,7 +548,7 @@ Phần này cần một bước tạo dữ liệu của User để Admin có d�
 
 Mong đợi 201, xuất hiện Enrollment với StudentId = userId. Tiếp tục dùng userToken gọi `POST /api/progress/lessons/{{lessonId}}/complete` không cần body: 200, xuất hiện tiến độ hoàn thành. Gọi lại cùng request: 200, không tạo thêm progress và không thay CompletedAt của lần hoàn thành trước.
 
-Ứng dụng hiện chưa tích hợp thanh toán ghi danh; không diễn giải Price của khóa như một giao dịch thanh toán đã được xử lý.
+Khóa miễn phí có thể ghi danh trực tiếp qua API này; khóa có phí chưa có đơn Paid trả 409. Luồng mua trên frontend sử dụng /api/purchases, QR payOS và bill; xem tài liệu PAYOS-PURCHASES.md.
 
 ### E02 Admin xem danh sách ghi danh
 

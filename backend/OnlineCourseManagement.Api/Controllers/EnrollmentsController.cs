@@ -7,6 +7,7 @@ using OnlineCourseManagement.Data;
 using OnlineCourseManagement.DTOs;
 using OnlineCourseManagement.Models;
 using System.Security.Claims;
+using System.Data;
 
 namespace OnlineCourseManagement.Controllers
 {
@@ -45,6 +46,9 @@ namespace OnlineCourseManagement.Controllers
             if (studentId == null)
                 return Unauthorized();
 
+            await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+            await _context.FindForUpdateAsync(studentId.Value);
+
             var studentExists = await _context.Users
                 .AnyAsync(u =>
                     u.Id == studentId.Value &&
@@ -74,6 +78,11 @@ namespace OnlineCourseManagement.Controllers
                     message = "Bạn đã đăng ký khóa học này"
                 });
 
+            var price = await _context.Courses.Where(c => c.Id == dto.CourseId).Select(c => c.Price).SingleAsync();
+            if (price > 0 && !await _context.CoursePurchases.AnyAsync(p => p.StudentId == studentId.Value
+                    && p.CourseId == dto.CourseId && p.Status == PurchaseStatus.Paid))
+                return Conflict(new { message = "Khóa học có học phí cần được thanh toán qua payOS trước khi ghi danh." });
+
             var enrollment = new Enrollment
             {
                 StudentId = studentId.Value,
@@ -86,6 +95,7 @@ namespace OnlineCourseManagement.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
             }
             catch (DbUpdateException)
             {

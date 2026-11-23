@@ -151,7 +151,7 @@ Hệ thống có bốn vai trò: **Admin**, **Staff (nhân viên)**, **Instructo
 | Instructor (giảng viên) | Tạo khóa học, quản lý bài học/học liệu và xem tiến độ học viên chỉ trong khóa mình phụ trách. |
 | Admin | Quản lý danh mục/khóa học/người dùng, phân quyền, phân công giảng viên/nhân viên và theo dõi ghi danh. |
 
-Hệ thống hiện hỗ trợ ghi danh, chưa tích hợp thanh toán. Phân quyền cuối cùng luôn do backend kiểm tra.
+User có thể mua khóa học qua payOS, quét QR, xem lịch sử đơn và in bill/lưu PDF. Backend xác minh thanh toán trước khi cấp quyền học cho khóa có phí. Khóa miễn phí được mở ngay và có bill 0 đồng. Xem [cấu hình payOS, migration và kiểm thử](docs/PAYOS-PURCHASES.md). Phân quyền cuối cùng luôn do backend kiểm tra.
 
 Sau khi chạy API và cập nhật database, có thể kiểm tra phân quyền thực tế bằng `npm.cmd run test:authorization`. Lệnh tạo và dọn các bản ghi QA tạm, không thay đổi tài khoản người dùng hiện có.
 
