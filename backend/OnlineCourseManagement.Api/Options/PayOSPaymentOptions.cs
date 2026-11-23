@@ -13,7 +13,8 @@ public sealed class PayOSPaymentOptions
     public bool IsConfigured => IsCredential(ClientId) && IsCredential(ApiKey) && IsCredential(ChecksumKey);
 
     private static bool IsCredential(string value) => !string.IsNullOrWhiteSpace(value)
-        && !value.Any(char.IsWhiteSpace)
+        && value.Length >= 8
+        && !value.Any(character => char.IsWhiteSpace(character) || char.IsControl(character))
         && !new[] { "DAN_", "DIEN_", "YOUR_", "CLIENT_ID", "API_KEY", "CHECKSUM_KEY", "<", ">" }
             .Any(marker => value.Contains(marker, StringComparison.OrdinalIgnoreCase));
 

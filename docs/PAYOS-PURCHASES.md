@@ -9,10 +9,14 @@ Tạo kênh thanh toán tại https://my.payos.vn và kết nối ngân hàng nh
 Cách nhập khóa không hiển thị ra màn hình và không đưa khóa vào lịch sử lệnh: mở PowerShell tại thư mục gốc và chạy:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/configure-payos.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/configure-payos.ps1 -FromClipboard
 ```
 
-Dùng nút sao chép cạnh Client ID, API Key và Checksum Key trên kênh payOS, dán lần lượt vào ba ô nhập ẩn rồi Enter. Công cụ chỉ cập nhật ba khóa payOS bằng User Secrets, giữ nguyên JWT và chuỗi kết nối đang có. Khởi động lại backend sau khi nhập.
+Dùng nút sao chép cạnh Client ID trên kênh payOS, quay về Terminal và chỉ nhấn Enter (không Ctrl+V). Công cụ đọc clipboard trực tiếp và chỉ in số ký tự đã nhận. Lặp lại với API Key và Checksum Key khi được hỏi. Công cụ chỉ cập nhật ba khóa payOS bằng User Secrets, giữ nguyên JWT và chuỗi kết nối đang có. Khởi động lại backend sau khi nhập.
+
+Windows PowerShell có thể lưu phím Ctrl+V thành một ký tự điều khiển trong ô nhập `Read-Host -AsSecureString`. Nếu mỗi khóa chỉ có một ký tự thì cấu hình chưa đúng. Công cụ từ chối khóa quá ngắn hoặc chứa ký tự điều khiển và không lưu bất kỳ khóa nào trong lần nhập lỗi. Chế độ `-FromClipboard` tránh lỗi dán này.
+
+Khi chạy bằng Visual Studio, dùng **Stop Debugging (Shift+F5)** rồi chạy lại bằng F5 sau khi lưu khóa. Profile `http`/`https` trong dự án dùng môi trường Development và đọc cùng User Secrets như lệnh dotnet. Cũng có thể bấm phải project **OnlineCourseManagement.Api → Manage User Secrets**, sửa ba trường `PayOS:ClientId`, `PayOS:ApiKey`, `PayOS:ChecksumKey` bằng khóa thật và giữ nguyên các trường JWT/SQL Server khác. Không gửi nội dung file secrets để nhờ hỗ trợ.
 
 Nếu cấu hình trước đó lưu nguyên chữ `DAN_CLIENT_ID_VAO_DAY`, `DAN_API_KEY_VAO_DAY`, `DAN_CHECKSUM_KEY_VAO_DAY` hoặc `<CLIENT_ID>`, đó là chữ mẫu, không phải khóa thật. payOS sẽ không nhận diện được kênh. Ứng dụng không coi các chữ mẫu này là cấu hình hợp lệ.
 

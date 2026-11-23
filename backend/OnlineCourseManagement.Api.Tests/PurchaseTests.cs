@@ -22,6 +22,10 @@ public sealed class PurchaseTests
     [InlineData("DIEN_API_KEY")]
     [InlineData("YOUR_CHECKSUM_KEY")]
     [InlineData(" invalid-key ")]
+    [InlineData("\u0016")]
+    [InlineData("a")]
+    [InlineData("*")]
+    [InlineData("invalid\u0016key")]
     public void Missing_or_example_keys_do_not_enable_payment(string invalid)
     {
         var options = new PayOSPaymentOptions { ClientId="test-client", ApiKey="test-api", ChecksumKey="test-checksum" };
