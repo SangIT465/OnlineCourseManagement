@@ -1,3 +1,4 @@
+using System.Data;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourseManagement.Data;
@@ -57,6 +58,11 @@ public sealed class CourseService(AppDbContext db, ICourseAccessService access, 
     public async Task<CourseResponseDto> CreateAsync(CreateCourseDto input, ClaimsPrincipal actor, CancellationToken token)
     {
         var userId = actor.RequireUserId();
+        await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, token);
+        var account = await db.FindForUpdateAsync(userId, token);
+        if (account is null || account.Role != actor.FindFirstValue(ClaimTypes.Role) ||
+            account.SecurityStamp != actor.FindFirstValue(AppRoles.SecurityStampClaim))
+            throw BusinessException.Unauthenticated();
         var course = new Course
         {
             Title = input.Title.Trim(), Description = input.Description?.Trim(), Price = input.Price,
@@ -68,6 +74,7 @@ public sealed class CourseService(AppDbContext db, ICourseAccessService access, 
         await EnsureCategoryAsync(input.CategoryId, token);
         db.Courses.Add(course);
         await db.SaveChangesAsync(token);
+        await transaction.CommitAsync(token);
         return await GetByIdAsync(course.Id, token);
     }
 
@@ -83,17 +90,26 @@ public sealed class CourseService(AppDbContext db, ICourseAccessService access, 
         await db.SaveChangesAsync(token);
     }
 
-    public async Task<CourseResponseDto> AssignAsync(int id, int operatorId, string role, ClaimsPrincipal actor, CancellationToken token)
+    public async Task<CourseResponseDto> AssignAsync(int id, int? operatorId, string role, ClaimsPrincipal actor, CancellationToken token)
     {
         if (!actor.IsInRole(AppRoles.Admin) || !actor.HasClaim(AppPermissions.ClaimType, AppPermissions.AccountsManage))
             throw BusinessException.Forbidden();
-        var course = await FindAsync(id, token);
-        if (role is not (AppRoles.Staff or AppRoles.Instructor) ||
-            !await db.Users.AnyAsync(user => user.Id == operatorId && user.Role == role, token))
+        // Keep the target role stable until the course assignment is committed.
+        // UpdateRole uses the same isolation level to prevent conflicting role changes.
+        await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, token);
+        if (role is not (AppRoles.Staff or AppRoles.Instructor))
             throw BusinessException.Invalid("Tài khoản được phân công không tồn tại hoặc không đúng vai trò.");
+        if (operatorId.HasValue)
+        {
+            var assignee = await db.FindForUpdateAsync(operatorId.Value, token);
+            if (assignee is null || assignee.Role != role)
+                throw BusinessException.Invalid("Tài khoản được phân công không tồn tại hoặc không đúng vai trò.");
+        }
+        var course = await FindAsync(id, token);
         if (role == AppRoles.Staff) course.StaffId = operatorId;
         else course.InstructorId = operatorId;
         await db.SaveChangesAsync(token);
+        await transaction.CommitAsync(token);
         return await GetByIdAsync(id, token);
     }
 

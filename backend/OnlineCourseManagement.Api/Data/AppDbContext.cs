@@ -19,6 +19,13 @@ namespace OnlineCourseManagement.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<LessonProgress> LessonProgresses { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+            configurationBuilder.Properties<DateTime>().HaveConversion<UtcDateTimeConverter>();
+        }
+
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {

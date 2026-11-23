@@ -157,7 +157,7 @@ namespace OnlineCourseManagement.Controllers
                 });
 
             await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.FindForUpdateAsync(id, HttpContext.RequestAborted);
 
             if (user == null)
                 return NotFound(new
@@ -216,7 +216,8 @@ namespace OnlineCourseManagement.Controllers
             int id,
             [FromBody] ResetPasswordDto dto)
         {
-            var user = await _context.Users.FindAsync(id);
+            await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+            var user = await _context.FindForUpdateAsync(id, HttpContext.RequestAborted);
 
             if (user == null)
             {
@@ -248,6 +249,8 @@ namespace OnlineCourseManagement.Controllers
 
             await _context.SaveChangesAsync();
 
+            await transaction.CommitAsync();
+
             return Ok(new
             {
                 message = "Đặt lại mật khẩu thành công. Các phiên đăng nhập cũ đã hết hiệu lực."
@@ -259,7 +262,7 @@ namespace OnlineCourseManagement.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.FindForUpdateAsync(id, HttpContext.RequestAborted);
 
             if (user == null)
                 return NotFound(new

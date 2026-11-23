@@ -2,7 +2,7 @@ export const ROLE_DEFINITIONS = {
   Admin: {
     name: "Admin",
     description:
-      "Quản lý toàn bộ hệ thống, tài khoản, phân quyền và phân công nhân viên phụ trách khóa học.",
+      "Quản lý toàn bộ hệ thống, tài khoản, phân quyền và phân công giảng viên, nhân viên phụ trách khóa học.",
     permissions: [
       "catalog.manage",
       "directory.read",

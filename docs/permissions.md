@@ -17,6 +17,7 @@
 
 1. Admin mở **Tài khoản** để tạo tài khoản với một trong bốn vai trò hoặc dùng **Thay đổi vai trò** cho tài khoản có sẵn.
 2. Mở chi tiết khóa học, chọn **Phân công giảng viên** và **Phân công nhân viên**. Hai phân công độc lập; mỗi danh sách chỉ gồm tài khoản đúng vai trò.
+   Admin có thể chọn **Chưa phân công / Bỏ phân công** rồi lưu. Bỏ giảng viên không làm mất nhân viên và ngược lại. Sau khi giải phóng toàn bộ khóa phụ trách, có thể đổi vai trò tài khoản đó.
 3. Giảng viên có **Khóa tôi giảng dạy** và **Học viên của tôi**. Khóa do giảng viên tạo tự gán cho họ. Giảng viên quản lý bài học, học liệu và tiến độ trong các khóa được giao.
 4. Nhân viên có màn hình **Sinh viên** để tìm User và đặt lại mật khẩu; không có nút tạo, xóa hoặc phân quyền tài khoản.
 5. User có **Khóa học của tôi**, **Tiến độ học tập**, chỉ mở nội dung/tài liệu sau khi ghi danh.
@@ -36,6 +37,7 @@ JWT mới có claim `permission` do `AppPermissions` sinh từ vai trò. `AppPol
 - Đổi vai trò hoặc đặt lại mật khẩu tạo SecurityStamp mới. JWT được đối chiếu với vai trò và stamp trong database. Token cũ bị từ chối ngay, kể cả khi vai trò được đổi về giá trị ban đầu.
 - Tài khoản đã xóa không tiếp tục dùng token cũ. PasswordHash và SecurityStamp không trả ra API hồ sơ/danh sách.
 - Thay đổi/xóa Admin được kiểm tra trong giao dịch; phải giữ ít nhất một Admin. Các ràng buộc dữ liệu ngăn xóa tài khoản/khóa đang có dữ liệu liên quan.
+- Phân công/tự tạo khóa và thay role/password/xóa tài khoản dùng update lock trong giao dịch. Việc kiểm tra vai trò người được phân công và ghi FK được bảo vệ trước thao tác đổi vai trò đồng thời; xung đột SQL trả 409 để thử lại.
 
 ## SQL Server và migration
 
@@ -52,8 +54,12 @@ Trong SSMS, `Users.Role` chấp nhận Admin, Staff, Instructor, User. `Courses.
 
 - `PUT /api/courses/{id}/staff` nhận `{ "staffId": 123 }`, chỉ chấp nhận Staff.
 - `PUT /api/courses/{id}/instructor` nhận `{ "instructorId": 456 }`, chỉ chấp nhận Instructor.
+- Gửi `{ "staffId": null }` hoặc `{ "instructorId": null }` để bỏ phân công tương ứng; vẫn chỉ Admin được phép. SQL lưu `NULL`, không xóa tài khoản hoặc nội dung khóa học.
+- Phải có trường phân công trong JSON; `{}` hoặc ID 0/âm trả 400, không được hiểu thành yêu cầu bỏ phân công.
 - Cả hai route chỉ Admin được gọi. `GET /api/courses/my` trả khóa được phân công theo vai trò Staff/Instructor.
 - Downgrade migration mới bị chặn khi còn tài khoản Instructor. Cần phân công lại khóa và chuyển các tài khoản này sang vai trò tương thích trước khi downgrade.
+
+Frontend tải lại dữ liệu khi chuyển trang, nhấn nút làm mới hoặc quay lại cửa sổ/tab. Phiên được kiểm tra qua `/api/auth/me`; token bị thu hồi đưa người dùng về trạng thái đăng xuất. Đây là đồng bộ qua request HTTP, chưa có WebSocket đẩy thay đổi ngay khi trang đang đứng yên. Backend luôn kiểm tra quyền bằng database hiện tại kể cả khi trình duyệt còn dữ liệu cũ. Khi có hộp thoại đang nhập, thao tác quay lại cửa sổ không ghi đè biểu mẫu.
 
 ## Kiểm thử
 
@@ -62,6 +68,9 @@ Trong SSMS, `Users.Role` chấp nhận Admin, Staff, Instructor, User. `Courses.
 npm.cmd test
 # Cần API/SQL Server đã áp dụng migration
 npm.cmd run test:authorization
+npm.cmd run test:roles
 ```
 
 Kiểm thử tích hợp tạo bản ghi QA tạm cho bốn vai trò, thử quyền cho phép/bị từ chối, chuyển bài học giữa khóa, phân công lại giảng viên, thu hồi token và quyền tải file; tự dọn dữ liệu. Thông tin Admin lấy từ COURSEFLOW_TEST_ADMIN_EMAIL/PASSWORD hoặc User Secrets AdminSeed:Email/Password. Không ghi mật khẩu hay token vào log hoặc mã nguồn.
+
+`test:roles` nhập trực tiếp các hàm quyền của frontend, so sánh với quyết định HTTP của backend và đọc lại SQL. Kiểm tra thêm bỏ phân công, mất quyền quản lý, bảo vệ đổi vai trò và checksum dữ liệu gốc. Trong SSMS, chạy `database/queries/AuditPermissions.sql` để xem các truy vấn kiểm tra chỉ đọc.

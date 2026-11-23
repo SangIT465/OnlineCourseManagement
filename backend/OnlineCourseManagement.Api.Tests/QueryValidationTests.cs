@@ -43,4 +43,25 @@ public sealed class QueryValidationTests
     }
 
     private static bool Valid(object input) => Validator.TryValidateObject(input, new ValidationContext(input), [], true);
+
+    [Theory]
+    [InlineData(null, true)]
+    [InlineData(1, true)]
+    [InlineData(0, false)]
+    [InlineData(-1, false)]
+    public void Assignment_accepts_explicit_unassignment_but_rejects_invalid_account_ids(int? id, bool valid)
+    {
+        Assert.Equal(valid, Valid(new AssignInstructorDto { InstructorId = id }));
+        Assert.Equal(valid, Valid(new AssignStaffDto { StaffId = id }));
+    }
+
+    [Fact]
+    public void Assignment_json_requires_the_field_but_accepts_explicit_null()
+    {
+        var options = new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web);
+        Assert.Throws<System.Text.Json.JsonException>(() => System.Text.Json.JsonSerializer.Deserialize<AssignInstructorDto>("{}", options));
+        Assert.Throws<System.Text.Json.JsonException>(() => System.Text.Json.JsonSerializer.Deserialize<AssignStaffDto>("{}", options));
+        Assert.Null(System.Text.Json.JsonSerializer.Deserialize<AssignInstructorDto>("{\"instructorId\":null}", options)!.InstructorId);
+        Assert.Null(System.Text.Json.JsonSerializer.Deserialize<AssignStaffDto>("{\"staffId\":null}", options)!.StaffId);
+    }
 }

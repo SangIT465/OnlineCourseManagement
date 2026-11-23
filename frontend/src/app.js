@@ -113,7 +113,10 @@ function currentRoute() {
   return { page, id: Number(id), sub, params: new URLSearchParams(search) };
 }
 function navigate(path) {
-  if (location.hash === `#/${path}`) void render();
+  if (location.hash === `#/${path}`) {
+    state.ready = false;
+    void render();
+  }
   else location.hash = `/${path}`;
 }
 function heading(title, description, actions = "") {
@@ -173,10 +176,16 @@ async function loadData() {
   }
   const tokenAtStart = getToken();
   loadingPromise = (async () => {
-    const [courses, categories, lessons] = await Promise.all([
+    const [courses, categories, lessons, profile] = await Promise.all([
       request("/courses"),
       request("/categories"),
       request("/lessons"),
+      state.user && tokenAtStart
+        ? request("/auth/me").catch((error) => {
+            if (error.status === 401) return null;
+            throw error;
+          })
+        : Promise.resolve(null),
     ]);
     state.courses = courses;
     state.categories = categories;
@@ -185,6 +194,7 @@ async function loadData() {
     state.progress = [];
     state.userCounts = {};
     state.roleError = null;
+    if (profile && getToken() === tokenAtStart) state.user = profile;
     if (state.user && getToken() === tokenAtStart) {
       try {
         if (is("User"))
@@ -786,8 +796,8 @@ function permissionsPage() {
       {
         Admin: "Tất cả tài khoản",
         Staff: "Chỉ User (sinh viên)",
-        Instructor: "Chỉ hồ sơ của mình",
-        User: "Chỉ hồ sơ của mình",
+        Instructor: "Không",
+        User: "Không",
       },
     ],
     ["Tạo và xóa tài khoản", "accounts.manage"],
@@ -978,9 +988,9 @@ function scheduleSessionExpiry(token) {
     /* Server verification through /auth/me determines token validity. */
   }
 }
-function authDialog(mode = "login") {
+function authDialog(mode = "login", { email = "", notice = "" } = {}) {
   const register = mode === "register";
-  const content = `<div class="dialog-brand">${icon("layers")}COURSEFLOW</div><form id="modal-form">${formError}${register ? field("Họ và tên", "fullName", { maxlength: 100, autocomplete: "name", placeholder: "Nguyễn Minh Anh" }) : ""}${field("Địa chỉ email", "email", { type: "email", autocomplete: "username", placeholder: "ban@example.com" })}${field("Mật khẩu", "password", { type: "password", minimum: register ? 8 : undefined, autocomplete: register ? "new-password" : "current-password", placeholder: register ? "Ít nhất 8 ký tự" : "Nhập mật khẩu của bạn", hint: register ? "Tài khoản đăng ký mới có vai trò User (sinh viên)." : "" })}<button class="btn btn-primary auth-submit" type="submit">${register ? "Tạo tài khoản sinh viên" : "Đăng nhập"}</button><p class="auth-switch">${register ? "Đã có tài khoản?" : "Bạn mới đến CourseFlow?"} <button type="button" data-action="${register ? "login" : "register"}">${register ? "Đăng nhập" : "Tạo tài khoản"}</button></p><div class="auth-role-note">${icon("shield")}Không gian được cá nhân hóa theo vai trò của bạn: quản trị viên, nhân viên hoặc sinh viên.</div></form>`;
+  const content = `<div class="dialog-brand">${icon("layers")}COURSEFLOW</div><form id="modal-form">${formError}${notice ? `<div class="form-info" role="status">${esc(notice)}</div>` : ""}${register ? field("Họ và tên", "fullName", { maxlength: 100, autocomplete: "name", placeholder: "Nguyễn Minh Anh" }) : ""}${field("Địa chỉ email", "email", { value: email, type: "email", autocomplete: "username", placeholder: "ban@example.com" })}${field("Mật khẩu", "password", { type: "password", minimum: register ? 8 : undefined, autocomplete: register ? "new-password" : "current-password", placeholder: register ? "Ít nhất 8 ký tự" : "Nhập mật khẩu của bạn", hint: register ? "Tài khoản đăng ký mới có vai trò User (sinh viên)." : "" })}<button class="btn btn-primary auth-submit" type="submit">${register ? "Tạo tài khoản sinh viên" : "Đăng nhập"}</button><p class="auth-switch">${register ? "Đã có tài khoản?" : "Bạn mới đến CourseFlow?"} <button type="button" data-action="${register ? "login" : "register"}">${register ? "Đăng nhập" : "Tạo tài khoản"}</button></p><div class="auth-role-note">${icon("shield")}Không gian được cá nhân hóa theo vai trò của bạn: quản trị viên, nhân viên, giảng viên hoặc sinh viên.</div></form>`;
   openDialog(
     register ? "Bắt đầu hành trình của bạn." : "Chào mừng bạn trở lại.",
     register
@@ -995,16 +1005,26 @@ function authDialog(mode = "login") {
         if (!data.fullName) throw new Error("Vui lòng nhập họ và tên.");
         await request("/auth/register", { method: "POST", body: data });
       }
-      const result = await request("/auth/login", {
-        method: "POST",
-        body: { email: data.email, password: data.password },
-      });
+      let result;
+      try {
+        result = await request("/auth/login", {
+          method: "POST",
+          body: { email: data.email, password: data.password },
+        });
+      } catch (error) {
+        if (!register) throw error;
+        authDialog("login", {
+          email: data.email,
+          notice: "Tài khoản đã được tạo. Vui lòng đăng nhập bằng email này khi kết nối ổn định; bạn không cần đăng ký lại.",
+        });
+        toast(error.message, true);
+        return;
+      }
       setToken(result.token);
       scheduleSessionExpiry(result.token);
       state.user = result.user;
       state.ready = false;
       closeDialog();
-      await loadData();
       toast(
         register
           ? "Tạo tài khoản thành công. Chào mừng bạn!"
@@ -1149,17 +1169,26 @@ async function assignOperator(courseId, role) {
   const teacher = role === "Instructor";
   const label = teacher ? "Giảng viên" : "Nhân viên";
   const fieldName = teacher ? "instructorId" : "staffId";
-  const staffMembers = await request(`/users?${query({ Role: role, PageSize: 100 })}`);
+  const [staffMembers, course] = await Promise.all([
+    request(`/users?${query({ Role: role, PageSize: 100 })}`),
+    request(`/courses/${courseId}`),
+  ]);
+  const choices = staffMembers.items.map((item) => [item.id, `${item.fullName} · ${item.email}`]);
+  const currentId = course[fieldName];
+  if (currentId && !choices.some(([id]) => id === currentId))
+    choices.push([currentId, (teacher ? course.instructorName : course.staffName) || `#${currentId}`]);
   openDialog(
     `Phân công ${label.toLocaleLowerCase("vi")}`,
     teacher ? "Giảng viên quản lý nội dung và học viên trong khóa được giao." : "Phân công nhân viên hỗ trợ vận hành khóa học.",
     modalForm(
-      `<div class="form-field"><label for="operator-search">Tìm ${label.toLocaleLowerCase("vi")}</label><div class="toolbar" style="margin-bottom:0"><input id="operator-search" type="search" placeholder="Tìm theo tên hoặc email…" maxlength="200"/><button class="btn btn-secondary btn-sm" type="button" data-action="find-operator" data-role="${role}" data-field="${fieldName}">Tìm</button></div><small>Tối đa 100 kết quả. Tìm theo tên hoặc email để thu hẹp danh sách.</small></div>${selectField(label, fieldName, [["", `Chọn ${label.toLocaleLowerCase("vi")}`], ...staffMembers.items.map((item) => [item.id, `${item.fullName} · ${item.email}`])])}`,
-      "Phân công",
+      `<div class="form-field"><label for="operator-search">Tìm ${label.toLocaleLowerCase("vi")}</label><div class="toolbar" style="margin-bottom:0"><input id="operator-search" type="search" placeholder="Tìm theo tên hoặc email…" maxlength="200"/><button class="btn btn-secondary btn-sm" type="button" data-action="find-operator" data-role="${role}" data-field="${fieldName}">Tìm</button></div><small>Tối đa 100 kết quả. Tìm theo tên hoặc email để thu hẹp danh sách.</small></div>${selectField(label, fieldName, [["none", "Chưa phân công / Bỏ phân công"], ...choices], currentId ?? "none")}`,
+      "Lưu phân công",
     ),
     async (form) => {
-      const id = Number(new FormData(form).get(fieldName));
-      if (!id) throw new Error(`Vui lòng chọn ${label.toLocaleLowerCase("vi")}.`);
+      const selected = new FormData(form).get(fieldName);
+      const id = selected === "none" ? null : Number(selected);
+      if (id !== null && (!Number.isInteger(id) || id <= 0))
+        throw new Error(`Vui lòng chọn ${label.toLocaleLowerCase("vi")}.`);
       await saved(
         `/courses/${courseId}/${teacher ? "instructor" : "staff"}`,
         "PUT",
@@ -1235,7 +1264,7 @@ async function passwordForm(id) {
         `/users/${id}/reset-password`,
         "PUT",
         { newPassword: new FormData(form).get("newPassword") },
-        "Đã đặt lại mật khẩu cho sinh viên.",
+        "Đã đặt lại mật khẩu. Tài khoản cần đăng nhập lại.",
       );
     },
   );
@@ -1271,7 +1300,7 @@ function uploadForm(id, type) {
 function helpDialog() {
   openDialog(
     "Cùng khám phá CourseFlow",
-    "Ba vai trò, đúng công việc của bạn.",
+    "Bốn vai trò, đúng công việc của bạn.",
     `<ol class="help-list"><li><strong>Khám phá:</strong> tìm khóa học theo tên, danh mục và học phí. Mở chi tiết để xem chương trình học.</li>${Object.values(
       ROLE_DEFINITIONS,
     )
@@ -1289,11 +1318,16 @@ async function logout(expired = false) {
   clearTimeout(sessionTimer);
   state.user = null;
   state.ready = false;
+  state.enrollments = [];
+  state.progress = [];
+  state.userCounts = {};
+  state.roleError = null;
+  state.courseDetail = null;
+  state.lessonDetail = null;
   state.users = null;
   state.students = null;
   pendingRoute = null;
   closeDialog();
-  await loadData();
   toast(
     expired
       ? "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."
@@ -1325,7 +1359,14 @@ async function handleAction(target) {
   if (action === "register") return authDialog("register");
   if (action === "close-dialog") return closeDialog();
   if (action === "help") return helpDialog();
-  if (action === "logout") return logout();
+  if (action === "logout")
+    return confirmAction(
+      "Đăng xuất tài khoản?",
+      "Bạn có muốn đăng xuất tài khoản không?",
+      "Đăng xuất",
+      () => logout(),
+      false,
+    );
   if (action === "toggle-password") {
     const input = target.parentElement.querySelector("input"),
       show = input.type === "password";
@@ -1488,7 +1529,7 @@ async function handleAction(target) {
     const select = $(`#field-${target.dataset.field}`);
     if (select)
       select.innerHTML =
-        '<option value="">Chọn tài khoản</option>' +
+        '<option value="">Chọn tài khoản</option><option value="none">Chưa phân công / Bỏ phân công</option>' +
         result.items
           .map(
             (item) =>
@@ -1594,9 +1635,20 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") setMenu(false);
 });
 window.addEventListener("hashchange", () => {
+  state.ready = false;
   void render();
   window.scrollTo(0, 0);
 });
+// Revalidate sessions and assignments when returning from another tab/application.
+let syncTimer;
+function synchronizeOnReturn() {
+  if (document.visibilityState === "hidden") return;
+  state.ready = false;
+  clearTimeout(syncTimer);
+  if (!dialog.open) syncTimer = setTimeout(() => void render(), 100);
+}
+window.addEventListener("focus", synchronizeOnReturn);
+document.addEventListener("visibilitychange", synchronizeOnReturn);
 window.addEventListener("session-expired", () => {
   void logout(true).catch((error) => {
     toast(error.message, true);

@@ -1,44 +1,13 @@
 import assert from "node:assert/strict";
 import { adminCredentials as credentials } from "./support/admin-credentials.mjs";
-import { existsSync, readFileSync, unlinkSync } from "node:fs";
-import { randomUUID } from "node:crypto";
-import { spawnSync } from "node:child_process";
-import path from "node:path";
-import os from "node:os";
+import { snapshot, sql } from "./support/sql-server.mjs";
 
 // Run explicitly against the local development API and its SQL Server database.
 // Only records created by this run are changed or deleted.
 const base = (process.env.COURSEFLOW_API_URL || "http://localhost:5106/api").replace(/\/+$/, "");
-const server = process.env.COURSEFLOW_TEST_SQL_SERVER || ".\\SQLEXPRESS";
-const database = process.env.COURSEFLOW_TEST_SQL_DATABASE || "OnlineCourseDB";
 const suffix = Date.now().toString(36);
 const created = { categories: new Set(), courses: new Set(), lessons: new Set() };
 let token;
-
-function sql(query) {
-  // sqlcmd console encoding can replace Vietnamese characters. Read its Unicode file instead.
-  const output = path.join(os.tmpdir(), `courseflow-crud-${randomUUID()}.txt`);
-  try {
-    const result = spawnSync("sqlcmd", [
-      "-S", server, "-d", database, "-E", "-C", "-b", "-r", "1",
-      "-y", "0", "-w", "65535", "-u", "-o", output,
-      "-Q", `SET NOCOUNT ON; ${query} FOR JSON PATH;`,
-    ], { encoding: "utf8", windowsHide: true, timeout: 30000, maxBuffer: 2 * 1024 * 1024 });
-    if (result.error) throw result.error;
-    assert.equal(result.status, 0, `SQL query failed: ${result.stderr}`);
-    return JSON.parse(readFileSync(output, "utf16le").replace(/^\uFEFF/, "").trim());
-  } finally {
-    if (existsSync(output)) unlinkSync(output);
-  }
-}
-
-const tables = ["Users", "Categories", "Courses", "Lessons", "Enrollments", "LessonProgresses", "UploadedFiles"];
-function snapshot() {
-  return sql(`SELECT * FROM (${tables.map(table =>
-    `SELECT N'${table}' AS TableName, COUNT_BIG(*) AS Total, CHECKSUM_AGG(BINARY_CHECKSUM(*)) AS Fingerprint FROM dbo.[${table}]`
-  ).join(" UNION ALL ")}) AS Counts ORDER BY TableName`);
-}
-
 
 async function api(route, { method = "GET", body, status = 200 } = {}) {
   const response = await fetch(base + route, {

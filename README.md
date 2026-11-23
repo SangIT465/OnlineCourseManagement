@@ -4,6 +4,8 @@ Hệ thống quản lý khóa học trực tuyến được tổ chức thành h
 
 Xem [checklist backend theo Buổi 2–15](docs/backend-checklist.md), [Postman](docs/postman/README.md), [publish/triển khai](docs/backend-deployment.md) và [báo cáo/demo bảo vệ](docs/backend-report.md).
 
+Chuẩn bị báo cáo: [kịch bản slide, demo đủ bốn vai trò và câu hỏi bảo vệ](docs/project-presentation.md). Cài đặt/chuyển máy: [SETUP_GUIDE.md](SETUP_GUIDE.md).
+
 ## Cấu trúc
 
 ```text
@@ -152,3 +154,7 @@ Hệ thống có bốn vai trò: **Admin**, **Staff (nhân viên)**, **Instructo
 Hệ thống hiện hỗ trợ ghi danh, chưa tích hợp thanh toán. Phân quyền cuối cùng luôn do backend kiểm tra.
 
 Sau khi chạy API và cập nhật database, có thể kiểm tra phân quyền thực tế bằng `npm.cmd run test:authorization`. Lệnh tạo và dọn các bản ghi QA tạm, không thay đổi tài khoản người dùng hiện có.
+
+Kiểm tra vòng đời đăng ký/đăng nhập, hash mật khẩu trong SQL, email trùng khi gửi đồng thời, token giả, đặt lại mật khẩu và ghi danh/hủy ghi danh bằng `npm.cmd run test:auth`. Chạy tuần tự các bộ kiểm thử tích hợp vì chúng đối chiếu số lượng và checksum dữ liệu trước/sau. Cần `sqlcmd`, Windows Authentication và tài khoản Admin trong User Secrets hoặc biến môi trường; xem [kết quả kiểm tra logic](docs/logic-audit.md).
+
+`npm.cmd run test:roles` so sánh các hàm quyền FE với API và SQL, bao gồm bỏ phân công và các tình huống đổi vai trò/phân công/tự tạo khóa đồng thời. Sau khi mở Edge thử nghiệm theo hướng dẫn kiểm thử browser, chạy `npm.cmd run test:roles:browser` để thử đủ bốn vai trò, chuyển phân công ở phiên khác và dữ liệu học tập. Script SQL chỉ đọc cho buổi demo: `database/queries/AuditPermissions.sql`.
