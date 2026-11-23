@@ -16,12 +16,14 @@ public class FilesController : ControllerBase
     private readonly AppDbContext _db;
     private readonly IFileStorage _storage;
     private readonly ICourseAccessService _access;
+    private readonly IOfficePreviewService _office;
 
-    public FilesController(AppDbContext db, IFileStorage storage, ICourseAccessService access)
+    public FilesController(AppDbContext db, IFileStorage storage, ICourseAccessService access, IOfficePreviewService office)
     {
         _db = db;
         _storage = storage;
         _access = access;
+        _office = office;
     }
 
     private int? CurrentUserId()
@@ -143,9 +145,6 @@ public class FilesController : ControllerBase
         if (!allowed)
             return Forbid();
 
-        if (preview && file.ContentType is not ("application/pdf" or "image/jpeg" or "image/png" or "image/webp"))
-            return StatusCode(StatusCodes.Status415UnsupportedMediaType, new { message = "Định dạng này chưa hỗ trợ xem trực tiếp." });
-
         var folder = file.FileType switch
         {
             "CourseImage" => "course-images",
@@ -161,9 +160,23 @@ public class FilesController : ControllerBase
         if (!System.IO.File.Exists(path))
             return NotFound("File không tồn tại trên ổ đĩa");
 
+        var extension = Path.GetExtension(file.StoredName).ToLowerInvariant();
+        var contentType = file.ContentType;
+        var previewName = file.OriginalName;
+        if (preview)
+        {
+            if (LearningFileFormats.IsOffice(extension))
+            {
+                path = await _office.GetPdfAsync(path, HttpContext.RequestAborted);
+                contentType = "application/pdf";
+                previewName = Path.GetFileNameWithoutExtension(file.OriginalName) + ".pdf";
+            }
+            else contentType = LearningFileFormats.ContentType(extension);
+        }
+
         var stream = new FileStream(
             path, FileMode.Open, FileAccess.Read,
-            FileShare.Read);
+            FileShare.Read | FileShare.Delete);
 
         Response.Headers.CacheControl = "private, no-store";
         Response.Headers.XContentTypeOptions = "nosniff";
@@ -171,9 +184,9 @@ public class FilesController : ControllerBase
         {
             Response.GetTypedHeaders().ContentDisposition = new Microsoft.Net.Http.Headers.ContentDispositionHeaderValue("inline")
             {
-                FileNameStar = file.OriginalName
+                FileNameStar = previewName
             };
-            return File(stream, file.ContentType, enableRangeProcessing: true);
+            return File(stream, contentType, enableRangeProcessing: true);
         }
 
         return File(
@@ -296,8 +309,7 @@ public class FilesController : ControllerBase
         _db.UploadedFiles.Remove(file);
         await _db.SaveChangesAsync();
 
-        if (System.IO.File.Exists(path))
-            System.IO.File.Delete(path);
+        _storage.Delete(file.FileType, file.StoredName);
 
         return Ok(new
         {

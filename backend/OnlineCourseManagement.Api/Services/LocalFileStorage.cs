@@ -20,7 +20,7 @@ public sealed class LocalFileStorage(IOptions<FileStorageOptions> configured, IW
         var extension = Path.GetExtension(storedName).ToLowerInvariant();
         if (Path.GetFileName(storedName) != storedName ||
             !Guid.TryParseExact(Path.GetFileNameWithoutExtension(storedName), "N", out _) ||
-            !AllowedExtension(fileType, extension))
+            !LearningFileFormats.IsAllowed(fileType, extension))
             throw BusinessException.Invalid("Tên file lưu trữ không hợp lệ.");
         return Path.Combine(_root, folder, storedName);
     }
@@ -28,10 +28,10 @@ public sealed class LocalFileStorage(IOptions<FileStorageOptions> configured, IW
     public async Task<StoredFile> SaveAsync(IFormFile file, string fileType, CancellationToken token)
     {
         if (file.Length <= 0) throw BusinessException.Invalid("Vui lòng chọn file.");
-        var limit = fileType == "CourseImage" ? _options.MaxImageBytes : _options.MaxDocumentBytes;
-        if (file.Length > limit) throw BusinessException.Invalid("File vượt quá dung lượng cho phép.");
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!AllowedExtension(fileType, extension)) throw BusinessException.Invalid("Định dạng file không hợp lệ.");
+        if (!LearningFileFormats.IsAllowed(fileType, extension)) throw BusinessException.Invalid("Định dạng file không hợp lệ.");
+        var limit = LearningFileFormats.IsImage(extension) ? _options.MaxImageBytes : _options.MaxDocumentBytes;
+        if (file.Length > limit) throw BusinessException.Invalid("File vượt quá dung lượng cho phép.");
         await using var input = file.OpenReadStream();
         var header = new byte[12];
         var read = await input.ReadAtLeastAsync(header, (int)Math.Min(header.Length, file.Length), false, token);
@@ -40,17 +40,19 @@ public sealed class LocalFileStorage(IOptions<FileStorageOptions> configured, IW
         var name = $"{Guid.NewGuid():N}{extension}";
         var path = GetPath(fileType, name);
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        var contentType = extension switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg", ".png" => "image/png", ".webp" => "image/webp", _ => "application/pdf"
-        };
+        var contentType = LearningFileFormats.ContentType(extension);
         try
         {
-            await using var output = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None);
-            await output.WriteAsync(header.AsMemory(0, read), token);
-            await input.CopyToAsync(output, token);
-            if (output.Length > limit) throw BusinessException.Invalid("File vượt quá dung lượng cho phép.");
-            return new(name, contentType, output.Length);
+            long size;
+            await using (var output = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
+                await output.WriteAsync(header.AsMemory(0, read), token);
+                await input.CopyToAsync(output, token);
+                size = output.Length;
+                if (size > limit) throw BusinessException.Invalid("File vượt quá dung lượng cho phép.");
+            }
+            await LearningFileFormats.ValidateDocumentAsync(path, extension, token);
+            return new(name, contentType, size);
         }
         catch
         {
@@ -63,14 +65,10 @@ public sealed class LocalFileStorage(IOptions<FileStorageOptions> configured, IW
     {
         var path = GetPath(fileType, storedName);
         if (File.Exists(path)) File.Delete(path);
+        var preview = Path.Combine(_root, ".previews", Path.GetFileNameWithoutExtension(storedName) + ".pdf");
+        if (File.Exists(preview)) File.Delete(preview);
     }
 
-    private static bool AllowedExtension(string type, string extension) => type switch
-    {
-        "CourseImage" => extension is ".jpg" or ".jpeg" or ".png" or ".webp",
-        "LessonDocument" => extension == ".pdf",
-        _ => false
-    };
 }
 
 public static class FileSignatures
@@ -81,6 +79,11 @@ public static class FileSignatures
         ".png" => header.Length >= 8 && header[..8].SequenceEqual(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }),
         ".webp" => header.Length >= 12 && header[..4].SequenceEqual("RIFF"u8) && header[8..12].SequenceEqual("WEBP"u8),
         ".pdf" => header.Length >= 5 && header[..5].SequenceEqual("%PDF-"u8),
+        ".gif" => header.Length >= 6 && (header[..6].SequenceEqual("GIF87a"u8) || header[..6].SequenceEqual("GIF89a"u8)),
+        ".bmp" => header.Length >= 2 && header[..2].SequenceEqual("BM"u8),
+        ".docx" or ".pptx" or ".xlsx" => header.Length >= 4 && header[..4].SequenceEqual(new byte[] { 80, 75, 3, 4 }),
+        ".doc" or ".ppt" or ".xls" => header.Length >= 8 && header[..8].SequenceEqual(new byte[] { 208, 207, 17, 224, 161, 177, 26, 225 }),
+        ".txt" or ".csv" => true,
         _ => false
     };
 }

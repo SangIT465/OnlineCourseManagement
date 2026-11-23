@@ -141,6 +141,8 @@ Khi triển khai API, bố trí `Uploads/` dưới content root của ứng dụ
 
 ## Chức năng theo vai trò
 
+Giao diện tự chuyển theo tài khoản đăng nhập: **Admin** dùng thanh bên xanh đen, bảng quản lý khóa học, năm thẻ thống kê (có giảng viên), biểu đồ ghi danh và phân bố tài khoản; **User** dùng không gian học tập sáng, thanh menu ngang trên máy tính, tiếp tục học và tiến độ cá nhân; **Staff** dùng bàn vận hành xanh ngọc; **Instructor** dùng phòng giảng dạy tím với khóa được phân công. Điện thoại có menu nhanh ở dưới và menu đầy đủ dạng ngăn kéo. Các khối sách nổi dùng CSS phối cảnh, bóng đổ và chuyển động nhẹ; tự giảm hiệu ứng khi hệ điều hành bật giảm chuyển động. Số liệu lấy từ API hiện có và quyền thao tác vẫn do backend kiểm tra.
+
 Hệ thống có bốn vai trò: **Admin**, **Staff (nhân viên)**, **Instructor (giảng viên)** và **User (sinh viên)**. Xem [ma trận quyền và cách cấp quyền](docs/permissions.md). Migration mới tách `StaffId` và `InstructorId`, giữ nguyên các phân công nhân viên cũ. Admin chủ động cấp quyền giảng viên và phân công giảng dạy.
 
 | Vai trò | Chức năng |
@@ -153,7 +155,19 @@ Hệ thống có bốn vai trò: **Admin**, **Staff (nhân viên)**, **Instructo
 
 User có thể mua khóa học qua payOS, quét QR, xem lịch sử đơn và in bill/lưu PDF. Backend xác minh thanh toán trước khi cấp quyền học cho khóa có phí. Khóa miễn phí được mở ngay và có bill 0 đồng. Xem [cấu hình payOS, migration và kiểm thử](docs/PAYOS-PURCHASES.md). Phân quyền cuối cùng luôn do backend kiểm tra.
 
-Ảnh bìa (JPG/PNG/WebP) và tài liệu PDF có thể **xem trực tiếp trên website** bằng nút **Xem** bên cạnh từng tệp. Sau khi upload thành công, trình xem tự mở. PDF hỗ trợ chuyển trang, phóng to/thu nhỏ và co giãn trên mobile; thư viện PDF.js chỉ tải khi mở PDF. Nút **Tải xuống** vẫn có sẵn. API `GET /api/files/{id}/preview` dùng cùng kiểm tra quyền với download: người quản lý khóa học hoặc User đã ghi danh mới được đọc tệp; dữ liệu tệp không được lưu vào bộ nhớ đệm dùng chung. Tệp được bảo vệ bằng mật khẩu hoặc PDF hỏng có thông báo và tùy chọn tải xuống. Không cần migration mới cho chức năng xem tệp.
+Học liệu bài học hỗ trợ **ảnh JPG/JPEG/PNG/WebP/GIF/BMP**, **Word DOC/DOCX**, **PowerPoint PPT/PPTX**, **Excel XLS/XLSX**, **PDF**, **TXT và CSV UTF-8**. Tài liệu Office/PDF tối đa 25 MB, ảnh 5 MB, TXT/CSV 1 MB. Ảnh bìa khóa học tiếp tục nhận JPG/PNG/WebP tối đa 5 MB. Giao diện có nút **Tải tài liệu lên** và mở bản xem ngay sau khi upload; tệp đã có dùng nút **Xem**.
+
+PDF hỗ trợ chuyển trang, phóng to/thu nhỏ và co giãn trên mobile. Word/PowerPoint/Excel được LibreOffice chuyển thành PDF riêng để xem; **Tải bản gốc** luôn trả đúng tệp Office đã upload, không đổi nội dung hay phần mở rộng. Văn bản được hiển thị như chữ thường, không thực thi HTML/script. API `GET /api/files/{id}/preview` kiểm tra quyền như download: người quản lý khóa hoặc User đã ghi danh mới được đọc tệp. Bản xem và tệp gốc không được lưu trong cache dùng chung. Không cần migration mới.
+
+Để xem Office trên máy Windows mới, chạy một lần từ thư mục gốc:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup-office-preview.ps1
+```
+
+Công cụ tải bản LibreOffice chính thức, xác minh SHA256 rồi giải nén vào `.tools/libreoffice` riêng của dự án; thư mục runtime không được commit lên Git. Khởi động lại backend trong Visual Studio bằng Shift+F5 rồi F5. Nếu đã cài LibreOffice trong Program Files, backend tự tìm. Có thể cấu hình `DocumentPreview:ExecutablePath` bằng User Secrets hoặc `DocumentPreview__ExecutablePath` trong môi trường triển khai; Linux dùng executable `soffice` của LibreOffice Writer/Impress/Calc.
+
+Bộ chuyển Office dùng profile riêng, tắt macro/OLE/DDE, giới hạn thời gian và dọn thư mục tạm sau khi xử lý. Backend kiểm tra chữ ký tệp, cấu trúc DOCX/PPTX/XLSX, giới hạn giải nén và từ chối macro trong gói Open XML. Bản xem PDF được cache trong vùng lưu trữ riêng và xóa cùng tệp gốc. Tệp hỏng/cần mật khẩu hoặc máy chưa có bộ chuyển sẽ có thông báo; người dùng vẫn tải được bản gốc. Khi triển khai thực tế, chạy bộ chuyển bằng tài khoản ít quyền hoặc container, cập nhật LibreOffice và bố trí thư mục upload bền vững.
 
 Sau khi chạy API và cập nhật database, có thể kiểm tra phân quyền thực tế bằng `npm.cmd run test:authorization`. Lệnh tạo và dọn các bản ghi QA tạm, không thay đổi tài khoản người dùng hiện có.
 

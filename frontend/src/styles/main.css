@@ -652,6 +652,9 @@ kbd {
   gap: 18px;
   margin-bottom: 30px;
 }
+.stats-grid.admin-stats {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
 .stat-card {
   background: #fff;
   border: 1px solid var(--line);
@@ -694,6 +697,10 @@ kbd {
 .stat-card:nth-child(4) .stat-icon {
   background: #f1ecff;
   color: #8660c2;
+}
+.admin-stats .stat-card:nth-child(5) .stat-icon {
+  background: #e5f4ef;
+  color: #287c68;
 }
 .stat-value {
   font-size: 2rem;
@@ -2382,6 +2389,17 @@ tbody tr:hover td {
   .hero-badge {
     display: none;
   }
+}
+@media (max-width: 1200px) {
+  .stats-grid.admin-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .admin-stats .stat-card { grid-column: span 2; }
+  .admin-stats .stat-card:nth-last-child(-n + 2) { grid-column: span 3; }
+}
+@media (max-width: 700px) {
+  .stats-grid.admin-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-stats .stat-card,
+  .admin-stats .stat-card:nth-last-child(-n + 2) { grid-column: auto; }
+  .admin-stats .stat-card:last-child { grid-column: 1 / -1; }
 }
 @media (max-width: 1000px) {
   .dashboard-columns {

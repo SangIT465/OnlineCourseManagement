@@ -1,4 +1,4 @@
-﻿import {
+import {
   request,
   getToken,
   setToken,
@@ -10,6 +10,8 @@
 import { icon } from "./components/icons.js";
 import { API_DOCS_URL } from "./config.js";
 import { purchaseDetail, purchaseList, printPurchase } from "./features/purchases.js";
+import { COURSE_IMAGE_EXTENSIONS, LESSON_DOCUMENT_EXTENSIONS, uploadLimit } from "./features/file-types.js";
+import { workspaceFor, renderWorkspaceDashboard, renderManagementCourses, installWorkspaceEffects } from "./features/workspaces.js";
 import {
   ROLE_NAMES as roleName,
   ROLE_DEFINITIONS,
@@ -131,11 +133,19 @@ function setMenu(open) {
   $('[data-action="toggle-menu"]').setAttribute("aria-expanded", String(open));
 }
 function shell(page) {
+  const workspace = workspaceFor(state.user);
+  document.body.dataset.workspace = workspace.key;
+  document.body.dataset.page = page;
+  $(".brand small").textContent = workspace.caption;
+  $(".workspace-label").textContent = workspace.name.toLocaleUpperCase("vi");
+  $(".breadcrumb-root").textContent = workspace.name;
+  $("#workspace-chip").innerHTML = `${icon(workspace.icon)}<span>${esc(workspace.short)}</span>`;
+  $(".sidebar-note").innerHTML = `<span class="note-spark" aria-hidden="true">✦</span><h3>${esc(workspace.note)}</h3><p>${esc(workspace.description)}</p><a href="${workspace.link}">${esc(workspace.linkText)}${icon("next")}</a>`;
   const routes = [
-    ["dashboard", "grid", "Tổng quan"],
-    ["courses", "compass", "Khám phá"],
+    ["dashboard", "grid", workspace.title],
+    ["courses", is("Admin") ? "book" : "compass", is("Admin") ? "Quản lý khóa học" : "Khám phá"],
   ];
-  if (!is("Admin"))
+  if (state.user && !is("Admin"))
     routes.push([
       "my-courses",
       "book",
@@ -150,7 +160,7 @@ function shell(page) {
         ["enrollments", "chart", "Lượt ghi danh"],
       ]
     : is("Instructor") ? [["enrollments", "chart", "Học viên của tôi"]] : [];
-  if (state.user) management.push(["permissions", "shield", "Vai trò & quyền"]);
+  if (state.user && !is("User")) management.push(["permissions", "shield", "Vai trò & quyền"]);
   const activePage = page === "lesson" ? "courses" : page;
   const navLink = ([route, name, title]) =>
     `<a href="#/${route}" class="nav-link${activePage === route ? " active" : ""}" ${activePage === route ? 'aria-current="page"' : ""}>${icon(name)}<span>${title}</span>${route === "courses" && state.ready ? `<span class="nav-count">${count(state.courses.length)}</span>` : ""}</a>`;
@@ -162,7 +172,13 @@ function shell(page) {
       : "");
   $("#breadcrumb").textContent =
     [...routes, ...management].find((item) => item[0] === activePage)?.[2] ||
-    (page === "profile" ? "Tài khoản" : "Khóa học");
+    (page === "profile" ? "Tài khoản" : page === "permissions" ? "Vai trò & quyền" : "Khóa học");
+  const mobileRoutes = is("Admin") ? [["dashboard","grid","Điều hành"],["courses","book","Khóa học"],["users","users","Tài khoản"],["purchases","shield","Đơn mua"]]
+    : is("Staff") ? [["dashboard","grid","Công việc"],["my-courses","book","Phụ trách"],["users","users","Sinh viên"],["profile","user","Tài khoản"]]
+    : is("Instructor") ? [["dashboard","grid","Giảng dạy"],["my-courses","book","Khóa học"],["enrollments","users","Học viên"],["profile","user","Tài khoản"]]
+    : is("User") ? [["dashboard","grid","Trang chủ"],["courses","compass","Khám phá"],["my-courses","book","Khóa của tôi"],["profile","user","Tài khoản"]] : [];
+  $("#mobile-workspace-nav").innerHTML = mobileRoutes.map(([route,symbol,label]) => `<a href="#/${route}" ${activePage === route ? 'aria-current="page"' : ""}>${icon(symbol)}<span>${esc(label)}</span></a>`).join("");
+  $("#mobile-workspace-nav").hidden = !mobileRoutes.length;
   $("#sidebar-account").innerHTML = state.user
     ? `<div class="sidebar-account">${avatar(state.user.fullName, "sidebar-avatar")}<a href="#/profile"><strong>${esc(state.user.fullName)}</strong><small>${roleName[state.user.role]}</small></a>${toolsButton("logout", "logout", 0, "Đăng xuất")}</div>`
     : `<div class="sidebar-account">${avatar("Khách", "sidebar-avatar")}<div><strong>Xin chào, bạn!</strong><small>Khám phá cùng CourseFlow</small></div></div>`;
@@ -214,8 +230,14 @@ async function loadData() {
           state.enrollments = enrollments;
           state.userCounts = { students: students.totalCount };
           if (is("Admin")) {
-            const staff = await request("/users?Role=Staff&PageSize=1");
+            const [staff, instructors, admins] = await Promise.all([
+              request("/users?Role=Staff&PageSize=1"),
+              request("/users?Role=Instructor&PageSize=1"),
+              request("/users?Role=Admin&PageSize=1"),
+            ]);
             state.userCounts.staff = staff.totalCount;
+            state.userCounts.instructors = instructors.totalCount;
+            state.userCounts.admins = admins.totalCount;
           }
         }
       } catch (error) {
@@ -257,9 +279,6 @@ function progressBar(item) {
 function statCard(label, value, name, note) {
   return `<article class="stat-card"><div class="stat-top"><span class="stat-label">${esc(label)}</span><span class="stat-icon">${icon(name)}</span></div><div class="stat-value">${esc(value)}</div><div class="stat-note">${icon("check")}${esc(note)}</div></article>`;
 }
-function heroArt() {
-  return `<div class="hero-art" aria-hidden="true"><svg viewBox="0 0 350 235"><circle cx="187" cy="117" r="91" stroke="#5c7f5b" stroke-dasharray="3 8"/><circle cx="187" cy="117" r="66" stroke="#5c7f5b" stroke-opacity=".4"/><path d="m88 161 90-32 87 27-89 34Z" fill="#bad27d" stroke="#bad27d"/><path d="m88 161 1 15 87 29 88-34 1-15M176 190v15" stroke="#719451" fill="#a8c366"/><path d="m105 130 91-31 76 24-91 34Z" fill="#eaf0d8" stroke="#eaf0d8"/><path d="M105 130v15l76 25 90-32 1-15m-91 34v13" fill="#cfdbb6" stroke="#9fb28b"/><path d="m112 100 77-28 77 24-79 30Z" fill="#d2f58a" stroke="#d2f58a"/><path d="m112 100 1 15 74 26 79-30V96m-79 30v15" fill="#a8cd6b" stroke="#81a64e"/><path d="m169 50 37-12 35 12-37 14Z" fill="#e8f2db" stroke="#e8f2db"/><path d="m180 55 1 16s23 15 46-1V55m14-5v21" stroke="#c7deac"/><circle cx="77" cy="76" r="18" fill="#d2f58a" stroke="none"/><path d="m70 76 5 5 10-12" stroke="#284b31" stroke-width="2.5"/><path d="m277 45 3 11 11 3-11 3-3 11-3-11-11-3 11-3Z" fill="#d2f58a" stroke="none"/><circle cx="291" cy="146" r="6" fill="#b3cd92" stroke="none"/><path d="m60 181 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" fill="#8ba66f" stroke="none"/></svg></div>`;
-}
 function activityChart() {
   const now = new Date(),
     months = Array.from(
@@ -281,14 +300,7 @@ function activityChart() {
   return `<section class="side-panel"><h2>${is("Admin") ? "Hoạt động ghi danh" : "Thư viện đang phát triển"}</h2><p>Trong 6 tháng gần đây</p><div class="chart-bars" role="img" aria-label="${esc(months.map((month, index) => `Tháng ${month.getMonth() + 1}: ${values[index]}`).join("; "))}">${values.map((value) => `<div class="chart-column"><b>${count(value)}</b><div class="chart-bar" style="height:${Math.max(3, (value / max) * 86)}px"></div></div>`).join("")}</div><div class="chart-months">${months.map((month) => `<span>Th.${month.getMonth() + 1}</span>`).join("")}</div><div class="chart-legend"><i></i>${is("Admin") ? "Lượt đăng ký khóa học" : "Khóa học mới"}</div></section>`;
 }
 function dashboard() {
-  const name = state.user?.fullName?.split(" ").at(-1);
-  const title = name
-    ? `Chào ${name}, ngày mới tốt lành!`
-    : "Hành trình mới, bắt đầu từ đây.";
   let stats,
-    heroTitle,
-    heroText,
-    heroAction,
     featured = state.courses.slice(0, 4),
     sectionTitle = "Khóa học dành cho bạn";
   if (is("Admin")) {
@@ -312,20 +324,18 @@ function dashboard() {
         "Đồng hành cùng sinh viên",
       ],
       [
+        "Giảng viên",
+        count(state.userCounts.instructors),
+        "graduation",
+        "Tài khoản giảng viên",
+      ],
+      [
         "Lượt ghi danh",
         count(state.enrollments.length),
         "chart",
         "Trên toàn hệ thống",
       ],
     ];
-    heroTitle = "Kiến tạo tri thức.<br /><em>Kết nối những tiềm năng.</em>";
-    heroText =
-      "Quản lý nội dung, đồng hành cùng nhân viên và mở ra những cơ hội học tập mới.";
-    heroAction = button(
-      `${icon("plus")}Tạo khóa học mới`,
-      "create-course",
-      "lime",
-    );
     sectionTitle = "Khóa học mới nhất";
   } else if (is("Staff")) {
     const own = state.courses.filter(
@@ -360,14 +370,6 @@ function dashboard() {
         "Lĩnh vực của bạn",
       ],
     ];
-    heroTitle = "Vận hành hiệu quả.<br /><em>Đồng hành cùng sinh viên.</em>";
-    heroText =
-      "Tạo bài học, quản lý học liệu và theo dõi sự tiến bộ của sinh viên trong một không gian.";
-    heroAction = button(
-      `${icon("plus")}Tạo khóa học mới`,
-      "create-course",
-      "lime",
-    );
     featured = (own.length ? own : state.courses).slice(0, 4);
     sectionTitle = own.length ? "Khóa học bạn phụ trách" : "Khóa học mới nhất";
   } else if (is("Instructor")) {
@@ -379,9 +381,6 @@ function dashboard() {
       ["Thời lượng", `${count(ownLessons.reduce((sum, item) => sum + item.durationMinutes, 0))} phút`, "clock", "Tổng thời lượng bài học"],
       ["Lĩnh vực giảng dạy", count(new Set(own.map((course) => course.categoryId)).size), "compass", "Kiến thức bạn chia sẻ"],
     ];
-    heroTitle = "Chia sẻ kiến thức.<br /><em>Đồng hành cùng học viên.</em>";
-    heroText = "Xây dựng bài học, cập nhật học liệu và theo dõi tiến độ trong các khóa bạn giảng dạy.";
-    heroAction = button(`${icon("plus")}Tạo khóa học`, "create-course", "lime");
     featured = own.slice(0, 4);
     sectionTitle = "Khóa học bạn giảng dạy";
   } else if (is("User")) {
@@ -423,15 +422,6 @@ function dashboard() {
         "Tính theo bài học hoàn thành",
       ],
     ];
-    heroTitle =
-      "Một chút nỗ lực mỗi ngày.<br /><em>Một phiên bản tốt hơn.</em>";
-    heroText =
-      "Tiếp tục bài học còn dang dở, khám phá kỹ năng mới và chinh phục mục tiêu của bạn.";
-    heroAction = linkButton(
-      `${icon("play")}Tiếp tục học`,
-      "#/my-courses",
-      "lime",
-    );
     if (state.enrollments.length) {
       featured = state.courses
         .filter((course) => enrolled(course.id))
@@ -460,36 +450,14 @@ function dashboard() {
         "Bắt đầu theo cách của bạn",
       ],
     ];
-    heroTitle = "Học điều mới.<br /><em>Mở lối tương lai.</em>";
-    heroText =
-      "Khám phá kiến thức, phát triển kỹ năng và biến những mục tiêu của bạn thành bước tiến thực tế.";
-    heroAction = linkButton(
-      `${icon("compass")}Khám phá khóa học`,
-      "#/courses",
-      "lime",
-    );
   }
-  const categoryRows = state.categories
-    .slice(0, 4)
-    .map(
-      (item) =>
-        `<a class="category-row" href="#/courses?category=${item.id}"><span class="category-icon">${icon("layers")}</span><span><span class="category-name">${esc(item.name)}</span><small>${count(state.courses.filter((course) => course.categoryId === item.id).length)} khóa học</small></span><span class="category-number">${icon("next")}</span></a>`,
-    )
-    .join("");
-  const activities = is("Admin")
-    ? state.enrollments.slice(0, 4)
-    : state.courses.slice(0, 3);
-  return (
-    heading(
-      title,
-      "Tất cả những gì bạn cần cho một ngày học tập hiệu quả.",
-      `<span class="date-label">${icon("calendar")}${new Intl.DateTimeFormat("vi-VN", { weekday: "short", day: "2-digit", month: "long", year: "numeric" }).format(new Date())}</span>`,
-    ) +
-    (state.roleError
-      ? `<div class="notice">Một phần dữ liệu chưa tải được: ${esc(state.roleError)}. Hãy làm mới để thử lại.</div>`
-      : "") +
-    `<section class="hero"><div class="hero-copy"><div class="eyebrow">${icon("spark")}KHÔNG NGỪNG HỌC HỎI</div><h2>${heroTitle}</h2><p>${heroText}</p>${heroAction}</div>${heroArt()}<div class="hero-badge">${icon("shield")}Tri thức cho hành trình dài</div></section><div class="stats-grid">${stats.map((item) => statCard(...item)).join("")}</div><div class="dashboard-columns"><div><section><div class="section-heading"><div><h2>${sectionTitle}</h2><p>Kiến thức thực tế. Kỹ năng cho ngày mai.</p></div><a href="#/${is("Staff") || is("Instructor") || is("User") ? "my-courses" : "courses"}">Xem tất cả</a></div><div class="course-grid compact">${featured.length ? featured.map((course) => courseCard(course, is("User"))).join("") : empty("Một hành trình đang chờ bắt đầu", canCreate() ? "Tạo khóa học đầu tiên và chia sẻ kiến thức của bạn." : "Khám phá thư viện và chọn điều bạn muốn học.", canCreate() ? button("Tạo khóa học", "create-course") : linkButton("Khám phá khóa học", "#/courses", "primary"))}</div></section><section class="activity-panel"><div class="section-heading"><h2>${is("Admin") ? "Ghi danh gần đây" : "Mới trên CourseFlow"}</h2><span class="badge neutral">${is("Admin") ? "Ghi danh" : "Khóa học"}</span></div>${activities.length ? activities.map((item) => `<div class="activity-row"><span class="activity-icon">${icon(is("Admin") ? "users" : "book")}</span><div class="activity-main"><strong>${esc(is("Admin") ? item.studentName : item.title)}</strong><p>${esc(is("Admin") ? `Đã đăng ký ${item.courseName}` : categoryName(item))}</p></div><time>${date(item.enrolledAt || item.createdAt)}</time><a class="icon-button" href="#/courses/${item.courseId || item.id}" aria-label="Xem khóa học">${icon("next")}</a></div>`).join("") : '<p class="text-muted text-small">Chưa có hoạt động nào. Những bước tiến đầu tiên sẽ xuất hiện tại đây.</p>'}</section></div><aside class="dashboard-aside"><section class="side-panel"><div class="section-heading"><h2>Khám phá lĩnh vực</h2>${icon("compass")}</div>${categoryRows || "<p>Chưa có danh mục.</p>"}<a class="btn btn-secondary btn-sm full-width" href="#/categories">Tất cả danh mục</a></section>${activityChart()}<section class="tip-panel"><span class="eyebrow">GÓC CẢM HỨNG</span><h3>Đầu tư cho bản thân,<br />không bao giờ là muộn.</h3><p>Bắt đầu với một khóa học phù hợp. Kiên trì với từng bước nhỏ.</p><a class="btn" href="#/courses">Tìm điều bạn muốn học</a></section></aside></div>`
-  );
+  const categoryRows = state.categories.slice(0, 4).map(item => `<a class="category-row" href="#/courses?category=${item.id}"><span class="category-icon">${icon("layers")}</span><span><span class="category-name">${esc(item.name)}</span><small>${count(state.courses.filter(course => course.categoryId === item.id).length)} khóa học</small></span><span class="category-number">${icon("next")}</span></a>`).join("");
+  const featuredMarkup = featured.length ? featured.map(course => courseCard(course, is("User"))).join("") : empty("Một hành trình đang chờ bắt đầu", canCreate() ? "Tạo khóa học đầu tiên và chia sẻ kiến thức của bạn." : "Khám phá thư viện và chọn điều bạn muốn học.", canCreate() ? button("Tạo khóa học đầu tiên", "create-course") : linkButton("Khám phá khóa học", "#/courses", "primary"));
+  return renderWorkspaceDashboard(state, {
+    statsMarkup: stats.map(item => statCard(...item)).join(""),
+    featuredMarkup, sectionTitle, categoryMarkup: categoryRows,
+    chartMarkup: activityChart(), progressBar, date,
+  });
 }
 function coursesPage(route, mine = false, progressOnly = false) {
   let courses = mine
@@ -538,19 +506,19 @@ function coursesPage(route, mine = false, progressOnly = false) {
       ? is("Staff")
         ? "Khóa học phụ trách"
         : is("Instructor") ? "Khóa tôi giảng dạy" : "Khóa học của tôi"
-      : "Khám phá khóa học";
+      : is("Admin") ? "Quản lý khóa học" : "Khám phá khóa học";
   const subtitle = progressOnly
     ? "Mỗi bài học hoàn thành là một bước gần hơn với mục tiêu."
     : mine
       ? "Một nơi cho tất cả những bước tiến của bạn."
-      : "Tìm kiến thức bạn cần. Xây dựng kỹ năng bạn muốn.";
+      : is("Admin") ? "Quản lý nội dung, học phí và phân công giảng viên trong thư viện." : "Tìm kiến thức bạn cần. Xây dựng kỹ năng bạn muốn.";
   return (
     heading(
       title,
       subtitle,
       canCreate() ? button(`${icon("plus")}Tạo khóa học`, "create-course") : "",
     ) +
-    `<form id="course-filter" class="toolbar" role="search"><div class="search-field">${icon("search")}<input type="search" name="search" value="${esc(search)}" placeholder="Tên khóa học, giảng viên…" aria-label="Tìm khóa học" maxlength="200" /></div><select name="category" aria-label="Lọc theo danh mục"><option value="">Tất cả danh mục</option>${state.categories.map((item) => `<option value="${item.id}" ${category === String(item.id) ? "selected" : ""}>${esc(item.name)}</option>`).join("")}</select><select name="price" aria-label="Lọc theo học phí"><option value="">Tất cả học phí</option><option value="free" ${price === "free" ? "selected" : ""}>Miễn phí</option><option value="paid" ${price === "paid" ? "selected" : ""}>Có học phí</option></select><select name="sort" aria-label="Sắp xếp khóa học"><option value="newest">Mới nhất</option><option value="name" ${sort === "name" ? "selected" : ""}>Tên A–Z</option><option value="price-asc" ${sort === "price-asc" ? "selected" : ""}>Giá tăng dần</option><option value="price-desc" ${sort === "price-desc" ? "selected" : ""}>Giá giảm dần</option></select><button class="btn btn-secondary btn-sm" type="submit">Tìm kiếm</button></form><div class="section-heading"><p>${count(total)} khóa học ${search ? "phù hợp với tìm kiếm" : mine ? "trong không gian của bạn" : "đang chờ bạn khám phá"}</p>${search || category || price ? '<button class="btn btn-ghost btn-sm" data-action="clear-filters">Bỏ bộ lọc</button>' : ""}</div><div class="course-grid">${shown.length ? shown.map((course) => courseCard(course, mine || progressOnly)).join("") : empty(mine ? "Chưa có khóa học nào" : "Không tìm thấy khóa học", mine ? (is("Staff") ? "Tạo khóa học hoặc chờ quản trị viên phân công cho bạn." : "Chọn một khóa học trong thư viện để bắt đầu hành trình.") : "Thử một từ khóa khác hoặc bỏ bớt bộ lọc.", mine ? linkButton("Khám phá khóa học", "#/courses", "primary") : button("Bỏ bộ lọc", "clear-filters", "secondary"))}</div>${totalPages > 1 ? pagination(page, totalPages, total) : ""}`
+    `<form id="course-filter" class="toolbar" role="search"><div class="search-field">${icon("search")}<input type="search" name="search" value="${esc(search)}" placeholder="Tên khóa học, giảng viên…" aria-label="Tìm khóa học" maxlength="200" /></div><select name="category" aria-label="Lọc theo danh mục"><option value="">Tất cả danh mục</option>${state.categories.map((item) => `<option value="${item.id}" ${category === String(item.id) ? "selected" : ""}>${esc(item.name)}</option>`).join("")}</select><select name="price" aria-label="Lọc theo học phí"><option value="">Tất cả học phí</option><option value="free" ${price === "free" ? "selected" : ""}>Miễn phí</option><option value="paid" ${price === "paid" ? "selected" : ""}>Có học phí</option></select><select name="sort" aria-label="Sắp xếp khóa học"><option value="newest">Mới nhất</option><option value="name" ${sort === "name" ? "selected" : ""}>Tên A–Z</option><option value="price-asc" ${sort === "price-asc" ? "selected" : ""}>Giá tăng dần</option><option value="price-desc" ${sort === "price-desc" ? "selected" : ""}>Giá giảm dần</option></select><button class="btn btn-secondary btn-sm" type="submit">Tìm kiếm</button></form><div class="section-heading"><p>${count(total)} khóa học ${search ? "phù hợp với tìm kiếm" : mine ? "trong không gian của bạn" : "đang chờ bạn khám phá"}</p>${search || category || price ? '<button class="btn btn-ghost btn-sm" data-action="clear-filters">Bỏ bộ lọc</button>' : ""}</div><div class="${is("Admin") ? "workspace-admin-catalog" : "course-grid"}">${shown.length ? (is("Admin") ? renderManagementCourses(shown, { lessons: state.lessons, canEdit: canManage }) : shown.map((course) => courseCard(course, mine || progressOnly)).join("")) : empty(mine ? "Chưa có khóa học nào" : "Không tìm thấy khóa học", mine ? (is("Staff") ? "Tạo khóa học hoặc chờ quản trị viên phân công cho bạn." : "Chọn một khóa học trong thư viện để bắt đầu hành trình.") : "Thử một từ khóa khác hoặc bỏ bớt bộ lọc.", mine ? linkButton("Khám phá khóa học", "#/courses", "primary") : button("Bỏ bộ lọc", "clear-filters", "secondary"))}</div>${totalPages > 1 ? pagination(page, totalPages, total) : ""}`
   );
 }
 function pagination(page, totalPages, total) {
@@ -664,7 +632,7 @@ async function courseDetail(route, version) {
     body = `<div class="section-heading"><h2>${count(students.totalStudents)} sinh viên đồng hành</h2></div>${students.students.length ? `<div class="table-wrap"><table><thead><tr><th>Sinh viên</th><th>Ngày ghi danh</th><th>Tiến độ học tập</th><th>Trạng thái</th></tr></thead><tbody>${students.students.map((student) => `<tr><td><div class="cell-user">${avatar(student.studentName)}<div><strong>${esc(student.studentName)}</strong><small>${esc(student.studentEmail)}</small></div></div></td><td>${date(student.enrolledAt)}</td><td style="min-width:180px">${progressBar(student)}</td><td><span class="badge ${student.percentage === 100 && student.totalLessons > 0 ? "" : "neutral"}">${student.percentage === 100 && student.totalLessons > 0 ? "Hoàn thành" : "Đang học"}</span></td></tr>`).join("")}</tbody></table></div>` : empty("Chưa có sinh viên", "Các sinh viên ghi danh sẽ được hiển thị tại đây.")}`;
   } else {
     const files = await request(`/files/courses/${course.id}`);
-    body = `<section class="panel"><div class="panel-heading"><div><h2>Ảnh bìa khóa học</h2><p class="text-muted text-small">JPG, PNG hoặc WebP · Tối đa 5 MB</p></div>${canManage(course) ? button(`${icon("upload")}Tải ảnh lên`, "upload-image", "secondary", `data-id="${course.id}"`) : ""}</div>${files.length ? `<div class="document-list">${files.map((file) => fileRow(file, canManage(course), canManage(course) || enrolled(course.id))).join("")}</div>` : '<p class="text-muted text-small">Chưa có ảnh bìa được tải lên.</p>'}</section><section class="panel"><h2>Tài liệu bài học</h2><p class="text-muted text-small">${canManage(course) ? "Mở từng bài học để tải lên và quản lý tài liệu PDF." : "Mở bài học sau khi ghi danh để xem và tải các tài liệu PDF được nhân viên chia sẻ."}</p><a href="#/courses/${course.id}" class="btn btn-secondary btn-sm">Xem danh sách bài học</a></section>`;
+    body = `<section class="panel"><div class="panel-heading"><div><h2>Ảnh bìa khóa học</h2><p class="text-muted text-small">JPG, PNG hoặc WebP · Tối đa 5 MB</p></div>${canManage(course) ? button(`${icon("upload")}Tải ảnh lên`, "upload-image", "secondary", `data-id="${course.id}"`) : ""}</div>${files.length ? `<div class="document-list">${files.map((file) => fileRow(file, canManage(course), canManage(course) || enrolled(course.id))).join("")}</div>` : '<p class="text-muted text-small">Chưa có ảnh bìa được tải lên.</p>'}</section><section class="panel"><h2>Tài liệu bài học</h2><p class="text-muted text-small">${canManage(course) ? "Mở từng bài học để tải lên và quản lý ảnh và tài liệu Word, PowerPoint, Excel, PDF." : "Mở bài học sau khi ghi danh để xem và tải các tài liệu được chia sẻ."}</p><a href="#/courses/${course.id}" class="btn btn-secondary btn-sm">Xem danh sách bài học</a></section>`;
   }
   return `<a class="back-link" href="#/courses">${icon("back")}Thư viện khóa học</a><section class="course-detail-header"><div><span class="badge">${esc(categoryName(course))}</span><h1>${esc(course.title)}</h1><p>${esc(course.description || "Nội dung giới thiệu đang được cập nhật.")}</p><div class="detail-meta"><span>${icon("user")}${esc(course.instructorName || "Chưa phân công giảng viên")}</span><span>${icon("users")}${esc(course.staffName || "Chưa phân công nhân viên")}</span><span>${icon("book")}${count(lessons.length)} bài học</span><span>${icon("clock")}${count(lessons.reduce((sum, item) => sum + item.durationMinutes, 0))} phút</span></div>${is("Admin") ? `<div class="detail-meta">${button(`${icon("user")}Phân công giảng viên`, "assign-instructor", "secondary", `data-id="${course.id}"`)}${button(`${icon("users")}Phân công nhân viên`, "assign-staff", "secondary", `data-id="${course.id}"`)}</div>` : ""}</div><aside>${cover(course, true)}<div class="detail-price-row"><span class="text-small text-muted">Học phí khóa học</span><span class="course-price ${Number(course.price) === 0 ? "free" : ""}">${money(course.price)}</span></div><div class="detail-actions">${actions}</div>${enrolled(course.id) ? '<p class="text-small" style="color:#648854;margin:12px 0 0">Bạn đã ghi danh khóa học này.</p>' : ""}</aside></section>${detailTabs(course, tab)}<section id="detail-tab-panel" role="tabpanel" aria-labelledby="tab-${tab}">${body}</section>`;
 }
@@ -695,7 +663,7 @@ async function lessonPage(route, version) {
     position = lessons.findIndex((item) => item.id === lesson.id),
     next = lessons[position + 1],
     url = safeUrl(lesson.videoUrl);
-  return `<div class="lesson-reader"><a class="back-link" href="#/courses/${course.id}">${icon("back")}${esc(course.title)}</a><article class="panel"><div class="course-category">BÀI ${lesson.orderIndex} · ${count(lesson.durationMinutes)} PHÚT</div><h1>${esc(lesson.title)}</h1>${url ? `<div class="form-info">${linkButton(`${icon("play")}Mở video bài học`, url, "secondary")}<p style="margin:12px 0 0">Video được mở tại địa chỉ do nhân viên cung cấp.</p></div>` : ""}<div class="lesson-content">${esc(lesson.content || "Nội dung bài học đang được cập nhật. Hãy xem video hoặc tài liệu đính kèm nếu có.")}</div><div class="reader-footer">${is("User") ? button(`${icon(done ? "check" : "target")}${done ? "Đã hoàn thành · Bỏ đánh dấu" : "Đánh dấu hoàn thành"}`, "toggle-complete", done ? "secondary" : "primary", `data-id="${lesson.id}" data-completed="${Boolean(done)}"`) : button(`${icon("edit")}Chỉnh sửa bài học`, "edit-lesson", "secondary", `data-id="${lesson.id}"`)}${next ? linkButton(`Bài tiếp theo: ${esc(next.title)}`, `#/lesson/${next.id}`, "secondary") : linkButton("Về khóa học", `#/courses/${course.id}`, "secondary")}</div></article><section class="panel"><div class="panel-heading"><div><h2>Tài liệu học tập</h2><p class="text-small text-muted">Tất cả tài liệu bạn cần cho bài học này.</p></div>${canManage(course) ? button(`${icon("upload")}Tải PDF lên`, "upload-document", "secondary", `data-id="${lesson.id}"`) : ""}</div><div class="document-list">${files.length ? files.map((file) => fileRow(file, canManage(course))).join("") : '<p class="text-muted text-small">Chưa có tài liệu đính kèm.</p>'}</div></section></div>`;
+  return `<div class="lesson-reader"><a class="back-link" href="#/courses/${course.id}">${icon("back")}${esc(course.title)}</a><article class="panel"><div class="course-category">BÀI ${lesson.orderIndex} · ${count(lesson.durationMinutes)} PHÚT</div><h1>${esc(lesson.title)}</h1>${url ? `<div class="form-info">${linkButton(`${icon("play")}Mở video bài học`, url, "secondary")}<p style="margin:12px 0 0">Video được mở tại địa chỉ do nhân viên cung cấp.</p></div>` : ""}<div class="lesson-content">${esc(lesson.content || "Nội dung bài học đang được cập nhật. Hãy xem video hoặc tài liệu đính kèm nếu có.")}</div><div class="reader-footer">${is("User") ? button(`${icon(done ? "check" : "target")}${done ? "Đã hoàn thành · Bỏ đánh dấu" : "Đánh dấu hoàn thành"}`, "toggle-complete", done ? "secondary" : "primary", `data-id="${lesson.id}" data-completed="${Boolean(done)}"`) : button(`${icon("edit")}Chỉnh sửa bài học`, "edit-lesson", "secondary", `data-id="${lesson.id}"`)}${next ? linkButton(`Bài tiếp theo: ${esc(next.title)}`, `#/lesson/${next.id}`, "secondary") : linkButton("Về khóa học", `#/courses/${course.id}`, "secondary")}</div></article><section class="panel"><div class="panel-heading"><div><h2>Tài liệu học tập</h2><p class="text-small text-muted">Tất cả tài liệu bạn cần cho bài học này.</p></div>${canManage(course) ? button(`${icon("upload")}Tải tài liệu lên`, "upload-document", "secondary", `data-id="${lesson.id}"`) : ""}</div><div class="document-list">${files.length ? files.map((file) => fileRow(file, canManage(course))).join("") : '<p class="text-muted text-small">Chưa có tài liệu đính kèm.</p>'}</div></section></div>`;
 }
 async function usersPage(route, version) {
   const params = {
@@ -948,6 +916,16 @@ async function render() {
     }
   }
 }
+async function downloadFile(id, name) {
+  const blob = await request(`/files/${id}/download`, { blob: true });
+  const url = URL.createObjectURL(blob), link = document.createElement("a");
+  link.href = url;
+  link.download = name || `hoc-lieu-${id}`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
 function closeDialog() {
   modalCleanup?.();
   modalCleanup = null;
@@ -964,7 +942,8 @@ async function previewFile(id, name) {
     if (!dialog.open || !host.isConnected) return;
     modalCleanup = mountFilePreview(host, {
       name: name || `hoc-lieu-${id}`,
-      load: (signal) => request(`/files/${id}/preview`, { blob: true, signal }),
+      load: (signal) => request(`/files/${id}/preview`, { blob: true, signal, timeoutMs: 90000 }),
+      download: () => downloadFile(id, name),
     });
   } catch {
     if (dialog.open && host.isConnected) host.textContent = "Chưa mở được trình xem. Vui lòng đóng rồi thử lại.";
@@ -1326,21 +1305,21 @@ async function passwordForm(id) {
 }
 function uploadForm(id, type) {
   const image = type === "image",
-    max = image ? 5000000 : 10000000,
-    extensions = image ? ["jpg", "jpeg", "png", "webp"] : ["pdf"];
+    extensions = image ? COURSE_IMAGE_EXTENSIONS : LESSON_DOCUMENT_EXTENSIONS;
   openDialog(
     image ? "Tải ảnh bìa khóa học" : "Tải tài liệu bài học",
     "Chia sẻ học liệu với sinh viên của bạn.",
     modalForm(
-      `<div class="form-field"><label for="upload-file">${image ? "Chọn ảnh" : "Chọn tài liệu PDF"}</label><input id="upload-file" type="file" name="file" accept="${image ? ".jpg,.jpeg,.png,.webp" : ".pdf"}" required/><small>${image ? "JPG, PNG hoặc WebP · Tối đa 5 MB" : "PDF · Tối đa 10 MB"}</small></div>`,
+      `<div class="form-field"><label for="upload-file">${image ? "Chọn ảnh" : "Chọn tài liệu hoặc ảnh"}</label><input id="upload-file" type="file" name="file" accept="${extensions.map(extension => '.' + extension).join(',')}" required/><small>${image ? "JPG, PNG hoặc WebP · Tối đa 5 MB" : "Word, PowerPoint, Excel, PDF · tối đa 25 MB. Ảnh JPG/PNG/WebP/GIF/BMP · 5 MB. TXT/CSV (UTF-8) · 1 MB."}</small></div>`,
       "Tải lên",
     ),
     async (form) => {
       const data = new FormData(form),
         file = data.get("file");
       if (!file?.size) throw new Error("Vui lòng chọn một file có nội dung.");
+      const max = uploadLimit(file.name, image);
       if (file.size > max)
-        throw new Error(`File vượt quá ${image ? 5 : 10} MB.`);
+        throw new Error(`File vượt quá ${max / 1000000} MB.`);
       if (!extensions.includes(file.name.split(".").pop().toLowerCase()))
         throw new Error("Định dạng file không được hỗ trợ.");
       const uploaded = await saved(
@@ -1581,18 +1560,7 @@ async function handleAction(target) {
         : "Thêm một bước tiến! Đã hoàn thành bài học.",
     );
   if (action === "preview-file") return previewFile(id, target.dataset.name);
-  if (action === "download-file") {
-    const blob = await request(`/files/${id}/download`, { blob: true }),
-      url = URL.createObjectURL(blob),
-      link = document.createElement("a");
-    link.href = url;
-    link.download = target.dataset.name || `hoc-lieu-${id}`;
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 30000);
-    return;
-  }
+  if (action === "download-file") return downloadFile(id, target.dataset.name);
   if (action === "find-operator") {
     const result = await request(
       `/users?${query({ Role: target.dataset.role, PageSize: 100, SearchTerm: $("#operator-search").value.trim() })}`,
@@ -1732,6 +1700,7 @@ window.addEventListener("session-expired", () => {
   });
 });
 async function boot() {
+  installWorkspaceEffects();
   hydrateIcons();
   if (getToken()) {
     try {

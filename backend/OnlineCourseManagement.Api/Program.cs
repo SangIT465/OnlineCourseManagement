@@ -114,6 +114,9 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
+builder.Services.AddOptions<DocumentPreviewOptions>().BindConfiguration(DocumentPreviewOptions.SectionName)
+    .ValidateDataAnnotations().ValidateOnStart();
+builder.Services.AddScoped<IOfficePreviewService, OfficePreviewService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
     .Configure<IOptions<JwtOptions>>((options, configured) =>

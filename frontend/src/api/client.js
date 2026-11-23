@@ -18,7 +18,7 @@ export class ApiError extends Error {
 }
 export async function request(
   path,
-  { method = "GET", body, signal, blob = false } = {},
+  { method = "GET", body, signal, blob = false, timeoutMs = 30000 } = {},
 ) {
   const token = getToken();
   const headers = { Accept: blob ? "*/*" : "application/json" };
@@ -39,8 +39,8 @@ export async function request(
             ? body
             : JSON.stringify(body),
       signal: signal
-        ? AbortSignal.any([signal, AbortSignal.timeout(30000)])
-        : AbortSignal.timeout(30000),
+        ? AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)])
+        : AbortSignal.timeout(timeoutMs),
     });
   } catch (error) {
     if (error.name === "AbortError") throw error;

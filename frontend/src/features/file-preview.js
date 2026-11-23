@@ -1,16 +1,17 @@
-// Only server-validated image/PDF responses can become an inline viewer.
+// Office previews arrive as PDF; the download action always requests the original file.
 export function filePreviewKind(contentType) {
   const type = String(contentType || "").split(";")[0].trim().toLowerCase();
   if (type === "application/pdf") return "pdf";
-  return ["image/jpeg", "image/png", "image/webp"].includes(type) ? "image" : null;
+  if (["text/plain", "text/csv"].includes(type)) return "text";
+  return ["image/jpeg", "image/png", "image/webp", "image/gif", "image/bmp"].includes(type) ? "image" : null;
 }
 
-export function mountFilePreview(host, { name, load }) {
+export function mountFilePreview(host, { name, load, download: downloadOriginal }) {
   const controller = new AbortController();
-  let closed = false, objectUrl, loadingTask, renderTask, pdf;
+  let closed = false, objectUrl, loadingTask, renderTask, pdf, passwordProtected = false;
   let pageNumber = 1, zoom = 1, sequence = 0, resizeTimer, lastWidth = 0;
-  host.innerHTML = `<p class="file-preview-status" role="status">Đang tải tài liệu…</p>
-    <div class="file-preview-toolbar" hidden>
+  host.innerHTML = `<p class="file-preview-status" role="status">Đang chuẩn bị bản xem tài liệu…</p>
+    <div class="file-preview-toolbar">
       <div class="file-preview-pages" hidden>
         <button type="button" class="btn btn-secondary btn-sm" data-preview="previous" aria-label="Trang trước">←</button>
         <span data-preview="page" aria-live="polite"></span>
@@ -18,13 +19,20 @@ export function mountFilePreview(host, { name, load }) {
         <button type="button" class="btn btn-secondary btn-sm" data-preview="zoom-out" aria-label="Thu nhỏ">−</button>
         <button type="button" class="btn btn-secondary btn-sm" data-preview="zoom-in" aria-label="Phóng to">+</button>
       </div>
-      <a class="btn btn-secondary btn-sm" data-preview="download">Tải xuống</a>
+      <button type="button" class="btn btn-secondary btn-sm" data-preview="download">Tải bản gốc</button>
     </div><div class="file-preview-content" hidden></div>`;
   const find = (selector) => host.querySelector(selector);
   const status = find(".file-preview-status"), toolbar = find(".file-preview-toolbar");
   const pages = find(".file-preview-pages"), content = find(".file-preview-content");
   const previous = find('[data-preview="previous"]'), next = find('[data-preview="next"]');
   const smaller = find('[data-preview="zoom-out"]'), larger = find('[data-preview="zoom-in"]');
+  const download = find('[data-preview="download"]');
+  download.onclick = async () => {
+    download.disabled = true;
+    try { await downloadOriginal(); }
+    catch (error) { showError(error.message || "Chưa tải được tệp gốc. Vui lòng thử lại."); }
+    finally { download.disabled = false; }
+  };
   const controls = [previous, next, smaller, larger];
   const showError = (message) => {
     if (closed) return;
@@ -86,13 +94,17 @@ export function mountFilePreview(host, { name, load }) {
       if (closed) return;
       const kind = filePreviewKind(blob.type);
       if (!kind) throw new Error("Định dạng này chưa hỗ trợ xem trực tiếp.");
-      objectUrl = URL.createObjectURL(blob);
-      const download = find('[data-preview="download"]');
-      download.href = objectUrl;
-      download.download = name;
       toolbar.hidden = false;
       content.hidden = false;
+      if (kind === "text") {
+        const text = document.createElement("pre");
+        text.className = "file-preview-text";
+        text.textContent = await blob.text();
+        if (!closed) { content.replaceChildren(text); status.hidden = true; }
+        return;
+      }
       if (kind === "image") {
+        objectUrl = URL.createObjectURL(blob);
         const image = document.createElement("img");
         image.alt = name;
         image.src = objectUrl;
@@ -108,6 +120,7 @@ export function mountFilePreview(host, { name, load }) {
       if (closed) return;
       loadingTask = engine.getDocument({ data, isEvalSupported: false, enableXfa: false });
       loadingTask.onPassword = () => {
+        passwordProtected = true;
         showError("PDF này yêu cầu mật khẩu. Hãy tải xuống để mở bằng phần mềm đọc PDF.");
         void loadingTask.destroy().catch(() => {});
       };
@@ -117,7 +130,9 @@ export function mountFilePreview(host, { name, load }) {
       lastWidth = content.clientWidth;
       await renderPage();
     } catch (error) {
-      if (!closed && error.name !== "AbortError") showError(error.name === "InvalidPDFException"
+      if (!closed && error.name !== "AbortError") showError(passwordProtected
+        ? "PDF này yêu cầu mật khẩu. Hãy tải bản gốc xuống để mở bằng phần mềm đọc PDF."
+        : error.name === "InvalidPDFException"
         ? "Tệp PDF không hợp lệ hoặc đã bị hỏng. Bạn vẫn có thể tải xuống để kiểm tra."
         : error.name === "PasswordException" ? "PDF này yêu cầu mật khẩu. Hãy tải xuống để mở bằng phần mềm đọc PDF."
         : error.message || "Chưa mở được tài liệu. Vui lòng thử lại.");
@@ -134,6 +149,6 @@ export function mountFilePreview(host, { name, load }) {
     void loadingTask?.destroy().catch(() => {});
     if (objectUrl) URL.revokeObjectURL(objectUrl);
     content.replaceChildren();
-    for (const control of controls) control.onclick = null;
+    for (const control of [...controls, download]) control.onclick = null;
   };
 }
