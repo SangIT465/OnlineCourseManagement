@@ -1,0 +1,24 @@
+.document-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.document-info { min-width: 0; overflow-wrap: anywhere; }
+dialog.file-preview-dialog { width: min(1120px, calc(100% - 24px)); }
+.file-preview-dialog .dialog-header h2 { overflow-wrap: anywhere; }
+.file-preview-dialog .dialog-body { padding: 20px; }
+.file-preview-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.file-preview-pages { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.file-preview-pages span { font-size: .85rem; min-width: 92px; text-align: center; }
+.file-preview-content { padding: 12px; background: #eef3f0; border: 1px solid var(--line); border-radius: 12px; overflow: auto; max-height: 65dvh; min-height: 120px; }
+.file-preview-content canvas { display: block; background: white; margin: auto; box-shadow: 0 2px 12px #102f2a20; }
+.file-preview-content img { display: block; max-width: 100%; max-height: 65dvh; object-fit: contain; margin: auto; }
+.file-preview-status { color: var(--muted); padding: 12px 0; overflow-wrap: anywhere; }
+.file-preview-status[role="alert"] { color: #813b35; }
+.file-preview-toolbar[hidden], .file-preview-pages[hidden], .file-preview-content[hidden], .file-preview-status[hidden] { display: none; }
+@media (max-width: 600px) {
+  .document-row { flex-wrap: wrap; }
+  .document-row .document-info { flex: 1; min-width: 120px; }
+  .document-actions { margin-left: auto; max-width: 100%; flex-wrap: wrap; }
+  .file-preview-dialog .dialog-header { padding: 18px 16px 0; }
+  .file-preview-dialog .dialog-body { padding: 14px; }
+  .file-preview-content { max-height: 60dvh; padding: 8px; }
+  .file-preview-pages { gap: 6px; }
+  .file-preview-pages .btn { min-width: 36px; padding-left: 9px; padding-right: 9px; }
+}

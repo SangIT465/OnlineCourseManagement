@@ -103,7 +103,14 @@ public class FilesController : ControllerBase
     // GET: api/files/1/download
     [Authorize]
     [HttpGet("{id:int}/download")]
-    public async Task<IActionResult> Download(int id)
+    public Task<IActionResult> Download(int id) => ReadFile(id, preview: false);
+
+    // Preview uses exactly the same course permissions as downloading.
+    [Authorize]
+    [HttpGet("{id:int}/preview")]
+    public Task<IActionResult> Preview(int id) => ReadFile(id, preview: true);
+
+    private async Task<IActionResult> ReadFile(int id, bool preview)
     {
         var file = await _db.UploadedFiles
             .AsNoTracking()
@@ -136,6 +143,9 @@ public class FilesController : ControllerBase
         if (!allowed)
             return Forbid();
 
+        if (preview && file.ContentType is not ("application/pdf" or "image/jpeg" or "image/png" or "image/webp"))
+            return StatusCode(StatusCodes.Status415UnsupportedMediaType, new { message = "Định dạng này chưa hỗ trợ xem trực tiếp." });
+
         var folder = file.FileType switch
         {
             "CourseImage" => "course-images",
@@ -154,6 +164,17 @@ public class FilesController : ControllerBase
         var stream = new FileStream(
             path, FileMode.Open, FileAccess.Read,
             FileShare.Read);
+
+        Response.Headers.CacheControl = "private, no-store";
+        Response.Headers.XContentTypeOptions = "nosniff";
+        if (preview)
+        {
+            Response.GetTypedHeaders().ContentDisposition = new Microsoft.Net.Http.Headers.ContentDispositionHeaderValue("inline")
+            {
+                FileNameStar = file.OriginalName
+            };
+            return File(stream, file.ContentType, enableRangeProcessing: true);
+        }
 
         return File(
             stream,

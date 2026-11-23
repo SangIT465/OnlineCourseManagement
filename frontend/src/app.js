@@ -69,6 +69,7 @@ const state = {
 };
 let renderVersion = 0;
 let modalSubmit = null;
+let modalCleanup = null;
 let loadingPromise = null;
 let pendingRoute = null;
 let pendingTabFocus = null;
@@ -672,7 +673,7 @@ function fileRow(file, manage, download = true) {
     file.size >= 1000000
       ? `${(file.size / 1000000).toFixed(1)} MB`
       : `${Math.ceil(file.size / 1000)} KB`;
-  return `<div class="document-row">${icon("file")}<div class="document-info"><strong>${esc(file.originalName)}</strong><small>${size} · ${date(file.uploadedAt)}</small></div>${download ? toolsButton("download", "download-file", file.id, `Tải ${file.originalName}`, `data-name="${esc(file.originalName)}"`) : '<span class="badge neutral">Cần ghi danh để tải</span>'}${manage ? toolsButton("trash", "delete-file", file.id, `Xóa ${file.originalName}`) : ""}</div>`;
+  return `<div class="document-row">${icon("file")}<div class="document-info"><strong>${esc(file.originalName)}</strong><small>${size} · ${date(file.uploadedAt)}</small></div><div class="document-actions">${download ? `<button class="btn btn-secondary btn-sm" data-action="preview-file" data-id="${Number(file.id)}" data-name="${esc(file.originalName)}" title="Xem trực tiếp ${esc(file.originalName)}">${icon("eye")}Xem</button>${toolsButton("download", "download-file", file.id, `Tải ${file.originalName}`, `data-name="${esc(file.originalName)}"`)}` : '<span class="badge neutral">Cần ghi danh để xem</span>'}${manage ? toolsButton("trash", "delete-file", file.id, `Xóa ${file.originalName}`) : ""}</div></div>`;
 }
 async function lessonPage(route, version) {
   const lesson = await request(`/lessons/${route.id}`);
@@ -948,9 +949,26 @@ async function render() {
   }
 }
 function closeDialog() {
+  modalCleanup?.();
+  modalCleanup = null;
   if (dialog.open) dialog.close();
   modalSubmit = null;
-  dialog.classList.remove("wide");
+  dialog.classList.remove("wide", "file-preview-dialog");
+}
+async function previewFile(id, name) {
+  openDialog(name || "Xem tài liệu", "Xem trực tiếp trên website", '<div data-file-preview><p role="status">Đang tải tài liệu…</p></div>', null, { wide: true });
+  dialog.classList.add("file-preview-dialog");
+  const host = dialog.querySelector("[data-file-preview]");
+  try {
+    const { mountFilePreview } = await import("./features/file-preview.js");
+    if (!dialog.open || !host.isConnected) return;
+    modalCleanup = mountFilePreview(host, {
+      name: name || `hoc-lieu-${id}`,
+      load: (signal) => request(`/files/${id}/preview`, { blob: true, signal }),
+    });
+  } catch {
+    if (dialog.open && host.isConnected) host.textContent = "Chưa mở được trình xem. Vui lòng đóng rồi thử lại.";
+  }
 }
 function openDialog(
   title,
@@ -1325,12 +1343,13 @@ function uploadForm(id, type) {
         throw new Error(`File vượt quá ${image ? 5 : 10} MB.`);
       if (!extensions.includes(file.name.split(".").pop().toLowerCase()))
         throw new Error("Định dạng file không được hỗ trợ.");
-      await saved(
+      const uploaded = await saved(
         image ? `/files/courses/${id}/image` : `/files/lessons/${id}/document`,
         "POST",
         data,
         "Đã tải file lên thành công.",
       );
+      await previewFile(uploaded.id, uploaded.originalName);
     },
   );
 }
@@ -1561,6 +1580,7 @@ async function handleAction(target) {
         ? "Đã bỏ đánh dấu hoàn thành."
         : "Thêm một bước tiến! Đã hoàn thành bài học.",
     );
+  if (action === "preview-file") return previewFile(id, target.dataset.name);
   if (action === "download-file") {
     const blob = await request(`/files/${id}/download`, { blob: true }),
       url = URL.createObjectURL(blob),
@@ -1647,6 +1667,10 @@ document.addEventListener("change", (event) => {
   )
     updateFilters(event.target.form);
 });
+dialog.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeDialog();
+});
 dialog.addEventListener("click", (event) => {
   if (event.target === dialog) {
     const rect = dialog.getBoundingClientRect();
@@ -1686,6 +1710,7 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") setMenu(false);
 });
 window.addEventListener("hashchange", () => {
+  if (modalCleanup || dialog.classList.contains("file-preview-dialog")) closeDialog();
   state.ready = false;
   void render();
   window.scrollTo(0, 0);

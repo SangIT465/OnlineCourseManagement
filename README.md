@@ -52,7 +52,7 @@ OnlineCourseManagement/
 ## Yêu cầu
 
 - .NET SDK 10.
-- Node.js 22.12 trở lên (máy hiện tại dùng Node.js 24).
+- Node.js 22.13 trở lên (máy hiện tại dùng Node.js 24).
 - SQL Server và database `OnlineCourseDB` đã cấu hình.
 - `dotnet-ef` 10.x khi cần cập nhật database.
 
@@ -152,6 +152,8 @@ Hệ thống có bốn vai trò: **Admin**, **Staff (nhân viên)**, **Instructo
 | Admin | Quản lý danh mục/khóa học/người dùng, phân quyền, phân công giảng viên/nhân viên và theo dõi ghi danh. |
 
 User có thể mua khóa học qua payOS, quét QR, xem lịch sử đơn và in bill/lưu PDF. Backend xác minh thanh toán trước khi cấp quyền học cho khóa có phí. Khóa miễn phí được mở ngay và có bill 0 đồng. Xem [cấu hình payOS, migration và kiểm thử](docs/PAYOS-PURCHASES.md). Phân quyền cuối cùng luôn do backend kiểm tra.
+
+Ảnh bìa (JPG/PNG/WebP) và tài liệu PDF có thể **xem trực tiếp trên website** bằng nút **Xem** bên cạnh từng tệp. Sau khi upload thành công, trình xem tự mở. PDF hỗ trợ chuyển trang, phóng to/thu nhỏ và co giãn trên mobile; thư viện PDF.js chỉ tải khi mở PDF. Nút **Tải xuống** vẫn có sẵn. API `GET /api/files/{id}/preview` dùng cùng kiểm tra quyền với download: người quản lý khóa học hoặc User đã ghi danh mới được đọc tệp; dữ liệu tệp không được lưu vào bộ nhớ đệm dùng chung. Tệp được bảo vệ bằng mật khẩu hoặc PDF hỏng có thông báo và tùy chọn tải xuống. Không cần migration mới cho chức năng xem tệp.
 
 Sau khi chạy API và cập nhật database, có thể kiểm tra phân quyền thực tế bằng `npm.cmd run test:authorization`. Lệnh tạo và dọn các bản ghi QA tạm, không thay đổi tài khoản người dùng hiện có.
 
