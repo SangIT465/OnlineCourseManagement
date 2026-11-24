@@ -5,7 +5,7 @@ using OnlineCourseManagement.Models;
 
 namespace OnlineCourseManagement.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _db;
 
@@ -14,17 +14,12 @@ namespace OnlineCourseManagement.Repositories
             _db = db;
         }
 
-        public async Task<User?> GetByIdAsync(int id)
+        public Task<User?> GetByIdAsync(int id, CancellationToken token)
         {
-            return await _db.Users.FindAsync(id);
+            return _db.Users.AsNoTracking().SingleOrDefaultAsync(user => user.Id == id, token);
         }
 
-        public async Task<List<User>> GetAllAsync()
-        {
-            return await _db.Users.AsNoTracking().ToListAsync();
-        }
-
-        public async Task<PagedResult<User>> GetAllAsync(UserQueryParameters queryParams)
+        public async Task<PagedResult<User>> GetAllAsync(UserQueryParameters queryParams, CancellationToken token)
         {
             var query = _db.Users.AsNoTracking().AsQueryable();
 
@@ -62,7 +57,7 @@ namespace OnlineCourseManagement.Repositories
             };
 
             // 4. COUNT (Tổng số dòng thỏa điều kiện search/filter)
-            var totalCount = await query.CountAsync();
+            var totalCount = await query.CountAsync(token);
 
             // 5. PAGINATION (Chỉ lấy đúng PageSize dòng từ DB)
             var items = await sorted
@@ -70,31 +65,9 @@ namespace OnlineCourseManagement.Repositories
                 .Skip(queryParams.Skip)
                 .Take(queryParams.PageSize)
                 .Select(u => new User { Id = u.Id, FullName = u.FullName, Email = u.Email, Role = u.Role, CreatedAt = u.CreatedAt })
-                .ToListAsync();
+                .ToListAsync(token);
 
             return new PagedResult<User>(items, totalCount, queryParams.PageNumber, queryParams.PageSize);
-        }
-
-        public async Task AddAsync(User entity)
-        {
-            await _db.Users.AddAsync(entity);
-        }
-
-        public async Task UpdateAsync(User entity)
-        {
-            _db.Users.Update(entity);
-            await Task.CompletedTask;
-        }
-
-        public async Task DeleteAsync(User entity)
-        {
-            _db.Users.Remove(entity);
-            await Task.CompletedTask;
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _db.SaveChangesAsync();
         }
     }
 }

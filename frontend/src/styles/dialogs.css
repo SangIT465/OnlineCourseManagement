@@ -1,0 +1,341 @@
+.profile-card {
+  max-width: 720px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 25px;
+}
+.profile-hero .avatar {
+  width: 70px;
+  height: 70px;
+  font-size: 1.3rem;
+}
+.profile-hero h2 {
+  font-size: 1.4rem;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+.profile-grid dt {
+  font-size: 0.77rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.profile-grid dd {
+  margin: 0;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.help-list {
+  display: grid;
+  gap: 17px;
+  padding-left: 22px;
+  font-size: 0.87rem;
+  line-height: 1.7;
+  color: #627467;
+}
+.help-list strong {
+  color: var(--ink);
+}
+/* Forms and accessible dialogs */
+dialog {
+  width: min(540px, calc(100% - 32px));
+  border: 1px solid #ffffff80;
+  border-radius: 22px;
+  padding: 0;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 32px 100px #102f2a40, 0 8px 24px #102f2a18;
+  max-height: calc(100dvh - 40px);
+}
+dialog::backdrop {
+  background: #102a2480;
+  backdrop-filter: blur(7px);
+}
+dialog.wide {
+  width: min(680px, calc(100% - 32px));
+}
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 28px 0;
+}
+.dialog-header h2 {
+  font-size: 1.35rem;
+  line-height: 1.4;
+  margin-bottom: 5px;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+.dialog-header p {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 0;
+  line-height: 1.8;
+}
+.dialog-body {
+  padding: 24px 28px 28px;
+}
+.dialog-brand {
+  color: #658954;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.dialog-brand svg {
+  width: 19px;
+  height: 19px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 17px;
+}
+.form-grid .form-field {
+  margin-bottom: 0;
+}
+.form-grid .full {
+  grid-column: 1/-1;
+}
+.form-field label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #3c5b4c;
+}
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  border: 1px solid #d9e5dd;
+  border-radius: 11px;
+  padding: 11px 12px;
+  background: #fbfdfb;
+  color: var(--ink);
+  font-size: 0.86rem;
+  min-height: 46px;
+  transition: background 180ms, border-color 180ms, box-shadow 180ms;
+}
+.form-field textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+.form-field select {
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23527060' stroke-width='1.5'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.form-field small {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.form-field input[type="file"] {
+  font-size: 0.77rem;
+  padding: 12px;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #84968a;
+}
+.password-wrap {
+  position: relative;
+}
+.password-wrap input {
+  padding-right: 46px;
+}
+.password-wrap button {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+.form-error {
+  background: #fff1f1;
+  color: #a73241;
+  border: 1px solid #f4d4d8;
+  padding: 11px 13px;
+  border-radius: 11px;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  margin-bottom: 17px;
+  white-space: pre-line;
+}
+.form-info {
+  background: #edf6e8;
+  color: #4b6d3d;
+  padding: 12px 14px;
+  border-radius: 11px;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  margin-bottom: 18px;
+  border: 1px solid #e1ecd8;
+}
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.form-footer .btn {
+  min-width: 100px;
+}
+.auth-submit {
+  width: 100%;
+  margin-top: 3px;
+}
+.auth-switch {
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--muted);
+  margin: 20px 0 0;
+}
+.auth-switch button {
+  background: none;
+  color: #3f6b49;
+  font-weight: 650;
+  padding: 3px;
+}
+.auth-role-note {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #87948a;
+  border-top: 1px solid var(--line);
+  margin-top: 23px;
+  padding-top: 17px;
+}
+.auth-role-note svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #dfe9dc;
+  border-top-color: #4a754a;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+.initial-loading {
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.loading-state {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.toast-region {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  display: grid;
+  gap: 9px;
+  max-width: calc(100vw - 40px);
+}
+.toast {
+  background: #173f30;
+  color: #f1f6ec;
+  padding: 15px 18px;
+  border-radius: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  box-shadow: 0 12px 40px #102f2a26;
+  animation: toast-in 0.2s ease-out;
+  max-width: 420px;
+  border: 1px solid #ffffff12;
+}
+.toast svg {
+  margin-top: 2px;
+  color: #c5ed91;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.toast.error {
+  background: #813b35;
+}
+.toast.error svg {
+  color: #f4c1b7;
+}
+.toast button {
+  margin-left: 12px;
+  background: none;
+  color: inherit;
+  font-size: 1.1rem;
+  padding: 0 2px;
+}
+.notice {
+  padding: 16px 20px;
+  background: #fcf6e8;
+  color: #9b7b3a;
+  border: 1px solid #eddfbd;
+  border-radius: 11px;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  margin-bottom: 22px;
+}
+.noscript-message {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  padding: 30px;
+}
+.error-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 50px 25px;
+  text-align: center;
+}
+.error-panel > svg {
+  width: 40px;
+  height: 40px;
+  color: #9e7961;
+  margin-bottom: 18px;
+}
+.error-panel p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}

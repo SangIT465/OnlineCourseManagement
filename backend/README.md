@@ -24,19 +24,21 @@ Swagger: http://localhost:5106/swagger. Endpoint `/` trả thông tin API, `/hea
 
 - `Controllers/`: route, xác thực/phân quyền, HTTP request và response.
 - `DTOs/`: định dạng và validation dữ liệu trao đổi.
-- `Services/`: nghiệp vụ người dùng, JWT và xử lý mật khẩu.
+- `Services/`: nghiệp vụ đăng nhập, tài khoản, catalog, ghi danh, tiến độ, thanh toán và lưu trữ file.
 - `Middleware/`: exception handler và logging/correlation cho request.
 - `Options/`: cấu hình JWT, upload và CORS có validation khi khởi động.
 - `Security/`: vai trò, permission claims, named policies và quyền theo khóa.
 - `OpenApi/`: metadata tài liệu và response/security cho Swagger.
 - `Health/`: kiểm tra kết nối database qua `/health/ready`.
-- `Repositories/`: truy vấn người dùng, lọc, sắp xếp và phân trang.
+- `Repositories/`: `IUserRepository`/`UserRepository` đọc tài khoản, lọc, sắp xếp và phân trang.
 - `Data/`: EF Core DbContext, tạo Admin ban đầu và lệnh nạp catalog mẫu trong Development.
 - `Models/`: các thực thể Course, Lesson, User, Enrollment, LessonProgress và UploadedFile.
 - `Migrations/`: các migration hiện có; giữ nguyên namespace và lịch sử database.
 - `Uploads/`: dữ liệu ảnh/PDF, tên file được giữ nguyên sau khi di chuyển.
 
-Đăng nhập, danh mục, khóa học và bài học đi qua service riêng; lưu file qua IFileStorage. Các controller người dùng/ghi danh/tiến độ còn một số thao tác DbContext trực tiếp. Backend chưa tách thành nhiều assembly Domain/Application/Infrastructure.
+Đăng nhập, tài khoản, danh mục, khóa học, bài học, ghi danh và tiến độ đi qua service riêng. Controller giữ route, policy và định dạng HTTP; service giữ quy tắc nghiệp vụ, truy vấn và transaction. `UserService` là nơi duy nhất thực hiện đổi vai trò, bảo vệ Admin cuối cùng và thu hồi phiên khi đổi mật khẩu/quyền.
+
+`FilesController` điều phối quyền truy cập và HTTP streaming; `IFileStorage`/`IOfficePreviewService` xử lý lưu trữ và chuyển đổi tài liệu. Backend giữ một project ASP.NET với các thư mục trách nhiệm, chưa cần chia thêm assembly Domain/Application/Infrastructure.
 
 Project `OnlineCourseManagement.Api.Tests/` nằm cạnh API trong solution, chạy bằng `npm.cmd run test:backend`. Các suite `backend/tests/*.integration.mjs` gọi API/SQL thật và cần môi trường Development đã cấu hình; xem checklist để chạy tuần tự.
 

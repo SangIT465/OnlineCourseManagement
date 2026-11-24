@@ -1,9 +1,6 @@
 using System.Security.Claims;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OnlineCourseManagement.Controllers;
 using OnlineCourseManagement.Data;
 using OnlineCourseManagement.DTOs;
 using OnlineCourseManagement.Exceptions;
@@ -36,8 +33,9 @@ public sealed class PurchaseSqlTests
         await using var db=fixture.Db();
         var gateway=new FakeGateway();var service=Service(db,gateway);var actor=Actor(fixture.StudentId);
         var input=new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Học viên thử nghiệm",BuyerAddress="Địa chỉ ban đầu"};
-        var controller=new EnrollmentsController(db,null!) {ControllerContext=new ControllerContext {HttpContext=new DefaultHttpContext {User=actor}}};
-        Assert.IsType<ConflictObjectResult>(await controller.Enroll(new EnrollCourseDto {CourseId=fixture.CourseId}));
+        var enrollments=new EnrollmentService(db,null!,TimeProvider.System);
+        var locked=await Assert.ThrowsAsync<BusinessException>(()=>enrollments.EnrollAsync(new EnrollCourseDto {CourseId=fixture.CourseId},actor,default));
+        Assert.Equal(BusinessError.Conflict,locked.Error);
         Assert.Empty(await db.Enrollments.ToListAsync());
         var order=await service.CreateAsync(input,actor,default);
         Assert.Equal(199001,order.Amount);Assert.Equal(PurchaseStatus.Pending,order.Status);

@@ -1,0 +1,139 @@
+:root {
+  --ink: #18372e;
+  --muted: #63766e;
+  --primary: #14674f;
+  --lime: #d1f88d;
+  --paper: #f3f6f7;
+  --line: #e0e9e5;
+  --white: #fff;
+  --danger: #bd3d49;
+  --radius: 22px;
+  --sidebar: 244px;
+  color: var(--ink);
+  background: var(--paper);
+  font-size: 16px;
+  font-synthesis: none;
+  --shadow-sm: 0 3px 16px #18372e06, 0 1px 3px #18372e04;
+  --shadow-hover: 0 16px 36px #18372e10, 0 3px 8px #18372e06;
+  font-family: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  line-height: 1.6;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  color: inherit;
+}
+button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+h1 {
+  font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+  line-height: 1.25;
+  letter-spacing: -0.055em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.18rem;
+  letter-spacing: -0.035em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+h3 {
+  font-size: 1.03rem;
+  line-height: 1.5;
+}
+p {
+  line-height: 1.65;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #69a986;
+  outline-offset: 4px;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #6c9e80;
+  outline-offset: 1px;
+}
+button {
+  border: 0;
+}
+button svg {
+  pointer-events: none;
+}
+[hidden] {
+  display: none !important;
+}
+.text-muted {
+  color: var(--muted);
+}
+.text-small {
+  font-size: 0.875rem;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 20px;
+  padding: 14px;
+  background: var(--lime);
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 10px;
+}

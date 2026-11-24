@@ -1,16 +1,15 @@
+using System.Security.Claims;
 using OnlineCourseManagement.DTOs;
 using OnlineCourseManagement.DTOs.Common;
 
-namespace OnlineCourseManagement.Services
+namespace OnlineCourseManagement.Services;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<UserResponseDto?> GetByIdAsync(int id);
-        Task<List<UserResponseDto>> GetAllAsync();
-        Task<PagedResult<UserResponseDto>> GetAllAsync(UserQueryParameters queryParams);
-        Task<UserResponseDto> CreateAsync(CreateUserDto dto);
-        Task<UserResponseDto> UpdateAsync(int id, UpdateUserDto dto);
-        Task DeleteAsync(int id);
-        Task ResetPasswordAsync(int id, string newPassword);
-    }
+    Task<PagedResult<UserResponseDto>> GetAllAsync(UserQueryParameters input, ClaimsPrincipal actor, CancellationToken token);
+    Task<UserResponseDto> GetByIdAsync(int id, ClaimsPrincipal actor, CancellationToken token);
+    Task<UserResponseDto> CreateAsync(CreateUserDto input, CancellationToken token);
+    Task<UserResponseDto> UpdateRoleAsync(int id, UpdateUserRoleDto input, ClaimsPrincipal actor, CancellationToken token);
+    Task ResetPasswordAsync(int id, string password, ClaimsPrincipal actor, CancellationToken token);
+    Task DeleteAsync(int id, ClaimsPrincipal actor, CancellationToken token);
 }

@@ -1,248 +1,48 @@
-using OnlineCourseManagement.Security;
-using OnlineCourseManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OnlineCourseManagement.Data;
 using OnlineCourseManagement.DTOs;
-using OnlineCourseManagement.Models;
-using System.Security.Claims;
-using System.Data;
+using OnlineCourseManagement.Security;
+using OnlineCourseManagement.Services;
 
-namespace OnlineCourseManagement.Controllers
+namespace OnlineCourseManagement.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public sealed class EnrollmentsController(IEnrollmentService enrollments) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    public class EnrollmentsController : ControllerBase
+    [Authorize(Policy = AppPolicies.Learning)]
+    [HttpPost]
+    public async Task<IActionResult> Enroll([FromBody] EnrollCourseDto input, CancellationToken token)
     {
-        private readonly AppDbContext _context;
-        private readonly ICourseAccessService _courseAccess;
-
-        public EnrollmentsController(AppDbContext context, ICourseAccessService courseAccess)
+        var enrollment = await enrollments.EnrollAsync(input, User, token);
+        return StatusCode(StatusCodes.Status201Created, new
         {
-            _context = context;
-            _courseAccess = courseAccess;
-        }
+            message = "Đăng ký khóa học thành công",
+            enrollment.Id, enrollment.StudentId, enrollment.CourseId, enrollment.EnrolledAt
+        });
+    }
 
-        private int? CurrentUserId()
-        {
-            var value = User.FindFirstValue(
-                ClaimTypes.NameIdentifier);
+    [Authorize(Policy = AppPolicies.Learning)]
+    [HttpGet("my")]
+    public async Task<IActionResult> MyCourses(CancellationToken token) =>
+        Ok(await enrollments.GetMineAsync(User, token));
 
-            return int.TryParse(value, out int id)
-                ? id : null;
-        }
+    [Authorize(Policy = AppPolicies.CatalogManagement)]
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken token) =>
+        Ok(await enrollments.GetAllAsync(token));
 
-        // POST: api/enrollments
-        // Student đăng ký khóa học
-        [Authorize(Policy = AppPolicies.Learning)]
-        [HttpPost]
-        public async Task<IActionResult> Enroll(
-            [FromBody] EnrollCourseDto dto)
-        {
-            var studentId = CurrentUserId();
+    [Authorize(Policy = AppPolicies.CourseEditing)]
+    [HttpGet("course/{courseId:int}")]
+    public async Task<IActionResult> GetStudents(int courseId, CancellationToken token) =>
+        Ok(await enrollments.GetStudentsAsync(courseId, User, token));
 
-            if (studentId == null)
-                return Unauthorized();
-
-            await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
-            await _context.FindForUpdateAsync(studentId.Value);
-
-            var studentExists = await _context.Users
-                .AnyAsync(u =>
-                    u.Id == studentId.Value &&
-                    u.Role == AppRoles.User);
-
-            if (!studentExists)
-                return Forbid();
-
-            var courseExists = await _context.Courses
-                .AnyAsync(c => c.Id == dto.CourseId);
-
-            if (!courseExists)
-                return NotFound(new
-                {
-                    message = "Khóa học không tồn tại"
-                });
-
-            var alreadyEnrolled =
-                await _context.Enrollments
-                    .AnyAsync(e =>
-                        e.StudentId == studentId.Value &&
-                        e.CourseId == dto.CourseId);
-
-            if (alreadyEnrolled)
-                return Conflict(new
-                {
-                    message = "Bạn đã đăng ký khóa học này"
-                });
-
-            var price = await _context.Courses.Where(c => c.Id == dto.CourseId).Select(c => c.Price).SingleAsync();
-            if (price > 0 && !await _context.CoursePurchases.AnyAsync(p => p.StudentId == studentId.Value
-                    && p.CourseId == dto.CourseId && p.Status == PurchaseStatus.Paid))
-                return Conflict(new { message = "Khóa học có học phí cần được thanh toán qua payOS trước khi ghi danh." });
-
-            var enrollment = new Enrollment
-            {
-                StudentId = studentId.Value,
-                CourseId = dto.CourseId,
-                EnrolledAt = DateTime.UtcNow
-            };
-
-            _context.Enrollments.Add(enrollment);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (DbUpdateException)
-            {
-                return Conflict(new
-                {
-                    message =
-                        "Không thể đăng ký. Hãy kiểm tra trạng thái khóa học và thử lại."
-                });
-            }
-
-            return StatusCode(201, new
-            {
-                message = "Đăng ký khóa học thành công",
-                enrollment.Id,
-                enrollment.StudentId,
-                enrollment.CourseId,
-                enrollment.EnrolledAt
-            });
-        }
-
-        // GET: api/enrollments/my
-        // Student xem các khóa học đã đăng ký
-        [Authorize(Policy = AppPolicies.Learning)]
-        [HttpGet("my")]
-        public async Task<IActionResult> MyCourses()
-        {
-            var studentId = CurrentUserId();
-
-            if (studentId == null)
-                return Unauthorized();
-
-            var enrollments = await _context.Enrollments
-                .AsNoTracking()
-                .Where(e => e.StudentId == studentId.Value)
-                .OrderByDescending(e => e.EnrolledAt)
-                .Select(e => new
-                {
-                    EnrollmentId = e.Id,
-                    e.CourseId,
-                    CourseName = e.Course.Title,
-                    e.Course.Description,
-                    e.Course.Price,
-                    e.EnrolledAt
-                })
-                .ToListAsync();
-
-            return Ok(enrollments);
-        }
-
-        // GET: api/enrollments
-        // Admin xem tất cả lượt đăng ký
-        [Authorize(Policy = AppPolicies.CatalogManagement)]
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var enrollments = await _context.Enrollments
-                .AsNoTracking()
-                .OrderByDescending(e => e.EnrolledAt)
-                .Select(e => new
-                {
-                    e.Id,
-                    e.StudentId,
-                    StudentName = e.Student.FullName,
-                    StudentEmail = e.Student.Email,
-                    e.CourseId,
-                    CourseName = e.Course.Title,
-                    e.EnrolledAt
-                })
-                .ToListAsync();
-
-            return Ok(enrollments);
-        }
-
-        // GET: api/enrollments/course/1
-        // Admin hoặc giảng viên phụ trách xem học viên
-        [Authorize(Policy = AppPolicies.CourseEditing)]
-        [HttpGet("course/{courseId:int}")]
-        public async Task<IActionResult> GetStudents(
-            int courseId)
-        {
-            var course = await _context.Courses
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == courseId);
-
-            if (course == null)
-                return NotFound(new
-                {
-                    message = "Khóa học không tồn tại"
-                });
-
-            if (!await _courseAccess.CanManageAsync(User, course))
-            {
-                return Forbid();
-            }
-
-            var students = await _context.Enrollments
-                .AsNoTracking()
-                .Where(e => e.CourseId == courseId)
-                .OrderBy(e => e.Student.FullName)
-                .Select(e => new
-                {
-                    EnrollmentId = e.Id,
-                    e.StudentId,
-                    e.Student.FullName,
-                    e.Student.Email,
-                    e.EnrolledAt
-                })
-                .ToListAsync();
-
-            return Ok(new
-            {
-                CourseId = course.Id,
-                CourseName = course.Title,
-                TotalStudents = students.Count,
-                Students = students
-            });
-        }
-
-        // DELETE: api/enrollments/{courseId}
-        // Student hủy đăng ký khóa học
-        [Authorize(Policy = AppPolicies.Learning)]
-        [HttpDelete("{courseId:int}")]
-        public async Task<IActionResult> Cancel(int courseId)
-        {
-            var studentId = CurrentUserId();
-
-            if (studentId == null)
-                return Unauthorized();
-
-            var enrollment = await _context.Enrollments
-                .FirstOrDefaultAsync(e =>
-                    e.StudentId == studentId.Value &&
-                    e.CourseId == courseId);
-
-            if (enrollment == null)
-                return NotFound(new
-                {
-                    message = "Bạn chưa đăng ký khóa học này"
-                });
-
-            _context.Enrollments.Remove(enrollment);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                message = "Hủy đăng ký thành công"
-            });
-        }
+    [Authorize(Policy = AppPolicies.Learning)]
+    [HttpDelete("{courseId:int}")]
+    public async Task<IActionResult> Cancel(int courseId, CancellationToken token)
+    {
+        await enrollments.CancelAsync(courseId, User, token);
+        return Ok(new { message = "Hủy đăng ký thành công" });
     }
 }

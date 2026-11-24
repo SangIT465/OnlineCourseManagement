@@ -19,15 +19,28 @@ Từ thư mục gốc có thể dùng `npm.cmd run dev:frontend`, hoặc `npm.cm
 
 - `index.html`: khung trang, sidebar, topbar, vùng nội dung và dialog.
 - `src/main.js`: điểm khởi tạo và import stylesheet.
-- `src/app.js`: trạng thái ứng dụng, các trang, định tuyến hash, biểu mẫu và xử lý thao tác.
+- `src/app.js`: khởi tạo ứng dụng, điều phối render và đăng ký sự kiện giao diện.
+- `src/router.js`: đọc định tuyến hash, chuyển trang và cập nhật bộ lọc.
+- `src/state/store.js`: dữ liệu dùng chung, tải dữ liệu API và các hàm tra cứu theo tài khoản/khóa học.
+- `src/pages/`: màn hình tổng quan, khóa học, bài học, tài khoản, ghi danh và đơn mua.
+- `src/forms/`: biểu mẫu catalog, tài khoản và upload. Callback `saved` giúp dùng chung luồng lưu và tải lại dữ liệu.
+- `src/actions.js`: xử lý các nút có `data-action` và gọi biểu mẫu hoặc API tương ứng.
 - `src/api/client.js`: HTTP client, JWT session, xử lý lỗi, tải file và mã hóa nội dung.
 - `src/config.js`: cấu hình API công khai theo môi trường.
 - `src/auth/permissions.js`: nhãn, quyền và điều hướng cho bốn vai trò Admin/Staff/Instructor/User; API vẫn là nơi quyết định quyền cuối cùng.
+- `src/auth/session.js`: đăng nhập, đăng ký, khôi phục phiên, đăng xuất và hẹn giờ hết hạn JWT.
+- `src/components/ui.js`: các phần HTML dùng chung, thông báo, phân trang và thẻ khóa học.
+- `src/components/shell.js`: sidebar, breadcrumb và điều hướng theo vai trò.
+- `src/components/dialog.js`: vòng đời hộp thoại, submit biểu mẫu, xác nhận và xem/tải học liệu.
 - `src/components/icons.js`: SVG icons dùng chung.
-- `src/styles/main.css`: giao diện desktop/tablet/điện thoại.
+- `src/utils/format.js`: định dạng số, tiền, ngày và tên viết tắt.
+- `src/features/`: các chức năng riêng như không gian theo vai trò, hóa đơn và trình xem học liệu.
+- `src/styles/main.css`: điểm import CSS. Các nhóm base, layout, buttons, dashboard, collections, learning, dialogs, enhancements và responsive giữ thứ tự áp dụng của giao diện.
 - `public/`: file tĩnh được đưa vào kết quả build.
 - `public/fonts/`: Be Vietnam Pro được phục vụ từ chính frontend, hỗ trợ tiếng Việt; giấy phép SIL Open Font License nằm trong `OFL.txt`.
-- `tests/`: kiểm tra hợp đồng HTTP client và cấu hình.
+- `tests/`: kiểm tra HTTP client, quyền, định tuyến, màn hình, trạng thái và các chức năng riêng; các file `*.integration.mjs` dùng cho kiểm thử browser.
+
+Khi thêm màn hình, đặt phần hiển thị trong `pages/`, biểu mẫu trong `forms/` và nối thao tác trong `actions.js`. Giữ `app.js` tập trung vào điều phối; các module chức năng không import ngược `app.js`.
 
 ## Môi trường API
 

@@ -27,7 +27,7 @@ Middleware ghi nhận request và `X-Request-ID`; exception handler chuẩn hóa
 2. Backend xác minh password hash, tạo JWT chứa định danh và vai trò.
 3. Frontend giữ JWT trong sessionStorage, gửi qua `Authorization: Bearer`.
 4. Backend xác minh chữ ký, thời hạn, vai trò và quyền sở hữu khóa học.
-5. Controller sử dụng service/repository hoặc DbContext theo nghiệp vụ hiện có để đọc/ghi SQL Server.
+5. Controller chuyển yêu cầu đến service; service áp dụng quy tắc nghiệp vụ và transaction trước khi đọc/ghi SQL Server.
 6. Frontend cập nhật giao diện theo phản hồi; các lỗi được hiển thị trong biểu mẫu hoặc thông báo.
 
 Admin và Staff quản lý catalog toàn hệ thống. Instructor được tạo khóa và chỉ quản lý các khóa có `InstructorId` trùng định danh tài khoản; `StaffId` lưu nhân viên vận hành độc lập. User học qua quan hệ ghi danh. Quyền theo khóa áp dụng cả bài học, file và báo cáo tiến độ. Vai trò và SecurityStamp trong JWT được đối chiếu với database trên từng request xác thực.
@@ -46,7 +46,11 @@ Admin và Staff quản lý catalog toàn hệ thống. Instructor được tạo
 
 Backend vẫn là một project ASP.NET với các thư mục chức năng; chưa chuyển sang kiến trúc nhiều project Domain/Application/Infrastructure. Frontend vẫn giữ JavaScript ES modules, chưa chuyển framework. Lần tái cấu trúc này tập trung làm rõ ranh giới FE/BE và khả năng chạy, build, triển khai riêng.
 
-Đăng nhập, danh mục, khóa học và bài học có service riêng; IFileStorage xử lý file qua cấu hình. Project xUnit `backend/OnlineCourseManagement.Api.Tests/` kiểm tra các thành phần backend, còn `backend/tests/` chứa kiểm thử HTTP/SQL. Endpoint `/paged` được bổ sung riêng để giữ tương thích các response mảng mà frontend đang dùng. Xem [checklist chuyên đề](backend-checklist.md) để đối chiếu source và các lệnh kiểm thử.
+Frontend dùng `app.js` để điều phối render và sự kiện; `router.js` quản lý URL hash; `state/store.js` tải dữ liệu và giữ trạng thái chung. Các màn hình nằm trong `pages/`, biểu mẫu trong `forms/`, thành phần dùng chung trong `components/`. Các factory biểu mẫu nhận callback lưu/làm mới từ `app.js`, giúp module không phải import ngược ứng dụng. `styles/main.css` nhập các nhóm CSS theo thứ tự cố định để giữ nguyên cascade và giao diện.
+
+Đăng nhập, tài khoản, danh mục, khóa học, bài học, ghi danh và tiến độ có service riêng. `UsersController`, `EnrollmentsController` và `LessonProgressController` chỉ điều phối HTTP; quyền theo tài khoản/khóa và transaction nằm trong service. `IUserRepository` phục vụ truy vấn thư mục tài khoản; các service còn lại dùng EF Core trực tiếp. `FilesController` điều phối quyền và HTTP streaming, còn `IFileStorage`/`IOfficePreviewService` xử lý lưu trữ/chuyển đổi tài liệu.
+
+Project xUnit `backend/OnlineCourseManagement.Api.Tests/` kiểm tra các thành phần backend, còn `backend/tests/` chứa kiểm thử HTTP/SQL. Endpoint `/paged` giữ tương thích các response mảng mà frontend đang dùng. Xem [checklist chuyên đề](backend-checklist.md) để đối chiếu source và các lệnh kiểm thử.
 
 ## Bảo toàn sau di chuyển
 

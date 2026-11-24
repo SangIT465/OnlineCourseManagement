@@ -14,10 +14,17 @@ OnlineCourseManagement/
 │   ├── public/                    # Tài nguyên tĩnh
 │   ├── src/
 │   │   ├── api/client.js          # HTTP client, JWT, lỗi API
-│   │   ├── auth/permissions.js    # Quyền và điều hướng theo vai trò
-│   │   ├── components/icons.js    # Thành phần SVG dùng chung
-│   │   ├── styles/main.css        # Giao diện responsive
-│   │   ├── app.js                 # Màn hình, biểu mẫu, định tuyến
+│   │   ├── auth/                  # Quyền và vòng đời phiên đăng nhập
+│   │   ├── components/            # UI dùng chung, shell, dialog và icons
+│   │   ├── pages/                 # Màn hình theo chức năng
+│   │   ├── forms/                 # Biểu mẫu catalog, tài khoản và upload
+│   │   ├── state/store.js         # Dữ liệu dùng chung và tải API
+│   │   ├── features/              # Workspace, hóa đơn, xem học liệu
+│   │   ├── styles/                # CSS chia nhóm, main.css là điểm import
+│   │   ├── utils/format.js        # Định dạng số, tiền và ngày
+│   │   ├── actions.js             # Xử lý thao tác giao diện
+│   │   ├── router.js              # Điều hướng hash và bộ lọc
+│   │   ├── app.js                 # Khởi tạo, render và sự kiện
 │   │   ├── config.js              # Địa chỉ API theo môi trường
 │   │   └── main.js                # Điểm khởi tạo frontend
 │   ├── tests/                     # Kiểm thử frontend
@@ -28,7 +35,7 @@ OnlineCourseManagement/
 │   ├── OnlineCourseManagement.Api/
 │   │   ├── Controllers/           # API endpoints và phân quyền
 │   │   ├── DTOs/                  # Hợp đồng request/response
-│   │   ├── Services/              # Nghiệp vụ, JWT, mật khẩu
+│   │   ├── Services/              # Nghiệp vụ, ghi danh, tiến độ, JWT
 │   │   ├── Security/              # Bốn vai trò và kiểm tra quyền theo khóa
 │   │   ├── Repositories/          # Truy cập dữ liệu người dùng
 │   │   ├── Models/                # Thực thể dữ liệu
