@@ -9,12 +9,17 @@ export function payOSUrl(value) {
   return url && new URL(url).protocol === "https:" && new URL(url).hostname.endsWith(".payos.vn") ? url : null;
 }
 const row = (label, value) => `<div><dt>${esc(label)}</dt><dd>${esc(value || "Chưa cung cấp")}</dd></div>`;
+const cancelButton = p => p.status === "PendingPayment"
+  ? `<button class="btn btn-danger btn-sm" data-action="purchase-cancel" data-id="${Number(p.id)}">Hủy thanh toán</button>` : "";
 
 export function purchaseDetail(purchase) {
   const p = purchase, paid = p.status === "Paid", pending = p.status === "PendingPayment", checkout = payOSUrl(p.checkoutUrl);
+  const demoConfirmed = String(p.paymentReference || "").startsWith("DEMO-");
+  const demoPayment = pending && p.canConfirmDemoPayment
+    ? `<div class="form-info"><p>Bản demo: bấm xác nhận để nhận khóa học ngay.</p><button class="btn btn-primary full-width" data-action="purchase-demo-confirm" data-id="${Number(p.id)}">Đã thanh toán (demo)</button></div>` : "";
   const qr = pending && isPaymentQr(p.qrCodeDataUrl);
   const payment = paid
-    ? `<div class="purchase-success"><strong>Thanh toán đã được xác nhận</strong><p>Khóa học đã được mở cho tài khoản của bạn.</p><a class="btn btn-primary" href="#/courses/${Number(p.courseId)}">Vào học ngay</a></div>`
+    ? `<div class="purchase-success"><strong>${demoConfirmed ? "Thanh toán demo đã được xác nhận" : "Thanh toán đã được xác nhận"}</strong><p>Khóa học đã được mở cho tài khoản của bạn.</p><a class="btn btn-primary" href="#/courses/${Number(p.courseId)}">Vào học ngay</a></div>`
     : pending ? `<section class="purchase-payment"><h2>Thanh toán an toàn qua payOS</h2>${qr ? `<img class="purchase-qr" src="${esc(p.qrCodeDataUrl)}" width="280" height="280" alt="Mã QR payOS cho đơn ${esc(p.orderCode)}"/><p>Quét mã bằng ứng dụng ngân hàng, hoặc mở trang thanh toán payOS.</p>` : `<div class="purchase-qr-empty">${p.paymentConfigured ? "Tạo liên kết để hiển thị mã QR thanh toán." : "Kênh payOS chưa được cấu hình. Đơn của bạn đã được lưu; vui lòng liên hệ quản trị viên."}</div>`}
       ${p.bankAccountNumber ? `<dl class="purchase-facts">${row("Tài khoản nhận", p.bankAccountNumber)}${row("Chủ tài khoản", p.bankAccountName)}${row("Mã ngân hàng", p.bankName)}</dl>` : ""}
       <p class="purchase-reference">Nội dung chuyển khoản: <strong>CF${esc(p.orderCode)}</strong></p>
@@ -26,13 +31,13 @@ export function purchaseDetail(purchase) {
     <div class="purchase-buyer"><h3>Thông tin người mua</h3><dl class="purchase-facts">${row("Họ và tên",p.buyerName)}${row("Email",p.buyerEmail)}${row("Điện thoại",p.buyerPhone)}${row("Địa chỉ",p.buyerAddress)}</dl></div>
     <div class="table-wrap"><table><thead><tr><th>Khóa học</th><th>SL</th><th>Thành tiền</th></tr></thead><tbody><tr><td><strong>${esc(p.courseTitle)}</strong><small>${esc(p.categoryName)}</small></td><td>1</td><td>${esc(vnd(p.amount))}</td></tr></tbody></table></div>
     <div class="purchase-total"><span>Tổng thanh toán</span><strong>${esc(vnd(p.amount))}</strong></div>${Number(p.originalPrice) !== Number(p.amount) ? `<p class="text-small text-muted">Học phí được làm tròn đến đơn vị đồng để thanh toán VND.</p>` : ""}
-    <dl class="purchase-facts">${row("Mã đơn",p.orderCode)}${row("Phương thức",Number(p.amount)===0?"Miễn phí":"payOS")}${row("Ngày thanh toán",date(p.paidAt))}${row("Tham chiếu",p.paymentReference || "Chưa có")}</dl>
-    <div class="purchase-actions"><button class="btn btn-secondary" data-action="purchase-print" data-id="${Number(p.id)}">${paid?"In bill / Lưu PDF":"In phiếu đặt mua"}</button>${pending && checkout ? `<button class="btn btn-secondary" data-action="purchase-sync" data-id="${Number(p.id)}">Kiểm tra thanh toán</button>` : ""}</div></section><aside>${payment}</aside></div>`;
+    <dl class="purchase-facts">${row("Mã đơn",p.orderCode)}${row("Phương thức",Number(p.amount)===0?"Miễn phí":demoConfirmed?"Thanh toán demo":"payOS")}${row("Ngày thanh toán",date(p.paidAt))}${row("Tham chiếu",p.paymentReference || "Chưa có")}</dl>
+    <div class="purchase-actions"><button class="btn btn-secondary" data-action="purchase-print" data-id="${Number(p.id)}">${paid?"In bill / Lưu PDF":"In phiếu đặt mua"}</button>${pending && checkout ? `<button class="btn btn-secondary" data-action="purchase-sync" data-id="${Number(p.id)}">Kiểm tra thanh toán</button>` : ""}${cancelButton(p)}</div></section><aside>${payment}${demoPayment}</aside></div>`;
 }
 
 export function purchaseList(items, admin = false, page = 1) {
   return `<div class="page-heading"><div><h1>${admin ? "Đơn mua khóa học" : "Đơn mua & hóa đơn"}</h1><p>${admin ? "Theo dõi kết quả thanh toán payOS của học viên." : "Xem lại đơn, tiếp tục thanh toán và in bill của bạn."}</p></div></div>
-    ${items.length ? `<div class="table-wrap"><table><thead><tr><th>Mã đơn / ngày tạo</th><th>Khóa học${admin ? " / Người mua" : ""}</th><th>Số tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>${items.map(p=>`<tr><td><strong>${esc(p.invoiceNumber)}</strong><small>${esc(date(p.createdAt))}</small></td><td><strong>${esc(p.courseTitle)}</strong>${admin?`<small>${esc(p.buyerName)} · ${esc(p.buyerEmail)}</small>`:""}</td><td>${esc(vnd(p.amount))}</td><td><span class="badge ${p.status==="Paid"?"":"neutral"}">${esc(purchaseLabels[p.status]||p.status)}</span></td><td><a class="btn btn-secondary btn-sm" href="#/purchases/${Number(p.id)}">Xem bill</a></td></tr>`).join("")}</tbody></table></div>` : `<div class="empty-state"><h3>Chưa có đơn mua</h3><p>Đơn mua và hóa đơn của bạn sẽ xuất hiện tại đây.</p><a class="btn btn-primary" href="#/courses">Khám phá khóa học</a></div>`}
+    ${items.length ? `<div class="table-wrap"><table><thead><tr><th>Mã đơn / ngày tạo</th><th>Khóa học${admin ? " / Người mua" : ""}</th><th>Số tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>${items.map(p=>`<tr><td><strong>${esc(p.invoiceNumber)}</strong><small>${esc(date(p.createdAt))}</small></td><td><strong>${esc(p.courseTitle)}</strong>${admin?`<small>${esc(p.buyerName)} · ${esc(p.buyerEmail)}</small>`:""}</td><td>${esc(vnd(p.amount))}</td><td><span class="badge ${p.status==="Paid"?"":"neutral"}">${esc(purchaseLabels[p.status]||p.status)}</span></td><td><div class="purchase-row-actions"><a class="btn btn-secondary btn-sm" href="#/purchases/${Number(p.id)}">Xem bill</a>${cancelButton(p)}</div></td></tr>`).join("")}</tbody></table></div>` : `<div class="empty-state"><h3>Chưa có đơn mua</h3><p>Đơn mua và hóa đơn của bạn sẽ xuất hiện tại đây.</p><a class="btn btn-primary" href="#/courses">Khám phá khóa học</a></div>`}
     <nav class="purchase-pagination" aria-label="Phân trang đơn mua">${page>1?`<a class="btn btn-secondary" href="#/purchases?page=${page-1}">Trang trước</a>`:""}${items.length===20?`<a class="btn btn-secondary" href="#/purchases?page=${page+1}">Trang sau</a>`:""}</nav>`;
 }
 

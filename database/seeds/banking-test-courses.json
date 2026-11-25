@@ -1,0 +1,68 @@
+{
+  "category": {
+    "name": "Kiểm thử Banking",
+    "description": "Các khóa giá nhỏ để kiểm tra thanh toán, bill và quyền học qua API/SQL Server."
+  },
+  "courses": [
+    {
+      "title": "Banking Test 01 - HTML & CSS mini (10.000 VNĐ)",
+      "price": 10000,
+      "description": "Khóa thử banking 10.000 VNĐ. Thực hành tạo trang HTML và kiểm tra quyền đọc bài sau khi thanh toán.",
+      "lesson": {
+        "title": "Tạo trang giới thiệu bằng HTML và CSS",
+        "content": "Mục tiêu: tạo một trang giới thiệu cá nhân.\n1. Viết tiêu đề h1, đoạn văn và danh sách kỹ năng.\n2. Thêm CSS cho màu chữ, khoảng cách và khung nội dung.\n3. Mở trang trên điện thoại để kiểm tra bố cục.\nSau khi đọc xong, đánh dấu hoàn thành bài để kiểm tra tiến độ được lưu vào database.",
+        "durationMinutes": 10
+      }
+    },
+    {
+      "title": "Banking Test 02 - JavaScript mini (10.000 VNĐ)",
+      "price": 10000,
+      "description": "Khóa thử banking 10.000 VNĐ. Thực hành sự kiện JavaScript và kiểm tra ghi danh sau khi thanh toán.",
+      "lesson": {
+        "title": "Xử lý nút bấm với JavaScript",
+        "content": "Mục tiêu: tạo một nút đếm số lần bấm.\n1. Khởi tạo biến đếm bằng 0.\n2. Dùng addEventListener để tăng biến khi bấm nút.\n3. Cập nhật textContent của phần tử hiển thị.\nTự kiểm tra: số lần bấm phải tăng đúng một lần cho mỗi thao tác. Đánh dấu hoàn thành bài để xác nhận tiến độ được lưu.",
+        "durationMinutes": 10
+      }
+    },
+    {
+      "title": "Banking Test 03 - SQL Server mini (10.000 VNĐ)",
+      "price": 10000,
+      "description": "Khóa thử banking 10.000 VNĐ. Thực hành SELECT và kiểm tra dữ liệu khóa học, bill, ghi danh.",
+      "lesson": {
+        "title": "Đọc dữ liệu bằng SELECT và WHERE",
+        "content": "Mục tiêu: hiểu truy vấn chỉ đọc.\n1. SELECT chọn các cột cần xem.\n2. WHERE lọc các bản ghi theo điều kiện.\n3. ORDER BY sắp xếp kết quả theo ID hoặc thời gian.\nBài tập: viết truy vấn đọc tên và học phí từ bảng Courses, lọc các khóa có Price = 10000. Không thay đổi hoặc xóa dữ liệu để làm bài này.",
+        "durationMinutes": 10
+      }
+    },
+    {
+      "title": "Banking Test 04 - C# mini (5 VNĐ)",
+      "price": 5,
+      "description": "Khóa thử banking đúng 5 VNĐ. Thực hành C# cơ bản và kiểm tra quyền học khi đơn được xác nhận.",
+      "lesson": {
+        "title": "Biến, điều kiện và vòng lặp C#",
+        "content": "Mục tiêu: viết chương trình C# nhỏ.\n1. Tạo biến kiểu int và string.\n2. Dùng if để kiểm tra một số là chẵn hay lẻ.\n3. Dùng for để in các số từ 1 đến 10.\nBài tập: tính tổng các số chẵn từ 1 đến 10. Kết quả mong đợi là 30. Đánh dấu hoàn thành để lưu tiến độ học.",
+        "durationMinutes": 10
+      }
+    },
+    {
+      "title": "Banking Test 05 - REST API mini (5 VNĐ)",
+      "price": 5,
+      "description": "Khóa thử banking đúng 5 VNĐ. Thực hành đọc JSON và kiểm tra sự đồng bộ giữa frontend, API và SQL.",
+      "lesson": {
+        "title": "Đọc phản hồi API và mã trạng thái HTTP",
+        "content": "Mục tiêu: hiểu cách frontend đọc dữ liệu từ backend.\n1. Mở GET /api/courses trong Swagger.\n2. Quan sát id, title, price và categoryId trong JSON.\n3. Phân biệt 200 thành công, 401 cần đăng nhập và 404 không tìm thấy.\nBài tập: tìm khóa học hiện tại trong phản hồi API và đối chiếu giá 5 VNĐ trên giao diện.",
+        "durationMinutes": 10
+      }
+    },
+    {
+      "title": "Banking Test 06 - Git mini (5 VNĐ)",
+      "price": 5,
+      "description": "Khóa thử banking đúng 5 VNĐ. Thực hành kiểm tra thay đổi bằng Git và kiểm tra bill, quyền học.",
+      "lesson": {
+        "title": "Xem thay đổi bằng git status và git diff",
+        "content": "Mục tiêu: đọc trạng thái dự án bằng Git.\n1. Dùng git status để xem file đã thay đổi.\n2. Dùng git diff để xem nội dung trước và sau khi sửa.\n3. Phân biệt file được theo dõi và file mới.\nBài tập: tạo một file ghi chú trong dự án thử riêng, sửa một dòng rồi đọc kết quả git diff. Đánh dấu hoàn thành bài để kiểm tra tiến độ.",
+        "durationMinutes": 10
+      }
+    }
+  ]
+}

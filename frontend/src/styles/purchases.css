@@ -4,5 +4,7 @@
 .purchase-total{display:flex;justify-content:space-between;gap:16px;margin:24px 0;padding:18px 0;border-top:1px solid var(--line);font-size:20px}.purchase-total strong{font-size:26px;color:var(--primary)}
 .purchase-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.purchase-payment,.purchase-success{padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:white;text-align:center}.purchase-success{background:#edf8ee}.purchase-success strong{font-size:21px}.purchase-qr{display:block;width:min(280px,100%);height:auto;margin:20px auto;background:white;padding:8px;border-radius:12px}.purchase-qr-empty{padding:28px 16px;background:var(--paper);border-radius:12px;margin:20px 0;color:var(--muted)}.purchase-reference{overflow-wrap:anywhere}.purchase-pagination{display:flex;justify-content:flex-end;gap:12px;margin-top:20px}
 .purchase-bill table small{display:block;margin-top:4px;color:var(--muted)}
+.purchase-row-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.purchase-row-actions .btn{white-space:nowrap}
 @media(max-width:850px){.purchase-layout{grid-template-columns:1fr}.purchase-bill{padding:20px}.purchase-facts>div{flex-wrap:wrap}.purchase-facts dd{text-align:left}.purchase-total strong{font-size:23px}.purchase-actions .btn{flex:1}.purchase-layout aside{grid-row:1}}
 @media print{.sidebar,.topbar,.sidebar-scrim,#toast-region{display:none!important}.purchase-layout{display:block}.purchase-actions{display:none}}

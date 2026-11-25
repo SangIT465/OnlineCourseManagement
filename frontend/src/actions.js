@@ -69,6 +69,30 @@ export function createActions({
       const invoice = await request(`/purchases/${id}/invoice`);
       return printPurchase(invoice.html);
     }
+    if (action === "purchase-cancel") {
+      return confirmAction("Hủy thanh toán?", "Đơn sẽ chuyển sang Đã hủy và được giữ trong lịch sử. Bạn có thể tạo đơn mới để mua lại khóa học.", "Hủy thanh toán", async () => {
+        let result;
+        try {
+          result = await request(`/purchases/${id}/cancel`, { method: "POST" });
+        } catch (error) {
+          if (error.status !== 409) throw error;
+          closeDialog();
+          state.ready = false;
+          await render();
+          return toast(error.message, true);
+        }
+        closeDialog();
+        state.ready = false;
+        await render();
+        toast(result.status === "Expired" ? "Đơn đã hết hạn thanh toán." : "Đã hủy thanh toán. Bill được giữ trong lịch sử.");
+      });
+    }
+    if (action === "purchase-demo-confirm") {
+      await request(`/purchases/${id}/demo-confirm`, { method: "POST" });
+      state.ready = false;
+      await render();
+      return toast("Đã xác nhận thanh toán demo. Bạn đã nhận được khóa học.");
+    }
     if (action === "purchase-payment-link" || action === "purchase-sync") {
       await request(`/purchases/${id}/${action === "purchase-sync" ? "sync" : "payment-link"}`, { method: "POST" });
       state.ready = false;
@@ -122,10 +146,25 @@ export function createActions({
         `<div class="form-info">Học phí: <strong>${money(course?.price)}</strong>. ${Number(course?.price) > 0 ? "Thanh toán bằng QR hoặc trang thanh toán payOS." : "Khóa học miễn phí sẽ được mở ngay."}</div>` +
         field("Họ tên trên bill", "buyerName", { value: state.user.fullName, maxlength: 100, minimum: 2, autocomplete: "name" }) +
         `<p class="text-small">Email: ${esc(state.user.email)}</p>` +
-        field("Số điện thoại", "buyerPhone", { required: false, maxlength: 30, type: "tel", autocomplete: "tel" }) +
-        field("Địa chỉ", "buyerAddress", { required: false, maxlength: 300, autocomplete: "street-address" }),
-        Number(course?.price) > 0 ? "Tạo đơn & thanh toán" : "Nhận khóa học và bill"), async form => {
-          const purchase = await request("/purchases", { method: "POST", body: { ...Object.fromEntries(new FormData(form)), courseId: id } });
+        field("Số điện thoại", "buyerPhone", { maxlength: 30, type: "tel", autocomplete: "tel", hint: "Nhập đúng 10 chữ số, không có khoảng trắng hoặc ký tự đặc biệt." }) +
+        field("Địa chỉ", "buyerAddress", { maxlength: 300, autocomplete: "street-address" }),
+        Number(course?.price) > 0 ? "Tạo đơn & thanh toán" : "Nhận khóa học và bill", { noValidate: true }), async form => {
+          const body = Object.fromEntries(new FormData(form));
+          const missing = [];
+          for (const [name, label] of [["buyerPhone", "số điện thoại"], ["buyerAddress", "địa chỉ"]]) {
+            if (!body[name].trim()) missing.push({ name, label });
+          }
+          if (missing.length) {
+            form.elements.namedItem(missing[0].name).focus();
+            throw new Error(`Vui lòng nhập ${missing.map(item => item.label).join(" và ")} trước khi tạo đơn mua.`);
+          }
+          if (body.buyerPhone.length !== 10 || /[^0-9]/.test(body.buyerPhone)) {
+            form.elements.namedItem("buyerPhone").focus();
+            throw new Error("Số điện thoại phải gồm đúng 10 chữ số từ 0–9, không có chữ, khoảng trắng hoặc ký tự đặc biệt.");
+          }
+          body.buyerAddress = body.buyerAddress.trim();
+          if (!form.reportValidity()) return;
+          const purchase = await request("/purchases", { method: "POST", body: { ...body, courseId: id } });
           closeDialog();
           state.ready = false;
           navigate(`purchases/${purchase.id}`);

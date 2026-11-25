@@ -13,6 +13,8 @@ public static class PurchaseInvoice
         static string Money(decimal amount) => amount.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) + " đ";
         static string Date(DateTime value) => value.ToUniversalTime().AddHours(7).ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) + " (GMT+7)";
         var paid = bill.Status == PurchaseStatus.Paid;
+        var paymentMethod = bill.Amount == 0 ? "Khóa học miễn phí" :
+            bill.PaymentReference?.StartsWith("DEMO-", StringComparison.Ordinal) == true ? "Thanh toán demo" : "payOS";
         return $$"""
         <!doctype html><html lang="vi"><head><meta charset="utf-8"><title>{{H(bill.InvoiceNumber)}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +22,7 @@ public static class PurchaseInvoice
         <body><main class="sheet"><header><div><h2>{{H(bill.SellerName)}}</h2><p>{{H(bill.SellerAddress)}}</p><p>{{H(bill.SellerContact)}}</p></div><div class="right"><strong>{{H(bill.InvoiceNumber)}}</strong><p>Đơn hàng #{{H(bill.OrderCode)}}</p></div></header>
         <h1>{{(paid ? "HÓA ĐƠN MUA KHÓA HỌC" : "PHIẾU ĐẶT MUA KHÓA HỌC")}}</h1>
         <p class="status">{{(paid ? "ĐÃ THANH TOÁN" : bill.Status == PurchaseStatus.Pending ? "CHỜ THANH TOÁN" : "ĐƠN ĐÃ ĐÓNG")}}</p>
-        <div class="grid"><section><div class="label">NGƯỜI MUA</div><strong>{{H(bill.BuyerName)}}</strong><p>{{H(bill.BuyerEmail)}}</p><p>{{H(bill.BuyerPhone)}}</p><p>{{H(bill.BuyerAddress)}}</p></section><section><div class="label">THÔNG TIN ĐƠN</div><p>Ngày tạo: {{H(Date(bill.CreatedAt))}}</p><p>Ngày thanh toán: {{H(bill.PaidAt is { } at ? Date(at) : "Chưa thanh toán")}}</p><p>Phương thức: {{(bill.Amount == 0 ? "Khóa học miễn phí" : "payOS")}}</p><p>Tham chiếu: {{H(bill.PaymentReference ?? "Chưa có")}}</p></section></div>
+        <div class="grid"><section><div class="label">NGƯỜI MUA</div><strong>{{H(bill.BuyerName)}}</strong><p>{{H(bill.BuyerEmail)}}</p><p>{{H(bill.BuyerPhone)}}</p><p>{{H(bill.BuyerAddress)}}</p></section><section><div class="label">THÔNG TIN ĐƠN</div><p>Ngày tạo: {{H(Date(bill.CreatedAt))}}</p><p>Ngày thanh toán: {{H(bill.PaidAt is { } at ? Date(at) : "Chưa thanh toán")}}</p><p>Phương thức: {{H(paymentMethod)}}</p><p>Tham chiếu: {{H(bill.PaymentReference ?? "Chưa có")}}</p></section></div>
         <table><thead><tr><th>Khóa học</th><th>SL</th><th class="right">Đơn giá</th><th class="right">Thành tiền</th></tr></thead><tbody><tr><td><strong>{{H(bill.CourseTitle)}}</strong><br><span class="muted">{{H(bill.CategoryName)}}</span></td><td>1</td><td class="right">{{H(Money(bill.Amount))}}</td><td class="right">{{H(Money(bill.Amount))}}</td></tr></tbody></table>
         <p class="right">Đơn vị tiền tệ: VND · Số lượng: 1 khóa học</p><p class="right total">Tổng cộng: {{H(Money(bill.Amount))}}</p>
         <p class="right">Đã thanh toán: {{H(Money(paid ? bill.Amount : 0))}} · Còn phải trả: {{H(Money(paid ? 0 : bill.Amount))}}</p>

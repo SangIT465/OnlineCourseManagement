@@ -79,7 +79,9 @@ Trên Windows PowerShell, dùng `npm.cmd` nếu chính sách máy chặn `npm.ps
 - Swagger: **http://localhost:5106/swagger**
 - Health endpoint: **http://localhost:5106/health** (kiểm tra ứng dụng đang chạy, không kiểm tra SQL Server).
 
-Nhấn `Ctrl+C` để dừng cả hai ứng dụng. Lệnh chạy chung tự dừng ứng dụng còn lại nếu một ứng dụng khởi chạy thất bại hoặc kết thúc.
+Nếu API CourseFlow đã chạy tại cổng 5106 (ví dụ bằng F5 trong Visual Studio), `npm.cmd run dev` kiểm tra và dùng lại API đó, chỉ mở frontend. Nhấn `Ctrl+C` sẽ chỉ dừng frontend và giữ nguyên API đang chạy trong Visual Studio. Nếu cổng bị ứng dụng khác chiếm hoặc API chưa sẵn sàng, lệnh báo rõ nguyên nhân trước khi mở frontend.
+
+Khi cả hai ứng dụng được lệnh này khởi động, nhấn `Ctrl+C` để dừng cả hai. Nếu một ứng dụng khởi chạy thất bại hoặc kết thúc, lệnh tự dừng các ứng dụng do chính nó khởi động.
 
 Hoặc chạy riêng ở hai Terminal:
 
@@ -177,6 +179,8 @@ Công cụ tải bản LibreOffice chính thức, xác minh SHA256 rồi giải 
 Bộ chuyển Office dùng profile riêng, tắt macro/OLE/DDE, giới hạn thời gian và dọn thư mục tạm sau khi xử lý. Backend kiểm tra chữ ký tệp, cấu trúc DOCX/PPTX/XLSX, giới hạn giải nén và từ chối macro trong gói Open XML. Bản xem PDF được cache trong vùng lưu trữ riêng và xóa cùng tệp gốc. Tệp hỏng/cần mật khẩu hoặc máy chưa có bộ chuyển sẽ có thông báo; người dùng vẫn tải được bản gốc. Khi triển khai thực tế, chạy bộ chuyển bằng tài khoản ít quyền hoặc container, cập nhật LibreOffice và bố trí thư mục upload bền vững.
 
 Sau khi chạy API và cập nhật database, có thể kiểm tra phân quyền thực tế bằng `npm.cmd run test:authorization`. Lệnh tạo và dọn các bản ghi QA tạm, không thay đổi tài khoản người dùng hiện có.
+
+Kiểm tra mọi thao tác trong tài liệu Swagger bằng `npm.cmd run test:swagger`: thử API công khai, thiếu JWT, Admin đọc dữ liệu, JWT giả và health/readiness. Lệnh không tạo dữ liệu ứng dụng; kết quả từng request lưu tại `artifacts/api-audit/swagger-results.json`. Cần API đang chạy và Admin đã cấu hình. Đây là kiểm tra route và phân quyền cơ bản; các luồng nghiệp vụ thành công được kiểm tra bằng các suite tích hợp riêng.
 
 Kiểm tra vòng đời đăng ký/đăng nhập, hash mật khẩu trong SQL, email trùng khi gửi đồng thời, token giả, đặt lại mật khẩu và ghi danh/hủy ghi danh bằng `npm.cmd run test:auth`. Chạy tuần tự các bộ kiểm thử tích hợp vì chúng đối chiếu số lượng và checksum dữ liệu trước/sau. Cần `sqlcmd`, Windows Authentication và tài khoản Admin trong User Secrets hoặc biến môi trường; xem [kết quả kiểm tra logic](docs/logic-audit.md).
 

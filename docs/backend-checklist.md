@@ -21,7 +21,7 @@ Phạm vi đối chiếu là tên các chuyên đề nhìn thấy trong ảnh Bu
 
 ## Kiến trúc và phạm vi
 
-Đây là một ứng dụng ASP.NET có các tầng theo thư mục, không phải kiến trúc nhiều assembly Domain/Application/Infrastructure. Luồng danh mục/khóa/bài học/đăng nhập đã chuyển qua service. Các controller hỗ trợ người dùng, ghi danh và tiến độ còn sử dụng DbContext trực tiếp trong một số thao tác; không trình bày chúng như đã tách hoàn toàn sang service.
+Đây là một ứng dụng ASP.NET có các tầng theo thư mục, không phải kiến trúc nhiều assembly Domain/Application/Infrastructure. Các luồng danh mục, khóa, bài học, đăng nhập, người dùng, ghi danh và tiến độ đã chuyển qua service. `FilesController` còn truy vấn và ghi DbContext trực tiếp; phần lưu file và chuyển đổi bản xem đã tách qua `IFileStorage` và `IOfficePreviewService`.
 
 EF Core DbContext thực hiện truy cập dữ liệu và giao dịch. Không thêm generic repository cho mọi thực thể chỉ để tăng số lượng lớp. Quyền theo khóa được dùng chung ở catalog, file và báo cáo học viên.
 
@@ -36,6 +36,7 @@ npm.cmd run test:backend
 npm.cmd run test:authorization
 npm.cmd run test:crud
 npm.cmd run test:contracts
+npm.cmd run test:swagger
 ```
 
 Chạy các suite tích hợp tuần tự vì chúng thêm/xóa bản ghi QA và kiểm tra dữ liệu trước/sau. Các suite dùng Admin trong User Secrets hoặc `COURSEFLOW_TEST_ADMIN_EMAIL/PASSWORD`; không chứa mật khẩu thật trong source. SQL test mặc định kết nối `.\SQLEXPRESS` bằng Windows Authentication. `COURSEFLOW_API_URL` đổi địa chỉ API; CRUD có thêm `COURSEFLOW_TEST_SQL_SERVER`, `COURSEFLOW_TEST_SQL_DATABASE`.

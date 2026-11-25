@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using System.Text.Json;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using OnlineCourseManagement.Data;
+using OnlineCourseManagement.DTOs;
 using OnlineCourseManagement.Exceptions;
 using OnlineCourseManagement.Models;
 using OnlineCourseManagement.Options;
@@ -13,6 +15,59 @@ namespace OnlineCourseManagement.Api.Tests;
 
 public sealed class PurchaseTests
 {
+    [Theory]
+    [InlineData(null, "Địa chỉ thử nghiệm", "BuyerPhone", "số điện thoại")]
+    [InlineData("", "Địa chỉ thử nghiệm", "BuyerPhone", "số điện thoại")]
+    [InlineData("   ", "Địa chỉ thử nghiệm", "BuyerPhone", "số điện thoại")]
+    [InlineData("0901234567", null, "BuyerAddress", "địa chỉ")]
+    [InlineData("0901234567", "", "BuyerAddress", "địa chỉ")]
+    [InlineData("0901234567", " \t ", "BuyerAddress", "địa chỉ")]
+    public async Task Missing_contact_is_rejected_by_API_validation_and_service_before_database_access(
+        string? phone, string? address, string field, string message)
+    {
+        var input = new CreatePurchaseDto { CourseId=1, BuyerName="Học viên", BuyerPhone=phone!, BuyerAddress=address! };
+        var errors = new List<ValidationResult>();
+        Assert.False(Validator.TryValidateObject(input,new ValidationContext(input),errors,true));
+        Assert.Contains(errors,error=>error.MemberNames.Contains(field) && error.ErrorMessage!.Contains(message));
+        var actor = new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier,"1"),new(ClaimTypes.Role,"User")],"test"));
+        // A missing contact must fail before a database or gateway is needed.
+        var service = new PurchaseService(null!,new FakeGateway(),Microsoft.Extensions.Options.Options.Create(new PayOSPaymentOptions()),TimeProvider.System);
+        var rejected = await Assert.ThrowsAsync<BusinessException>(()=>service.CreateAsync(input,actor,default));
+        Assert.Equal(BusinessError.InvalidInput,rejected.Error);
+        Assert.Contains(message,rejected.Message);
+    }
+
+    [Fact]
+    public void Complete_buyer_contact_passes_API_validation()
+    {
+        var input = new CreatePurchaseDto { CourseId=1, BuyerName="Học viên", BuyerPhone="0901234567", BuyerAddress="Địa chỉ thử nghiệm" };
+        Assert.True(Validator.TryValidateObject(input,new ValidationContext(input),[],true));
+    }
+
+    [Theory]
+    [InlineData("090123456")]
+    [InlineData("09012345678")]
+    [InlineData("090123456!")]
+    [InlineData("090123456a")]
+    [InlineData("090 123456")]
+    [InlineData(" 0901234567")]
+    [InlineData("0901234567 ")]
+    [InlineData("0901234567\n")]
+    [InlineData("+84901234567")]
+    [InlineData("０９０１２３４５６７")]
+    public async Task Invalid_phone_is_rejected_before_creating_a_purchase(string phone)
+    {
+        var input = new CreatePurchaseDto {CourseId=1,BuyerName="Học viên",BuyerPhone=phone,BuyerAddress="Địa chỉ thử nghiệm"};
+        var errors = new List<ValidationResult>();
+        Assert.False(Validator.TryValidateObject(input,new ValidationContext(input),errors,true));
+        Assert.Contains(errors,error=>error.MemberNames.Contains("BuyerPhone"));
+        var actor = new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier,"1"),new(ClaimTypes.Role,"User")],"test"));
+        var service = new PurchaseService(null!,new FakeGateway(),Microsoft.Extensions.Options.Options.Create(new PayOSPaymentOptions()),TimeProvider.System);
+        var error = await Assert.ThrowsAsync<BusinessException>(()=>service.CreateAsync(input,actor,default));
+        Assert.Equal(BusinessError.InvalidInput,error.Error);
+        Assert.Contains("đúng 10 chữ số",error.Message);
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData("DAN_CLIENT_ID_VAO_DAY")]
@@ -142,8 +197,18 @@ internal sealed class FakeGateway : IPayOSGateway
 {
     public bool IsConfigured => true;
     public bool Paid {get;set;}
+    public bool Cancelled {get;set;}
+    public bool CancelFails {get;set;}
+    public int CancelCalls {get;private set;}
     public CoursePurchase? Last {get;set;}
     public Task<GatewayLink> CreateAsync(CoursePurchase p,CancellationToken token) {Last=p;return Task.FromResult(new GatewayLink("test-link",p.OrderCode,p.Amount,"PENDING","https://pay.payos.vn/web/test-link","TEST QR"));}
-    public Task<GatewayPayment> GetAsync(long code,CancellationToken token) => Task.FromResult(new GatewayPayment("test-link",code,Last!.Amount,Paid?Last.Amount:0,Paid?"PAID":"PENDING"));
+    public Task<GatewayPayment> GetAsync(long code,CancellationToken token) => Task.FromResult(new GatewayPayment("test-link",code,Last!.Amount,Paid?Last.Amount:0,Paid?"PAID":Cancelled?"CANCELLED":"PENDING"));
+    public Task<GatewayPayment> CancelAsync(long code,CancellationToken token)
+    {
+        CancelCalls++;
+        if(CancelFails) throw BusinessException.Conflict("Fake payOS cancellation failed.");
+        if(!Paid) Cancelled=true;
+        return GetAsync(code,token);
+    }
     public Task<GatewayNotice> VerifyWebhookAsync(JsonElement body,CancellationToken token) => Task.FromResult(new GatewayNotice(Last!.OrderCode,"test-link",Last.Amount,"TEST-BANK-REF","VND",true));
 }

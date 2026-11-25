@@ -32,7 +32,7 @@ public sealed class PurchaseSqlTests
         await using var fixture=await SqlFixture.CreateAsync(199000.50m);
         await using var db=fixture.Db();
         var gateway=new FakeGateway();var service=Service(db,gateway);var actor=Actor(fixture.StudentId);
-        var input=new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Học viên thử nghiệm",BuyerAddress="Địa chỉ ban đầu"};
+        var input=new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Học viên thử nghiệm",BuyerPhone="0901234567",BuyerAddress="Địa chỉ ban đầu"};
         var enrollments=new EnrollmentService(db,null!,TimeProvider.System);
         var locked=await Assert.ThrowsAsync<BusinessException>(()=>enrollments.EnrollAsync(new EnrollCourseDto {CourseId=fixture.CourseId},actor,default));
         Assert.Equal(BusinessError.Conflict,locked.Error);
@@ -70,8 +70,18 @@ public sealed class PurchaseSqlTests
     {
         await using var fixture=await SqlFixture.CreateAsync(0);
         await using var db=fixture.Db();var gateway=new FakeGateway();
-        var bill=await Service(db,gateway).CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách miễn phí"},Actor(fixture.StudentId),default);
+        foreach (var contact in new[] { (Phone: "", Address: "Địa chỉ thử nghiệm"), (Phone: "0901234567", Address: "   "),
+            (Phone: "09012345678", Address: "Địa chỉ thử nghiệm"), (Phone: "090123456!", Address: "Địa chỉ thử nghiệm") })
+        {
+            var error = await Assert.ThrowsAsync<BusinessException>(() => Service(db,gateway).CreateAsync(
+                new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách miễn phí",BuyerPhone=contact.Phone,BuyerAddress=contact.Address},Actor(fixture.StudentId),default));
+            Assert.Equal(BusinessError.InvalidInput,error.Error);
+            Assert.Empty(await db.CoursePurchases.ToListAsync());
+            Assert.Empty(await db.Enrollments.ToListAsync());
+        }
+        var bill=await Service(db,gateway).CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách miễn phí",BuyerPhone="0901234567",BuyerAddress=" Địa chỉ thử nghiệm "},Actor(fixture.StudentId),default);
         Assert.Equal(PurchaseStatus.Paid,bill.Status);Assert.Equal(0,bill.Amount);Assert.Equal("FREE",bill.PaymentReference);
+        Assert.Equal("0901234567",bill.BuyerPhone);Assert.Equal("Địa chỉ thử nghiệm",bill.BuyerAddress);
         Assert.Null(gateway.Last);Assert.Single(await db.Enrollments.ToListAsync());
     }
 
@@ -80,7 +90,7 @@ public sealed class PurchaseSqlTests
     {
         await using var fixture=await SqlFixture.CreateAsync(20000);
         await using var db=fixture.Db();var gateway=new FakeGateway();var service=Service(db,gateway);var actor=Actor(fixture.StudentId);
-        var order=await service.CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách phục hồi"},actor,default);
+        var order=await service.CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách phục hồi",BuyerPhone="0901234567",BuyerAddress="Địa chỉ thử nghiệm"},actor,default);
         await service.CreatePaymentLinkAsync(order.Id,actor,default);
         db.ChangeTracker.Clear();var stored=await db.CoursePurchases.SingleAsync();stored.PaymentLinkId=null;stored.QrPayload=null;await db.SaveChangesAsync();
         gateway.Paid=true;
@@ -88,6 +98,136 @@ public sealed class PurchaseSqlTests
         var paid=await service.GetAsync(order.Id,actor,default);
         Assert.Equal(PurchaseStatus.Paid,paid.Status);Assert.Single(await db.Enrollments.ToListAsync());
         Assert.Equal("test-link",(await db.CoursePurchases.AsNoTracking().SingleAsync()).PaymentLinkId);
+    }
+
+    private static DemoPaymentService DemoService(AppDbContext db, FakeGateway gateway) => new(db,Service(db,gateway),
+        Microsoft.Extensions.Options.Options.Create(new DemoPaymentOptions {Enabled=true}),new DemoHostEnvironment("Development"),TimeProvider.System);
+
+    [PurchaseSqlFact]
+    public async Task Demo_confirmation_grants_access_once_without_payOS_and_preserves_the_bill()
+    {
+        await using var fixture=await SqlFixture.CreateAsync(100000);
+        await using var db=fixture.Db();var gateway=new FakeGateway();var actor=Actor(fixture.StudentId);
+        var original=await Service(db,gateway).CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách demo",BuyerPhone="0901234567",BuyerAddress="Địa chỉ demo"},actor,default);
+        Assert.Empty(await db.Enrollments.ToListAsync());
+        var hidden=await Assert.ThrowsAsync<BusinessException>(()=>DemoService(db,gateway).ConfirmAsync(original.Id,Actor(fixture.StudentId+999),default));
+        Assert.Equal(BusinessError.NotFound,hidden.Error);
+        await using(var first=fixture.Db()) await using(var second=fixture.Db())
+            await Task.WhenAll(DemoService(first,gateway).ConfirmAsync(original.Id,actor,default),DemoService(second,gateway).ConfirmAsync(original.Id,actor,default));
+        var paid=await Service(db,gateway).GetAsync(original.Id,actor,default);
+        Assert.Equal(PurchaseStatus.Paid,paid.Status);Assert.NotNull(paid.PaidAt);
+        Assert.Equal($"DEMO-{original.OrderCode}",paid.PaymentReference);
+        Assert.Equal(original.Amount,paid.Amount);Assert.Equal(original.CourseTitle,paid.CourseTitle);
+        Assert.Equal(original.BuyerName,paid.BuyerName);Assert.Equal(original.BuyerPhone,paid.BuyerPhone);Assert.Equal(original.BuyerAddress,paid.BuyerAddress);
+        Assert.Single(await db.CoursePurchases.AsNoTracking().ToListAsync());
+        Assert.Single(await db.Enrollments.AsNoTracking().ToListAsync());Assert.Null(gateway.Last);
+        await using(var retry=fixture.Db())
+            Assert.Equal(paid.PaidAt,(await DemoService(retry,gateway).ConfirmAsync(original.Id,actor,default)).PaidAt);
+        Assert.Single(await db.Enrollments.AsNoTracking().ToListAsync());
+        Assert.Contains("Thanh toán demo",System.Net.WebUtility.HtmlDecode(PurchaseInvoice.Render(paid)));
+    }
+
+    [PurchaseSqlFact]
+    public async Task Closed_demo_purchases_cannot_grant_access()
+    {
+        await using var fixture=await SqlFixture.CreateAsync(100000);
+        await using var db=fixture.Db();var gateway=new FakeGateway();var actor=Actor(fixture.StudentId);
+        var order=await Service(db,gateway).CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách demo",BuyerPhone="0901234567",BuyerAddress="Địa chỉ demo"},actor,default);
+        foreach(var status in new[]{PurchaseStatus.Cancelled,PurchaseStatus.Expired})
+        {
+            db.ChangeTracker.Clear();var stored=await db.CoursePurchases.SingleAsync(p=>p.Id==order.Id);stored.Status=status;await db.SaveChangesAsync();
+            var error=await Assert.ThrowsAsync<BusinessException>(()=>DemoService(db,gateway).ConfirmAsync(order.Id,actor,default));
+            Assert.Equal(BusinessError.Conflict,error.Error);Assert.Empty(await db.Enrollments.ToListAsync());
+        }
+    }
+
+    [PurchaseSqlFact]
+    public async Task User_and_Admin_cancel_pending_orders_and_both_lists_read_the_SQL_status()
+    {
+        await using var fixture=await SqlFixture.CreateAsync(100000);
+        await using var db=fixture.Db();var gateway=new FakeGateway();var service=Service(db,gateway);var actor=Actor(fixture.StudentId);
+        var input=new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách hủy đơn",BuyerPhone="0901234567",BuyerAddress="Địa chỉ bill"};
+        var original=await service.CreateAsync(input,actor,default);
+        var hidden=await Assert.ThrowsAsync<BusinessException>(()=>service.CancelAsync(original.Id,Actor(fixture.StudentId+999),default));
+        Assert.Equal(BusinessError.NotFound,hidden.Error);
+        var denied=await Assert.ThrowsAsync<BusinessException>(()=>service.CancelAsync(original.Id,Actor(fixture.StudentId,"Staff"),default));
+        Assert.Equal(BusinessError.NotFound,denied.Error);
+        var cancelled=await service.CancelAsync(original.Id,actor,default);
+        Assert.Equal(PurchaseStatus.Cancelled,cancelled.Status);Assert.Null(cancelled.PaidAt);
+        Assert.Equal(original.Amount,cancelled.Amount);Assert.Equal(original.BuyerPhone,cancelled.BuyerPhone);Assert.Equal(original.BuyerAddress,cancelled.BuyerAddress);
+        Assert.Equal(PurchaseStatus.Cancelled,(await service.CancelAsync(original.Id,actor,default)).Status);
+        Assert.Equal(PurchaseStatus.Cancelled,(await service.ListAsync(actor,false,1,default)).Single().Status);
+        var admin=Actor(999,"Admin");
+        Assert.Equal(PurchaseStatus.Cancelled,(await service.ListAsync(admin,true,1,default)).Single().Status);
+        var replacement=await service.CreateAsync(input,actor,default);
+        Assert.NotEqual(original.Id,replacement.Id);
+        await service.CancelAsync(replacement.Id,admin,default);
+        await using var verify=fixture.Db();
+        Assert.Equal(2,await verify.CoursePurchases.CountAsync());
+        Assert.All(await verify.CoursePurchases.ToListAsync(),p=>Assert.Equal(PurchaseStatus.Cancelled,p.Status));
+        Assert.Empty(await verify.Enrollments.ToListAsync());Assert.Equal(0,gateway.CancelCalls);
+    }
+
+    [PurchaseSqlFact]
+    public async Task Cancelling_a_payOS_link_updates_SQL_and_keeps_the_bill_history()
+    {
+        await using var fixture=await SqlFixture.CreateAsync(100000);
+        await using var db=fixture.Db();var gateway=new FakeGateway();var service=Service(db,gateway);var actor=Actor(fixture.StudentId);
+        var order=await service.CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách payOS",BuyerPhone="0901234567",BuyerAddress="Địa chỉ bill"},actor,default);
+        await service.CreatePaymentLinkAsync(order.Id,actor,default);
+        var cancelled=await service.CancelAsync(order.Id,actor,default);
+        Assert.True(gateway.Cancelled);Assert.Equal(1,gateway.CancelCalls);Assert.Equal(PurchaseStatus.Cancelled,cancelled.Status);
+        Assert.Null(cancelled.QrCodeDataUrl);
+        await using var verify=fixture.Db();var stored=await verify.CoursePurchases.SingleAsync();
+        Assert.Equal(PurchaseStatus.Cancelled,stored.Status);Assert.Equal("test-link",stored.PaymentLinkId);
+        Assert.Empty(await verify.Enrollments.ToListAsync());
+        Assert.Equal(PurchaseStatus.Cancelled,(await service.SyncAsync(order.Id,actor,default)).Status);
+    }
+
+    [PurchaseSqlFact]
+    public async Task Failed_gateway_cancellation_keeps_SQL_pending_and_payment_race_grants_access()
+    {
+        await using var fixture=await SqlFixture.CreateAsync(100000);
+        await using var db=fixture.Db();var gateway=new FakeGateway();var service=Service(db,gateway);var actor=Actor(fixture.StudentId);
+        var order=await service.CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách payOS",BuyerPhone="0901234567",BuyerAddress="Địa chỉ bill"},actor,default);
+        await service.CreatePaymentLinkAsync(order.Id,actor,default);
+        gateway.CancelFails=true;
+        var failed=await Assert.ThrowsAsync<BusinessException>(()=>service.CancelAsync(order.Id,actor,default));
+        Assert.Equal(BusinessError.Conflict,failed.Error);
+        await using(var verify=fixture.Db())
+        {
+            Assert.Equal(PurchaseStatus.Pending,(await verify.CoursePurchases.SingleAsync()).Status);
+            Assert.Empty(await verify.Enrollments.ToListAsync());
+        }
+        gateway.CancelFails=false;gateway.Paid=true;
+        var paidRace=await Assert.ThrowsAsync<BusinessException>(()=>service.CancelAsync(order.Id,actor,default));
+        Assert.Equal(BusinessError.Conflict,paidRace.Error);
+        await using(var verify=fixture.Db())
+        {
+            var paid=await verify.CoursePurchases.SingleAsync();Assert.Equal(PurchaseStatus.Paid,paid.Status);Assert.NotNull(paid.PaidAt);
+            Assert.Single(await verify.Enrollments.ToListAsync());
+        }
+        await Assert.ThrowsAsync<BusinessException>(()=>service.CancelAsync(order.Id,Actor(999,"Admin"),default));
+        Assert.Single(await db.Enrollments.AsNoTracking().ToListAsync());
+    }
+
+    [PurchaseSqlFact]
+    public async Task Cancellation_and_demo_confirmation_cannot_both_change_the_same_pending_order()
+    {
+        await using var fixture=await SqlFixture.CreateAsync(100000);
+        await using var db=fixture.Db();var gateway=new FakeGateway();var actor=Actor(fixture.StudentId);
+        var order=await Service(db,gateway).CreateAsync(new CreatePurchaseDto {CourseId=fixture.CourseId,BuyerName="Khách demo",BuyerPhone="0901234567",BuyerAddress="Địa chỉ bill"},actor,default);
+        static async Task<BusinessError?> Attempt(Func<Task<PurchaseView>> action)
+        {
+            try {await action();return null;} catch(BusinessException error) {return error.Error;}
+        }
+        await using var cancelDb=fixture.Db();await using var demoDb=fixture.Db();
+        var results=await Task.WhenAll(Attempt(()=>Service(cancelDb,gateway).CancelAsync(order.Id,actor,default)),
+            Attempt(()=>DemoService(demoDb,gateway).ConfirmAsync(order.Id,actor,default)));
+        Assert.Single(results,result=>result is null);Assert.Contains(BusinessError.Conflict,results);
+        await using var verify=fixture.Db();var stored=await verify.CoursePurchases.SingleAsync();
+        Assert.Contains(stored.Status,new[]{PurchaseStatus.Paid,PurchaseStatus.Cancelled});
+        Assert.Equal(stored.Status==PurchaseStatus.Paid?1:0,await verify.Enrollments.CountAsync());
     }
 
     private sealed class SqlFixture : IAsyncDisposable

@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { inspectBackend } from "./dev-backend.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const frontend = path.join(root, "frontend");
@@ -72,7 +73,7 @@ function start(command, args, cwd, name) {
   child.once("exit", (code, signal) => {
     if (!stopping) {
       console.log(
-        `${name} stopped (${signal || code}). Shutting down both applications.`,
+        `${name} stopped (${signal || code}). Shutting down applications started by this command.`,
       );
       void stop(code ?? 1);
     }
@@ -87,11 +88,23 @@ process.on("SIGTERM", () => {
 });
 console.log("CourseFlow frontend: http://localhost:5173");
 console.log("CourseFlow backend:  http://localhost:5106/swagger");
-console.log("Press Ctrl+C to stop both applications.\n");
-start(
-  "dotnet",
-  ["run", "--project", backend, "--launch-profile", "http"],
-  backend,
-  "Backend",
-);
+let backendMode;
+try {
+  backendMode = await inspectBackend();
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
+if (backendMode === "reuse") {
+  console.log("CourseFlow API is already running. Reusing it; starting only the frontend.");
+  console.log("Press Ctrl+C to stop the frontend. The existing API will keep running.\n");
+} else {
+  console.log("Press Ctrl+C to stop both applications.\n");
+  start(
+    "dotnet",
+    ["run", "--project", backend, "--launch-profile", "http"],
+    backend,
+    "Backend",
+  );
+}
 start(process.execPath, [vite], frontend, "Frontend");

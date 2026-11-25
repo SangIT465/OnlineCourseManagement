@@ -22,8 +22,10 @@
     "test:auth:browser": "node frontend/tests/auth-browser.integration.mjs",
     "test:crud": "node backend/tests/crud.integration.mjs",
     "seed:catalog": "dotnet run --project backend/OnlineCourseManagement.Api --configuration Release --launch-profile http -- --seed-catalog --Logging:LogLevel:Microsoft.EntityFrameworkCore=Warning",
+    "seed:banking": "node scripts/seed-banking-courses.mjs",
     "test:backend": "dotnet test backend/OnlineCourseManagement.Api.Tests --configuration Release",
     "test:contracts": "node backend/tests/backend-contract.integration.mjs",
+    "test:swagger": "node backend/tests/swagger.integration.mjs",
     "publish:backend": "dotnet publish backend/OnlineCourseManagement.Api --configuration Release --output artifacts/backend"
   }
 }

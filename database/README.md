@@ -52,6 +52,12 @@ Quy tắc nạp:
 
 Các khóa mới để trống nhân viên để bạn dễ thử thao tác phân công từ tài khoản Admin.
 
+## Sáu khóa thử banking giá nhỏ
+
+Chạy `npm.cmd run seed:banking` khi API local đang hoạt động và Admin test đã cấu hình trong User Secrets hoặc `COURSEFLOW_TEST_ADMIN_EMAIL`/`COURSEFLOW_TEST_ADMIN_PASSWORD`. Dữ liệu nằm ở `seeds/banking-test-courses.json`: danh mục **Kiểm thử Banking**, ba khóa **10.000 VNĐ**, ba khóa **5 VNĐ** và mỗi khóa có một bài thực hành để thử quyền học sau thanh toán. Mốc 5 VNĐ là 5 đồng, không phải 5.000 đồng.
+
+Lệnh thêm qua API vào SQL, không tạo đơn/thanh toán/ghi danh và không sửa dữ liệu đang có. Chạy lại sẽ dùng lại danh mục/khóa cùng tên và bài thứ nhất; nếu một khóa đã có nhưng giá khác bộ seed, lệnh báo lỗi thay vì ghi đè. Kết quả và ID lưu tại `artifacts/banking-courses-seed.json`. Trên frontend mở `/#/courses?search=Banking` hoặc lọc danh mục **Kiểm thử Banking** để xem đủ sáu khóa; frontend lấy giá từ API.
+
 ## Gợi ý thử giao diện
 
 1. Vào Khám phá, thử danh mục, học phí, tìm kiếm, sắp xếp và chuyển trang.

@@ -80,6 +80,33 @@ public sealed class PayOSGateway(IOptions<PayOSPaymentOptions> configured, ILogg
         }
     }
 
+    public async Task<GatewayPayment> CancelAsync(long orderCode, CancellationToken token)
+    {
+        try
+        {
+            var result = await Client().PaymentRequests.CancelAsync(orderCode, "Hủy thanh toán từ CourseFlow",
+                new RequestOptions<CancelPaymentLinkRequest> { CancellationToken = token });
+            return new(result.Id, result.OrderCode, result.Amount, result.AmountPaid, result.Status.ToString());
+        }
+        catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
+        catch (BusinessException) { throw; }
+        catch (Exception error)
+        {
+            logger.LogWarning("payOS cancellation for order {OrderCode}: {ErrorType}", orderCode, error.GetType().Name);
+            // A timeout may happen after cancellation, or payment may win the race.
+            try
+            {
+                var current = await GetAsync(orderCode, token);
+                if (current.Status.Equals("PAID", StringComparison.OrdinalIgnoreCase) ||
+                    current.Status.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase) ||
+                    current.Status.Equals("EXPIRED", StringComparison.OrdinalIgnoreCase)) return current;
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
+            catch (Exception) { /* Keep the local order pending until payOS confirms its final state. */ }
+            throw BusinessException.Conflict("Chưa hủy được thanh toán trên payOS. Đơn chưa được thay đổi; vui lòng thử lại.");
+        }
+    }
+
     public async Task<GatewayNotice> VerifyWebhookAsync(JsonElement body, CancellationToken token)
     {
         try

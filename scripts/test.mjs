@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const folders = ["frontend/tests", "database/tests"];
+const folders = ["frontend/tests", "database/tests", "scripts/tests"];
 const files = folders.flatMap((folder) =>
   readdirSync(new URL(`../${folder}/`, import.meta.url))
     .filter((file) => file.endsWith(".test.mjs"))

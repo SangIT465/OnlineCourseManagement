@@ -102,6 +102,8 @@ builder.Services.AddOptions<PayOSPaymentOptions>().BindConfiguration(PayOSPaymen
     .ValidateOnStart();
 builder.Services.AddScoped<IPayOSGateway, PayOSGateway>();
 builder.Services.AddScoped<PurchaseService>();
+builder.Services.AddOptions<DemoPaymentOptions>().BindConfiguration(DemoPaymentOptions.SectionName);
+builder.Services.AddScoped<DemoPaymentService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<CurrentSessionJwtEvents>();

@@ -12,7 +12,7 @@ namespace OnlineCourseManagement.Controllers;
 [Route("api/purchases")]
 [Authorize]
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-public sealed class PurchasesController(PurchaseService purchases) : ControllerBase
+public sealed class PurchasesController(PurchaseService purchases, DemoPaymentService demoPayments) : ControllerBase
 {
     [HttpPost]
     [Authorize(Policy = AppPolicies.Learning)]
@@ -33,7 +33,23 @@ public sealed class PurchasesController(PurchaseService purchases) : ControllerB
         Ok(await purchases.ListAsync(User, true, page, token));
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> Get(int id, CancellationToken token) => Ok(await purchases.GetAsync(id, User, token));
+    public async Task<IActionResult> Get(int id, CancellationToken token)
+    {
+        var purchase = await purchases.GetAsync(id, User, token);
+        return Ok(purchase with { CanConfirmDemoPayment = demoPayments.CanConfirm(User, purchase) });
+    }
+
+    /// <summary>Demo only: confirm the current user's purchase and grant course access without a bank transaction.</summary>
+    [HttpPost("{id:int}/demo-confirm")]
+    [Authorize(Policy = AppPolicies.Learning)]
+    public async Task<IActionResult> ConfirmDemo(int id, CancellationToken token) =>
+        Ok(await demoPayments.ConfirmAsync(id, User, token));
+
+    /// <summary>Cancel a pending purchase. Users cancel their own orders; Admin can cancel any pending order.</summary>
+    [HttpPost("{id:int}/cancel")]
+    [Authorize(Roles = AppRoles.Admin + "," + AppRoles.User)]
+    public async Task<IActionResult> Cancel(int id, CancellationToken token) =>
+        Ok(await purchases.CancelAsync(id, User, token));
 
     [HttpPost("{id:int}/payment-link")]
     [Authorize(Policy = AppPolicies.Learning)]

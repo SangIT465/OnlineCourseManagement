@@ -94,8 +94,8 @@ export const formError = '<div class="form-error" role="alert" hidden></div>';
 export const formFooter = (submit = "Lưu thay đổi", danger = false) =>
   `<div class="form-footer"><button type="button" class="btn btn-secondary" data-action="close-dialog">Hủy</button><button type="submit" class="btn btn-${danger ? "danger" : "primary"}">${submit}</button></div>`;
 
-export function modalForm(content, footer = "Lưu thay đổi") {
-  return `<form id="modal-form">${formError}${content}${formFooter(footer)}</form>`;
+export function modalForm(content, footer = "Lưu thay đổi", { noValidate = false } = {}) {
+  return `<form id="modal-form"${noValidate ? " novalidate" : ""}>${formError}${content}${formFooter(footer)}</form>`;
 }
 
 export function confirmAction(title, message, submitLabel, callback, danger = true) {

@@ -19,6 +19,10 @@ public sealed class PurchaseService(AppDbContext db, IPayOSGateway gateway,
     public async Task<PurchaseView> CreateAsync(CreatePurchaseDto input, ClaimsPrincipal actor, CancellationToken token)
     {
         var studentId = actor.RequireUserId();
+        if (string.IsNullOrWhiteSpace(input.BuyerPhone)) throw BusinessException.Invalid("Vui lòng nhập số điện thoại.");
+        if (string.IsNullOrWhiteSpace(input.BuyerAddress)) throw BusinessException.Invalid("Vui lòng nhập địa chỉ.");
+        if (input.BuyerPhone.Length != 10 || input.BuyerPhone.Any(character => !char.IsAsciiDigit(character)))
+            throw BusinessException.Invalid("Số điện thoại phải gồm đúng 10 chữ số từ 0–9, không có chữ, khoảng trắng hoặc ký tự đặc biệt.");
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, token);
         var student = await db.FindForUpdateAsync(studentId, token);
         if (student?.Role != AppRoles.User) throw BusinessException.Forbidden();
@@ -43,7 +47,7 @@ public sealed class PurchaseService(AppDbContext db, IPayOSGateway gateway,
             OriginalPrice = course.Price, Amount = PurchaseRules.AmountInVnd(course.Price),
             CourseTitle = course.Title, CategoryName = course.Category?.Name ?? "",
             BuyerName = input.BuyerName.Trim(), BuyerEmail = student.Email,
-            BuyerPhone = input.BuyerPhone?.Trim() ?? "", BuyerAddress = input.BuyerAddress?.Trim() ?? "",
+            BuyerPhone = input.BuyerPhone.Trim(), BuyerAddress = input.BuyerAddress.Trim(),
             SellerName = options.SellerName, SellerAddress = options.SellerAddress, SellerContact = options.SellerContact,
             CreatedAt = time.GetUtcNow().UtcDateTime
         };
@@ -107,10 +111,37 @@ public sealed class PurchaseService(AppDbContext db, IPayOSGateway gateway,
     public async Task<PurchaseView> SyncAsync(int id, ClaimsPrincipal actor, CancellationToken token)
     {
         var purchase = await ReadAsync(id, actor, token);
-        if (purchase.Status == PurchaseStatus.Paid || string.IsNullOrWhiteSpace(purchase.PaymentLinkId)) return View(purchase);
+        if (purchase.Status != PurchaseStatus.Pending || string.IsNullOrWhiteSpace(purchase.PaymentLinkId)) return View(purchase);
         var payment = await gateway.GetAsync(purchase.OrderCode, token);
         await ApplyPaymentAsync(purchase.Id, payment, $"PAYOS-{purchase.OrderCode}", token);
         return await GetAsync(id, actor, token);
+    }
+
+    public async Task<PurchaseView> CancelAsync(int id, ClaimsPrincipal actor, CancellationToken token)
+    {
+        var before = await ReadAsync(id, actor, token);
+        db.ChangeTracker.Clear();
+        await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, token);
+        await db.FindForUpdateAsync(before.StudentId, token);
+        var purchase = await LockAsync(id, token);
+        if (!PurchaseRules.CanRead(actor, purchase)) throw BusinessException.NotFound("Đơn mua khóa học không tồn tại.");
+        if (purchase.Status == PurchaseStatus.Cancelled) return View(purchase);
+        if (purchase.Status != PurchaseStatus.Pending)
+            throw BusinessException.Conflict("Chỉ có thể hủy đơn đang chờ thanh toán. Đơn đã thanh toán hoặc hết hạn không thể hủy.");
+
+        if (string.IsNullOrWhiteSpace(purchase.PaymentLinkId)) purchase.Status = PurchaseStatus.Cancelled;
+        else
+        {
+            var payment = await gateway.CancelAsync(purchase.OrderCode, token);
+            if (!new[] { "PAID", "CANCELLED", "EXPIRED" }.Contains(payment.Status, StringComparer.OrdinalIgnoreCase))
+                throw BusinessException.Conflict("payOS chưa xác nhận hủy thanh toán. Vui lòng thử lại.");
+            await UpdatePaymentAsync(purchase, payment, $"PAYOS-{purchase.OrderCode}", token);
+        }
+        await db.SaveChangesAsync(token);
+        await transaction.CommitAsync(token);
+        if (purchase.Status == PurchaseStatus.Paid)
+            throw BusinessException.Conflict("Đơn đã được thanh toán trên payOS nên không thể hủy. Hệ thống đã cập nhật bill và quyền học.");
+        return View(purchase);
     }
 
     public async Task ReceiveWebhookAsync(JsonElement body, CancellationToken token)
@@ -143,6 +174,13 @@ public sealed class PurchaseService(AppDbContext db, IPayOSGateway gateway,
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, token);
         await db.FindForUpdateAsync(before.StudentId, token);
         var purchase = await LockAsync(id, token);
+        await UpdatePaymentAsync(purchase, payment, reference, token);
+        await db.SaveChangesAsync(token);
+        await tx.CommitAsync(token);
+    }
+
+    private async Task UpdatePaymentAsync(CoursePurchase purchase, GatewayPayment payment, string reference, CancellationToken token)
+    {
         PurchaseRules.ValidatePayment(purchase, payment);
         purchase.PaymentLinkId ??= payment.Id;
         if (purchase.Status != PurchaseStatus.Paid)
@@ -157,8 +195,6 @@ public sealed class PurchaseService(AppDbContext db, IPayOSGateway gateway,
             else if (payment.Status.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase)) purchase.Status = PurchaseStatus.Cancelled;
             else if (payment.Status.Equals("EXPIRED", StringComparison.OrdinalIgnoreCase)) purchase.Status = PurchaseStatus.Expired;
         }
-        await db.SaveChangesAsync(token);
-        await tx.CommitAsync(token);
     }
 
     private async Task EnsureEnrollmentAsync(CoursePurchase purchase, CancellationToken token)

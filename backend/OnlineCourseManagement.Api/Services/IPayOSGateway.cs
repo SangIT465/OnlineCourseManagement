@@ -15,5 +15,6 @@ public interface IPayOSGateway
     bool IsConfigured { get; }
     Task<GatewayLink> CreateAsync(CoursePurchase purchase, CancellationToken token);
     Task<GatewayPayment> GetAsync(long orderCode, CancellationToken token);
+    Task<GatewayPayment> CancelAsync(long orderCode, CancellationToken token);
     Task<GatewayNotice> VerifyWebhookAsync(JsonElement body, CancellationToken token);
 }

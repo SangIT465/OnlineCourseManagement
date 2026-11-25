@@ -105,7 +105,7 @@ async function render() {
       );
     if (version !== view.renderVersion) return;
     main.innerHTML = html;
-    if (route.page === "purchases" && route.id) schedulePurchasePoll(route.id, version, render);
+    if (route.page === "purchases") schedulePurchasePoll(route.id, version, render);
     document.title = `${$("#breadcrumb").textContent} · CourseFlow`;
   } catch (error) {
     if (version === view.renderVersion) main.innerHTML = errorBox(error.message);
