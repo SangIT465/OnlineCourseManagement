@@ -4,7 +4,7 @@ import { button, linkButton, toolsButton, heading, empty, pagination, avatar } f
 import { count, date } from "../utils/format.js";
 import { state, view, is } from "../state/store.js";
 import { API_DOCS_URL } from "../config.js";
-import { ROLE_NAMES as roleName, ROLE_DEFINITIONS, directoryRoles, canResetPassword, hasPermission } from "../auth/permissions.js";
+import { ROLE_NAMES as roleName, ROLE_DEFINITIONS, directoryRoles, canResetPassword, canSupportEnrollment, hasPermission } from "../auth/permissions.js";
 
 export async function usersPage(route, version) {
   const params = {
@@ -27,10 +27,10 @@ export async function usersPage(route, version) {
       is("Admin") ? "Quản lý tài khoản" : "Hỗ trợ sinh viên",
       is("Admin")
         ? "Tạo tài khoản và phân quyền Admin, Nhân viên, Giảng viên, User (sinh viên)."
-        : "Xem tài khoản User và hỗ trợ đặt lại mật khẩu. Chỉ Admin được tạo, xóa hoặc cấp quyền.",
+        : "Tra cứu sinh viên, hỗ trợ ghi danh và đặt lại mật khẩu. Khóa có phí cần có đơn đã thanh toán.",
       actions,
     ) +
-    `<form id="user-filter" class="toolbar" role="search"><div class="search-field">${icon("search")}<input type="search" name="search" value="${esc(params.SearchTerm)}" placeholder="Tìm theo tên hoặc email…" aria-label="Tìm tài khoản" maxlength="200"/></div><select name="role" aria-label="Vai trò">${is("Admin") ? '<option value="">Tất cả vai trò</option>' : ""}${options.map(([value, label]) => `<option value="${value}" ${value === params.Role ? "selected" : ""}>${label}</option>`).join("")}</select><button type="submit" class="btn btn-secondary btn-sm">Tìm kiếm</button><span class="result-count">${count(result.totalCount)} tài khoản</span></form>${result.items.length ? `<div class="table-wrap"><table><thead><tr><th>Tài khoản</th><th>Vai trò</th><th>Ngày tham gia</th><th style="text-align:right">Thao tác</th></tr></thead><tbody>${result.items.map((user) => `<tr><td><div class="cell-user">${avatar(user.fullName)}<div><strong>${esc(user.fullName)}${user.id === state.user.id ? ' <span class="text-muted">(Bạn)</span>' : ""}</strong><small>${esc(user.email)}</small></div></div></td><td><span class="badge ${user.role === "Admin" ? "purple" : user.role === "Staff" ? "blue" : ""}">${roleName[user.role] || esc(user.role)}</span></td><td>${date(user.createdAt)}</td><td><div class="table-actions">${is("Admin") && user.id !== state.user.id ? toolsButton("shield", "edit-role", user.id, "Thay đổi vai trò") : ""}${canResetPassword(state.user, user) ? toolsButton("lock", "reset-password", user.id, "Đặt lại mật khẩu") : ""}${is("Admin") && user.id !== state.user.id ? toolsButton("trash", "delete-user", user.id, "Xóa tài khoản") : ""}</div></td></tr>`).join("")}</tbody></table></div>${pagination(result.pageNumber, Math.max(result.totalPages, 1), result.totalCount)}` : empty("Không có tài khoản phù hợp", "Thử tên, email hoặc vai trò khác.")}`
+    `<form id="user-filter" class="toolbar" role="search"><div class="search-field">${icon("search")}<input type="search" name="search" value="${esc(params.SearchTerm)}" placeholder="Tìm theo tên hoặc email…" aria-label="Tìm tài khoản" maxlength="200"/></div><select name="role" aria-label="Vai trò">${is("Admin") ? '<option value="">Tất cả vai trò</option>' : ""}${options.map(([value, label]) => `<option value="${value}" ${value === params.Role ? "selected" : ""}>${label}</option>`).join("")}</select><button type="submit" class="btn btn-secondary btn-sm">Tìm kiếm</button><span class="result-count">${count(result.totalCount)} tài khoản</span></form>${result.items.length ? `<div class="table-wrap"><table><thead><tr><th>Tài khoản</th><th>Vai trò</th><th>Ngày tham gia</th><th style="text-align:right">Thao tác</th></tr></thead><tbody>${result.items.map((user) => `<tr><td><div class="cell-user">${avatar(user.fullName)}<div><strong>${esc(user.fullName)}${user.id === state.user.id ? ' <span class="text-muted">(Bạn)</span>' : ""}</strong><small>${esc(user.email)}</small></div></div></td><td><span class="badge ${user.role === "Admin" ? "purple" : user.role === "Staff" ? "blue" : ""}">${roleName[user.role] || esc(user.role)}</span></td><td>${date(user.createdAt)}</td><td><div class="table-actions">${is("Admin") && user.id !== state.user.id ? toolsButton("shield", "edit-role", user.id, "Thay đổi vai trò") : ""}${canSupportEnrollment(state.user, user) ? toolsButton("plus", "support-enrollment", user.id, "Ghi danh hỗ trợ") : ""}${canResetPassword(state.user, user) ? toolsButton("lock", "reset-password", user.id, "Đặt lại mật khẩu") : ""}${is("Admin") && user.id !== state.user.id ? toolsButton("trash", "delete-user", user.id, "Xóa tài khoản") : ""}</div></td></tr>`).join("")}</tbody></table></div>${pagination(result.pageNumber, Math.max(result.totalPages, 1), result.totalCount)}` : empty("Không có tài khoản phù hợp", "Thử tên, email hoặc vai trò khác.")}`
   );
 }
 
@@ -48,6 +48,9 @@ export function permissionsPage() {
     ["Xem thư viện và hồ sơ", null, { Admin: "Có", Staff: "Có", Instructor: "Có", User: "Có" }],
     ["Ghi danh, học bài và cập nhật tiến độ", "learning"],
     ["Quản lý danh mục", "catalog.manage"],
+    ["Ghi danh hỗ trợ (miễn phí hoặc đã thanh toán)", "enrollments.support"],
+    ["Xuất báo cáo ghi danh và tiến độ CSV", "reports.export"],
+    ["Thêm bài giảng, upload và tải học liệu", null, { Admin: "Tất cả khóa", Staff: "Tất cả khóa", Instructor: "Chỉ khóa được giao", User: "Chỉ tải học liệu đã ghi danh" }],
     ["Tạo khóa học", null, { Admin: "Có", Staff: "Có", Instructor: "Có", User: "Không" }],
     ["Sửa khóa học, bài học và học liệu", null, { Admin: "Tất cả khóa", Staff: "Tất cả khóa", Instructor: "Chỉ khóa được giao", User: "Không" }],
     ["Xem ghi danh và tiến độ sinh viên", null, { Admin: "Tất cả khóa", Staff: "Tất cả khóa", Instructor: "Chỉ khóa được giao", User: "Chỉ của mình" }],

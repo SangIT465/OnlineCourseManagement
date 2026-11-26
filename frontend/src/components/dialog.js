@@ -10,10 +10,14 @@ let eventsInstalled = false;
 
 export async function downloadFile(id, name) {
   const blob = await request(`/files/${id}/download`, { blob: true });
+  saveDownload(blob, name || `hoc-lieu-${id}`);
+}
+
+export function saveDownload(blob, name) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = name || `hoc-lieu-${id}`;
+  link.download = name;
   document.body.append(link);
   link.click();
   link.remove();

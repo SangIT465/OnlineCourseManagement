@@ -13,6 +13,8 @@
 | Tạo, xóa tài khoản, thay vai trò | Có, có bảo vệ Admin và ràng buộc dữ liệu | Không | Không | Đăng ký công khai chỉ tạo User |
 | Phân công giảng viên và nhân viên | Có | Không | Không | Không |
 | Đặt lại mật khẩu qua quản trị | Mọi vai trò | Chỉ User | Không | Không |
+| Ghi danh hỗ trợ học viên | Có | Chỉ tài khoản User; khóa miễn phí hoặc đã có đơn Paid | Không | Tự ghi danh |
+| Xuất báo cáo ghi danh và tiến độ CSV | Có | Có, theo bộ lọc hiện tại | Không | Không |
 
 ## Thao tác trên giao diện
 
@@ -20,7 +22,7 @@
 2. Mở chi tiết khóa học, chọn **Phân công giảng viên** và **Phân công nhân viên**. Hai phân công độc lập; mỗi danh sách chỉ gồm tài khoản đúng vai trò.
    Admin có thể chọn **Chưa phân công / Bỏ phân công** rồi lưu. Bỏ giảng viên không làm mất nhân viên và ngược lại. Sau khi giải phóng toàn bộ khóa phụ trách, có thể đổi vai trò tài khoản đó.
 3. Giảng viên có **Khóa tôi giảng dạy** và **Học viên của tôi**. Khóa do giảng viên tạo tự gán cho họ. Giảng viên quản lý bài học, học liệu và tiến độ trong các khóa được giao.
-4. Nhân viên có màn hình **Sinh viên** để tìm User và đặt lại mật khẩu; không có nút tạo, xóa hoặc phân quyền tài khoản.
+4. Nhân viên có màn hình **Sinh viên** để tìm User, **Ghi danh hỗ trợ** bằng nút dấu cộng và đặt lại mật khẩu. Mở **Lượt ghi danh → Xuất báo cáo CSV** để tải báo cáo theo khóa/từ khóa đang lọc. Báo cáo có số bài, số bài hoàn thành và tỷ lệ tiến độ; đọc trực tiếp từ SQL Server tại thời điểm xuất. Không có nút tạo, xóa hoặc phân quyền tài khoản.
 5. User có **Khóa học của tôi**, **Tiến độ học tập**, chỉ mở nội dung/tài liệu sau khi ghi danh.
 6. **Vai trò & quyền** hiển thị ma trận quyền và vai trò hiện tại.
 
@@ -41,6 +43,10 @@ JWT mới có claim `permission` do `AppPermissions` sinh từ vai trò. `AppPol
 - Phân công/tự tạo khóa và thay role/password/xóa tài khoản dùng update lock trong giao dịch. Việc kiểm tra vai trò người được phân công và ghi FK được bảo vệ trước thao tác đổi vai trò đồng thời; xung đột SQL trả 409 để thử lại.
 
 ## SQL Server và migration
+
+**Ghi danh hỗ trợ và báo cáo:** `POST /api/Enrollments/support` nhận `{ "studentId": 123, "courseId": 456 }`, dành cho Admin/Staff. API kiểm tra vai trò User, chống ghi danh trùng và kiểm tra đơn Paid khi khóa có phí, rồi ghi cùng bảng `Enrollments` mà màn hình học viên đang đọc. Không đổi trạng thái thanh toán. `GET /api/Enrollments/export?CourseId=456&Search=ten` xuất CSV UTF-8 (có BOM cho Excel), đọc bảng Users/Courses/Enrollments/Lessons/LessonProgresses; text được chống thực thi công thức CSV. Hai chức năng dùng schema hiện có, không cần migration mới.
+
+Giảng viên có nút **Thêm bài giảng** và **Học liệu** ngay tại thẻ khóa/bàn làm việc. Trong bài học có **Tải tài liệu lên**, **Xem** và **Tải xuống**. Metadata file (người upload, khóa, bài, tên, kích thước) lưu ở `UploadedFiles`; nội dung nhị phân được lưu trong thư mục Uploads theo thiết kế hiện có. Phân công giảng viên và quyền truy cập được kiểm tra lại từ SQL ở từng request.
 
 Áp dụng toàn bộ migration từ thư mục gốc:
 
@@ -70,6 +76,7 @@ npm.cmd test
 # Cần API/SQL Server đã áp dụng migration
 npm.cmd run test:authorization
 npm.cmd run test:roles
+npm.cmd run test:staff-instructor
 ```
 
 Kiểm thử tích hợp tạo bản ghi QA tạm cho bốn vai trò, thử quyền cho phép/bị từ chối, chuyển bài học giữa khóa, phân công lại giảng viên, thu hồi token và quyền tải file; tự dọn dữ liệu. Thông tin Admin lấy từ COURSEFLOW_TEST_ADMIN_EMAIL/PASSWORD hoặc User Secrets AdminSeed:Email/Password. Không ghi mật khẩu hay token vào log hoặc mã nguồn.

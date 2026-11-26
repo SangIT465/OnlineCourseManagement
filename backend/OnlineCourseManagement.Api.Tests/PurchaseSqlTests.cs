@@ -27,6 +27,41 @@ public sealed class PurchaseSqlTests
         Microsoft.Extensions.Options.Options.Create(new PayOSPaymentOptions()),TimeProvider.System);
 
     [PurchaseSqlFact]
+    public async Task Staff_support_restores_only_paid_access_and_does_not_bypass_payment_or_account_roles()
+    {
+        await using var fixture = await SqlFixture.CreateAsync(100000);
+        await using var db = fixture.Db();
+        var enrollments = new EnrollmentService(db, null!, TimeProvider.System);
+        var input = new SupportEnrollmentDto { StudentId = fixture.StudentId, CourseId = fixture.CourseId };
+        foreach (var role in new[] { "Instructor", "User" })
+            Assert.Equal(BusinessError.Forbidden, (await Assert.ThrowsAsync<BusinessException>(() =>
+                enrollments.SupportEnrollAsync(input, Actor(999, role), default))).Error);
+        Assert.Equal(BusinessError.Conflict, (await Assert.ThrowsAsync<BusinessException>(() =>
+            enrollments.SupportEnrollAsync(input, Actor(999, "Staff"), default))).Error);
+        Assert.Empty(await db.Enrollments.ToListAsync());
+        var purchase = await Service(db, new FakeGateway()).CreateAsync(new CreatePurchaseDto {
+            CourseId=fixture.CourseId, BuyerName="Học viên", BuyerPhone="0901234567", BuyerAddress="Địa chỉ QA"
+        }, Actor(fixture.StudentId), default);
+        Assert.Equal(BusinessError.Conflict, (await Assert.ThrowsAsync<BusinessException>(() =>
+            enrollments.SupportEnrollAsync(input, Actor(999, "Staff"), default))).Error);
+        await DemoService(db, new FakeGateway()).ConfirmAsync(purchase.Id, Actor(fixture.StudentId), default);
+        await enrollments.CancelAsync(fixture.CourseId, Actor(fixture.StudentId), default);
+        var restored = await enrollments.SupportEnrollAsync(input, Actor(999, "Staff"), default);
+        Assert.Equal(fixture.StudentId, restored.StudentId);
+        Assert.Single(await db.Enrollments.ToListAsync());
+        Assert.Equal(PurchaseStatus.Paid, (await db.CoursePurchases.SingleAsync()).Status);
+        Assert.Equal(BusinessError.Conflict, (await Assert.ThrowsAsync<BusinessException>(() =>
+            enrollments.SupportEnrollAsync(input, Actor(999, "Admin"), default))).Error);
+        await enrollments.CancelAsync(fixture.CourseId, Actor(fixture.StudentId), default);
+        db.ChangeTracker.Clear();
+        (await db.Users.SingleAsync()).Role="Staff";
+        await db.SaveChangesAsync();
+        Assert.Equal(BusinessError.Forbidden, (await Assert.ThrowsAsync<BusinessException>(() =>
+            enrollments.SupportEnrollAsync(input, Actor(999, "Staff"), default))).Error);
+        Assert.Empty(await db.Enrollments.ToListAsync());
+    }
+
+    [PurchaseSqlFact]
     public async Task Paid_course_is_locked_until_verified_then_granted_once_and_bill_keeps_snapshot()
     {
         await using var fixture=await SqlFixture.CreateAsync(199000.50m);

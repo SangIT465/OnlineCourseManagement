@@ -15,6 +15,8 @@ import {
   downloadFile,
 } from "./components/dialog.js";
 import { printPurchase } from "./features/purchases.js";
+import { hasPermission } from "./auth/permissions.js";
+import { saveDownload } from "./components/dialog.js";
 
 export function createActions({
   saved,
@@ -30,6 +32,7 @@ export function createActions({
   roleForm,
   passwordForm,
   uploadForm,
+  supportEnrollmentForm,
 }) {
   async function handleAction(target) {
     const action = target.dataset.action;
@@ -65,6 +68,21 @@ export function createActions({
       return;
     }
     if (action === "refresh") return refresh();
+    if (action === "support-enrollment") {
+      if (!hasPermission(state.user, "enrollments.support"))
+        throw new Error("Bạn không có quyền hỗ trợ ghi danh.");
+      return supportEnrollmentForm(id);
+    }
+    if (action === "export-enrollments") {
+      if (!hasPermission(state.user, "reports.export"))
+        throw new Error("Bạn không có quyền xuất báo cáo.");
+      const params = currentRoute().params;
+      const blob = await request("/enrollments/export?" + query({
+        CourseId: params.get("course") || undefined, Search: params.get("search") || undefined,
+      }), { blob: true });
+      saveDownload(blob, "bao-cao-tien-do.csv");
+      return toast("Đã tải báo cáo ghi danh và tiến độ mới nhất.");
+    }
     if (action === "purchase-print") {
       const invoice = await request(`/purchases/${id}/invoice`);
       return printPurchase(invoice.html);

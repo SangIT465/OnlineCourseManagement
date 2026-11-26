@@ -16,16 +16,19 @@ const wait=async(expression,label=expression)=>{const start=Date.now();while(Dat
 const ready=()=>wait("document.querySelector('#main-content')?.getAttribute('aria-busy')==='false' && !document.querySelector('.initial-loading')",'page ready');
 const click=async selector=>{await wait(`Boolean(document.querySelector(${JSON.stringify(selector)}))`,'selector '+selector);await ev(`document.querySelector(${JSON.stringify(selector)}).click()`);};
 const fill=async(name,value)=>{await wait(`Boolean(document.querySelector('#modal-form [name="${name}"]'))`);await ev(`document.querySelector('#modal-form [name="${name}"]').value=${JSON.stringify(String(value))}`);};
-const submit=async()=>{await ev("document.querySelector('#modal-form').requestSubmit()");await wait("!document.querySelector('#app-dialog').open || !document.querySelector('#modal-form [type=submit]').disabled",'form submitted');const error=await ev("document.querySelector('#app-dialog').open && !document.querySelector('.form-error').hidden ? document.querySelector('.form-error').textContent : ''");if(error)throw new Error('Form failed: '+error);};
+const submit=async()=>{await ev("document.querySelector('#modal-form').requestSubmit()");await wait("!document.querySelector('#app-dialog').open || !document.querySelector('#modal-form [type=submit]') || !document.querySelector('#modal-form [type=submit]').disabled",'form submitted');const error=await ev("document.querySelector('#app-dialog').open && document.querySelector('.form-error') && !document.querySelector('.form-error').hidden ? document.querySelector('.form-error').textContent : ''");if(error)throw new Error('Form failed: '+error);};
 const route=async hash=>{await ev(`location.hash=${JSON.stringify('#/'+hash)}`);await new Promise(r=>setTimeout(r,50));await ready();};
 const login=async(email,pass)=>{if(await ev("Boolean(document.querySelector('[data-action=logout]'))")){await click('[data-action=logout]');await submit();await ready();}await click('[data-action=login]');await fill('email',email);await fill('password',pass);await submit();await ready();};
 async function api(endpoint,{token,method='GET',body}={}){const r=await fetch(origin+'/api'+endpoint,{method,headers:{...(token?{Authorization:'Bearer '+token}:{}),...(body!==undefined?{'Content-Type':'application/json'}:{})},body:body!==undefined?JSON.stringify(body):undefined});if(!r.ok)throw new Error(method+' '+endpoint+' HTTP '+r.status);return r.status===204?null:r.json();}
-const fixtures={users:[],courses:[],lessons:[]};let adminToken,userToken,enrolledCourse;
+const fixtures={users:[],courses:[],lessons:[],files:[]};let adminToken,userToken,enrolledCourse,supportedCourse;
+const downloads=path.resolve('artifacts/role-support/downloads-'+suffix);await fs.mkdir(downloads,{recursive:true});
+const downloaded=async name=>{const start=Date.now();while(Date.now()-start<15000){try{return await fs.readFile(path.join(downloads,name),'utf8');}catch{}await new Promise(resolve=>setTimeout(resolve,100));}throw new Error('Download missing: '+name);};
 const before=snapshot();
 const check=(value,message)=>{assert.ok(value,message);console.log('PASS '+message);};
 const logged=()=>wait("Boolean(document.querySelector('[data-action=logout]')) && document.querySelector('#main-content').getAttribute('aria-busy')==='false'");
 try {
  await call('Runtime.enable');await call('Page.enable');await call('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+ await call('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:downloads});
  await call('Page.navigate',{url:origin+'/?rolesqa='+Date.now()});await new Promise(r=>setTimeout(r,250));await ready();await login(adminEmail,adminPassword);await logged();
  adminToken=await ev("sessionStorage.getItem('courseflow.session')");
  await route('permissions');check(await ev("document.querySelectorAll('.roles-grid .category-card').length===4 && document.querySelectorAll('thead th').length===5"),'four role cards and permission columns');
@@ -58,8 +61,26 @@ try {
  await route('categories');check(await ev("!document.querySelector('[data-action=create-category]')"),'Instructor cannot modify categories');
  await route('my-courses');await click('[data-action=create-course]');await fill('title','QA Tự tạo '+suffix);await fill('description','Khóa do giảng viên tạo');await fill('categoryId',category.id);await submit();await ready();
  const self=(await api('/courses')).find(c=>c.title==='QA Tự tạo '+suffix);fixtures.courses.push(self.id);check(self.instructorId===teacher.id&&self.staffId===null,'Instructor course form assigns teaching ownership automatically');
+ await route('my-courses');
+ await click('[data-action=create-lesson][data-id="'+self.id+'"]');await fill('title','QA Instructor lecture '+suffix);await fill('content','Bài giảng do giảng viên tạo trên giao diện.');await fill('durationMinutes',10);await submit();await ready();
+ const lecture=(await api('/lessons/course/'+self.id))[0];fixtures.lessons.push(lecture.id);
+ check(sql('SELECT Content FROM dbo.Lessons WHERE Id='+lecture.id)[0].Content==='Bài giảng do giảng viên tạo trên giao diện.','Instructor quick action creates a real SQL lesson');
+ await route('lesson/'+lecture.id);await click('[data-action=upload-document]');
+ const documentText='Học liệu giảng viên QA '+suffix;
+ await ev(`(()=>{const transfer=new DataTransfer();transfer.items.add(new File([${JSON.stringify(documentText)}],'instructor-qa.txt',{type:'text/plain'}));const input=document.querySelector('#upload-file');input.files=transfer.files;input.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+ await submit();await wait("Boolean(document.querySelector('.file-preview-content'))");await wait('document.querySelector(".file-preview-content").textContent.includes('+JSON.stringify(documentText)+')');
+ const uploaded=(await api('/files/lessons/'+lecture.id,{token:await ev("sessionStorage.getItem('courseflow.session')")}))[0];fixtures.files.push(uploaded.id);
+ check(sql('SELECT UploadedById FROM dbo.UploadedFiles WHERE Id='+uploaded.id)[0].UploadedById===teacher.id,'Instructor upload stores file ownership in SQL');
+ await click('[data-preview=download]');check((await downloaded('instructor-qa.txt'))===documentText,'Instructor downloads the exact uploaded learning file through the UI');
+ await click('[data-action=close-dialog]');await route('my-courses');
+ await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});check(await ev('document.documentElement.scrollWidth<=innerWidth'),'Instructor quick lesson and materials actions fit mobile');
+ await call('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
  await route('users');check(await ev("!document.querySelector('table')"),'Instructor direct account route is blocked');
  await login(staff.email,password);await logged();await route('users');check(await ev("document.querySelectorAll('select[name=role] option').length===1 && document.querySelector('select[name=role]').value==='User' && !document.querySelector('[data-action=create-user]')"),'Staff retains student support scope');
+ await route('users?search='+encodeURIComponent(suffix));await click('[data-action=support-enrollment][data-id="'+user.id+'"]');await fill('courseId',foreign.id);await submit();await ready();supportedCourse=foreign.id;
+ check(sql('SELECT COUNT(*) AS Total FROM dbo.Enrollments WHERE StudentId='+user.id+' AND CourseId='+foreign.id)[0].Total===1,'Staff enrollment form creates the student/course relationship in SQL');
+ await route('enrollments?course='+foreign.id+'&search='+encodeURIComponent(suffix));await click('[data-action=export-enrollments]');
+ check((await downloaded('bao-cao-tien-do.csv')).includes(user.email),'Staff CSV download contains the filtered SQL student enrollment');
  await route('courses/'+own.id);check(await ev("Boolean(document.querySelector('[data-action=edit-course]')) && !document.querySelector('[data-action=assign-instructor]')"),'Staff manages catalog without assignment authority');
  await login(user.email,password);await logged();await route('progress');check(await ev("document.querySelector('#main-content').textContent.includes('100%')"),'User progress remains available');
  await route('courses/'+own.id);check(await ev("!document.querySelector('[data-action=edit-course]') && !document.querySelector('[data-action=create-lesson]')"),'User cannot edit course content');
@@ -100,6 +121,8 @@ try {
 } finally {
  if(adminToken){
   if(userToken&&enrolledCourse)await api('/enrollments/'+enrolledCourse,{token:userToken,method:'DELETE'});
+  if(userToken&&supportedCourse)await api('/enrollments/'+supportedCourse,{token:userToken,method:'DELETE'});
+  for(const id of fixtures.files)await api('/files/'+id,{token:adminToken,method:'DELETE'});
   for(const id of fixtures.lessons)await api('/lessons/'+id,{token:adminToken,method:'DELETE'});
   for(const id of fixtures.courses)await api('/courses/'+id,{token:adminToken,method:'DELETE'});
   for(const id of fixtures.users)await api('/users/'+id,{token:adminToken,method:'DELETE'});

@@ -11,17 +11,21 @@ export const ROLE_DEFINITIONS = {
       "staff.assign",
       "password.reset",
       "enrollments.read",
+      "enrollments.support",
+      "reports.export",
     ],
   },
   Staff: {
     name: "Nhân viên",
     description:
-      "Quản lý danh mục, khóa học, bài học và học liệu; xem ghi danh, tiến độ và hỗ trợ đặt lại mật khẩu cho sinh viên.",
+      "Quản lý danh mục, khóa học, bài học và học liệu; hỗ trợ ghi danh, đặt lại mật khẩu và xuất báo cáo tiến độ sinh viên.",
     permissions: [
       "catalog.manage",
       "directory.read",
       "password.reset",
       "enrollments.read",
+      "enrollments.support",
+      "reports.export",
     ],
   },
   Instructor: {
@@ -50,6 +54,8 @@ export const canManageCourse = (user, course) => canManageCatalog(user) ||
 export const canResetPassword = (actor, target) =>
   actor?.role === "Admin" ||
   (actor?.role === "Staff" && target?.role === "User");
+export const canSupportEnrollment = (actor, target) =>
+  hasPermission(actor, "enrollments.support") && target?.role === "User";
 export const directoryRoles = (user) =>
   user?.role === "Admin"
     ? Object.entries(ROLE_NAMES)

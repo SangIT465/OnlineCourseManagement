@@ -17,6 +17,7 @@
     "test": "node scripts/test.mjs",
     "test:authorization": "node backend/tests/authorization.integration.mjs",
     "test:roles": "node backend/tests/role-sync.integration.mjs",
+    "test:staff-instructor": "node backend/tests/staff-instructor.integration.mjs",
     "test:roles:browser": "node frontend/tests/roles-browser.integration.mjs",
     "test:auth": "node backend/tests/auth-lifecycle.integration.mjs",
     "test:auth:browser": "node frontend/tests/auth-browser.integration.mjs",

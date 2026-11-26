@@ -1,8 +1,9 @@
 import { request, escapeHtml as esc } from "../api/client.js";
 import { icon } from "../components/icons.js";
-import { heading, empty, pagination, avatar, progressBar } from "../components/ui.js";
+import { heading, empty, pagination, avatar, progressBar, button, linkButton } from "../components/ui.js";
 import { count, date } from "../utils/format.js";
 import { state, is, canManage } from "../state/store.js";
+import { hasPermission } from "../auth/permissions.js";
 
 export async function enrollmentsPage(route, _version) {
   if (is("Instructor")) return instructorStudentsPage(route);
@@ -28,6 +29,8 @@ export async function enrollmentsPage(route, _version) {
     heading(
       "Lượt ghi danh",
       "Theo dõi sinh viên và tiến độ trên các khóa học.",
+      (hasPermission(state.user, "enrollments.support") ? linkButton("Hỗ trợ ghi danh", "#/users", "secondary") : "") +
+      (hasPermission(state.user, "reports.export") ? button(`${icon("download")}Xuất báo cáo CSV`, "export-enrollments", "secondary") : ""),
     ) +
     `<form id="enrollment-filter" class="toolbar"><div class="search-field">${icon("search")}<input type="search" name="search" value="${esc(search)}" placeholder="Tìm sinh viên, khóa học…" aria-label="Tìm ghi danh" maxlength="200"/></div><select name="course" aria-label="Khóa học"><option value="">Tất cả khóa học</option>${state.courses.map((course) => `<option value="${course.id}" ${course.id === courseId ? "selected" : ""}>${esc(course.title)}</option>`).join("")}</select><button type="submit" class="btn btn-secondary btn-sm">Tìm kiếm</button><span class="result-count">${count(total)} lượt ghi danh</span></form>${
       total

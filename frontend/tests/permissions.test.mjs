@@ -8,6 +8,7 @@ import {
   canCreateCourse,
   canResetPassword,
   directoryRoles,
+  canSupportEnrollment,
 } from "../src/auth/permissions.js";
 
 test("Admin, Staff, Instructor and User are active roles", () => {
@@ -37,6 +38,16 @@ test("Staff can operate the catalog but cannot gain account administration", () 
     directoryRoles({ role: "Staff" }).map(([role]) => role),
     ["User"],
   );
+});
+
+test("only Admin and Staff support User enrollments and export reports", () => {
+  for (const role of ["Admin", "Staff", "Instructor", "User", "Unknown"]) {
+    const allowed = ["Admin", "Staff"].includes(role);
+    assert.equal(canSupportEnrollment({ role }, { role: "User" }), allowed);
+    assert.equal(hasPermission({ role }, "reports.export"), allowed);
+    for (const target of ["Staff", "Instructor", "Admin"])
+      assert.equal(canSupportEnrollment({ role }, { role: target }), false);
+  }
 });
 
 test("User learns but cannot access management screens or modify catalog records", () => {

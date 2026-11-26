@@ -11,27 +11,37 @@ namespace OnlineCourseManagement.Services;
 
 public sealed class EnrollmentService(AppDbContext db, ICourseAccessService access, TimeProvider time) : IEnrollmentService
 {
-    public async Task<EnrollmentResponseDto> EnrollAsync(
-        EnrollCourseDto input, ClaimsPrincipal actor, CancellationToken token)
+    public Task<EnrollmentResponseDto> EnrollAsync(
+        EnrollCourseDto input, ClaimsPrincipal actor, CancellationToken token) =>
+        EnrollStudentAsync(actor.RequireUserId(), input.CourseId, token);
+
+    public Task<EnrollmentResponseDto> SupportEnrollAsync(
+        SupportEnrollmentDto input, ClaimsPrincipal actor, CancellationToken token)
     {
-        var studentId = actor.RequireUserId();
+        if (!actor.IsInRole(AppRoles.Admin) && !actor.IsInRole(AppRoles.Staff))
+            throw BusinessException.Forbidden();
+        return EnrollStudentAsync(input.StudentId, input.CourseId, token);
+    }
+
+    private async Task<EnrollmentResponseDto> EnrollStudentAsync(int studentId, int courseId, CancellationToken token)
+    {
         await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, token);
         await db.FindForUpdateAsync(studentId, token);
 
         if (!await db.Users.AnyAsync(user => user.Id == studentId && user.Role == AppRoles.User, token))
             throw BusinessException.Forbidden();
-        var course = await db.Courses.AsNoTracking().SingleOrDefaultAsync(course => course.Id == input.CourseId, token)
+        var course = await db.Courses.AsNoTracking().SingleOrDefaultAsync(course => course.Id == courseId, token)
             ?? throw BusinessException.NotFound("Khóa học không tồn tại");
         if (await db.Enrollments.AnyAsync(enrollment => enrollment.StudentId == studentId &&
-            enrollment.CourseId == input.CourseId, token))
+            enrollment.CourseId == courseId, token))
             throw BusinessException.Conflict("Bạn đã đăng ký khóa học này");
         if (course.Price > 0 && !await db.CoursePurchases.AnyAsync(purchase => purchase.StudentId == studentId &&
-            purchase.CourseId == input.CourseId && purchase.Status == PurchaseStatus.Paid, token))
+            purchase.CourseId == courseId && purchase.Status == PurchaseStatus.Paid, token))
             throw BusinessException.Conflict("Khóa học có học phí cần được thanh toán qua payOS trước khi ghi danh.");
 
         var enrollment = new Enrollment
         {
-            StudentId = studentId, CourseId = input.CourseId, EnrolledAt = time.GetUtcNow().UtcDateTime
+            StudentId = studentId, CourseId = courseId, EnrolledAt = time.GetUtcNow().UtcDateTime
         };
         db.Enrollments.Add(enrollment);
         try
@@ -44,6 +54,24 @@ public sealed class EnrollmentService(AppDbContext db, ICourseAccessService acce
             throw BusinessException.Conflict("Không thể đăng ký. Hãy kiểm tra trạng thái khóa học và thử lại.");
         }
         return new(enrollment.Id, enrollment.StudentId, enrollment.CourseId, enrollment.EnrolledAt);
+    }
+
+    public Task<List<EnrollmentReportRow>> GetReportAsync(EnrollmentReportQuery input, CancellationToken token)
+    {
+        var query = db.Enrollments.AsNoTracking();
+        if (input.CourseId is int courseId) query = query.Where(e => e.CourseId == courseId);
+        if (!string.IsNullOrWhiteSpace(input.Search))
+        {
+            var search = input.Search.Trim();
+            query = query.Where(e => e.Student.FullName.Contains(search) ||
+                e.Student.Email.Contains(search) || e.Course.Title.Contains(search));
+        }
+        return query.OrderBy(e => e.CourseId).ThenBy(e => e.StudentId)
+            .Select(e => new EnrollmentReportRow(e.StudentId, e.Student.FullName, e.Student.Email,
+                e.CourseId, e.Course.Title, e.EnrolledAt,
+                db.Lessons.Count(l => l.CourseId == e.CourseId),
+                db.LessonProgresses.Count(p => p.EnrollmentId == e.Id && p.IsCompleted && p.Lesson.CourseId == e.CourseId)))
+            .ToListAsync(token);
     }
 
     public Task<List<MyEnrollmentDto>> GetMineAsync(ClaimsPrincipal actor, CancellationToken token)
