@@ -15,7 +15,7 @@ test("management lists escape stored course content and honor editing permission
   const courses=[{id:8,title:'<img src=x onerror=alert(1)>',categoryName:'<script>bad</script>',instructorName:'<svg onload=bad>',price:0}];
   const html=renderManagementCourses(courses);
   assert.ok(html.includes('&lt;img'));
-  assert.ok(!html.includes('<img'));
+  assert.ok(!html.includes('<img src=x'));
   assert.ok(!html.includes('<script>'));
   assert.ok(!html.includes('data-action="edit-course"'));
   assert.ok(renderManagementCourses(courses,{canEdit:()=>true}).includes('data-action="edit-course"'));

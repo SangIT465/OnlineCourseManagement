@@ -1,5 +1,6 @@
 import { escapeHtml as esc } from "../api/client.js";
 import { icon } from "../components/icons.js";
+import { courseArtwork } from "../components/course-artwork.js";
 
 const number = value => new Intl.NumberFormat("vi-VN").format(Number(value) || 0);
 const amount = value => Number(value) ? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(value) : "Miễn phí";
@@ -20,7 +21,7 @@ export function renderManagementCourses(courses, { lessons = [], canEdit = () =>
   if (!courses.length) return empty("Chưa có khóa học phù hợp. Khóa học mới sẽ xuất hiện tại đây.");
   return `<div class="table-wrap workspace-course-table"><table><thead><tr><th>Khóa học</th><th>Giảng viên</th><th>Bài học</th>${compact ? "" : "<th>Học phí</th>"}<th class="workspace-align-right">Thao tác</th></tr></thead><tbody>${courses.map(course => {
     const lessonCount = lessons.filter(lesson => lesson.courseId === course.id).length;
-    return `<tr><td><div class="workspace-course-cell"><span class="workspace-course-symbol">${icon("book")}</span><div><a href="#/courses/${Number(course.id)}"><strong>${esc(course.title)}</strong></a><small>${esc(course.categoryName || "Chưa phân loại")}</small></div></div></td><td>${course.instructorName ? `<span class="workspace-person">${icon("graduation")}${esc(course.instructorName)}</span>` : '<span class="workspace-status warning">Chưa phân công</span>'}</td><td><span class="workspace-status ${lessonCount ? "" : "neutral"}">${number(lessonCount)} bài học</span></td>${compact ? "" : `<td>${esc(amount(course.price))}</td>`}<td><div class="workspace-row-actions"><a class="icon-button" href="#/courses/${Number(course.id)}" aria-label="Mở ${esc(course.title)}" title="Chi tiết">${icon("next")}</a>${canEdit(course) ? `<button class="icon-button" data-action="edit-course" data-id="${Number(course.id)}" aria-label="Sửa ${esc(course.title)}" title="Sửa khóa học">${icon("edit")}</button>` : ""}</div></td></tr>`;
+    return `<tr><td><div class="workspace-course-cell"><img class="workspace-course-symbol" src="${courseArtwork(course, course.categoryName || "")}" alt="" width="64" height="48" loading="lazy" decoding="async" /><div><a href="#/courses/${Number(course.id)}"><strong>${esc(course.title)}</strong></a><small>${esc(course.categoryName || "Chưa phân loại")}</small></div></div></td><td>${course.instructorName ? `<span class="workspace-person">${icon("graduation")}${esc(course.instructorName)}</span>` : '<span class="workspace-status warning">Chưa phân công</span>'}</td><td><span class="workspace-status ${lessonCount ? "" : "neutral"}">${number(lessonCount)} bài học</span></td>${compact ? "" : `<td>${esc(amount(course.price))}</td>`}<td><div class="workspace-row-actions"><a class="icon-button" href="#/courses/${Number(course.id)}" aria-label="Mở ${esc(course.title)}" title="Chi tiết">${icon("next")}</a>${canEdit(course) ? `<button class="icon-button" data-action="edit-course" data-id="${Number(course.id)}" aria-label="Sửa ${esc(course.title)}" title="Sửa khóa học">${icon("edit")}</button>` : ""}</div></td></tr>`;
   }).join("")}</tbody></table></div>`;
 }
 

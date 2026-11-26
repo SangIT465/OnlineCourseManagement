@@ -140,8 +140,7 @@ body[data-workspace] .badge { border-radius: 7px; }
 .workspace-course-table th:first-child,.workspace-course-table td:first-child { padding-left:0; }
 .workspace-course-table td:last-child,.workspace-course-table th:last-child { padding-right:0; }
 .workspace-course-cell { display:flex;align-items:center;gap:11px;min-width:180px; }
-.workspace-course-symbol { width:35px;height:39px;border-radius:8px;display:grid;place-items:center;background:var(--workspace-soft);color:var(--workspace-accent);flex-shrink:0; }
-.workspace-course-symbol svg { width:17px; }
+.workspace-course-symbol { width:64px;height:48px;border-radius:8px;object-fit:cover;background:var(--workspace-soft);flex-shrink:0; }
 .workspace-course-cell strong { font-weight:550;display:block;max-width:245px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.71rem; }
 .workspace-course-cell small { color:#98a1b1;display:block;font-size:.6rem;margin-top:3px; }
 .workspace-person { display:flex;align-items:center;gap:5px;color:#7e8a9f;font-size:.65rem;white-space:nowrap; }

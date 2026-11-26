@@ -270,12 +270,6 @@
   .course-cover {
     height: 146px;
   }
-  .course-cover svg {
-    width: 150px;
-    height: 125px;
-    right: 7%;
-    top: 20px;
-  }
   .course-cover .cover-category {
     font-size: 0.75rem;
     padding: 4px 6px;
@@ -436,11 +430,6 @@
   }
   .course-cover {
     height: 180px;
-  }
-  .course-cover svg {
-    right: 17%;
-    width: 195px;
-    height: 145px;
   }
   .course-card h3 {
     min-height: 0;
